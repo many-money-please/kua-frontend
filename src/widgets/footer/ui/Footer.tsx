@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function Footer() {
+export const Footer = () => {
     return (
         <footer className="h-80 w-full bg-[#051726]">
             <div className="mx-auto flex flex-col items-center justify-center text-white">
@@ -58,4 +58,4 @@ export default function Footer() {
             </div>
         </footer>
     );
-}
+};
