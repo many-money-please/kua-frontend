@@ -3,24 +3,26 @@
 :root {
     --background: #ffffff;
     --foreground: #171717;
-    --kua-white: #ffffff;
-    --kua-gray100: #f7f7f7;
-    --kua-gray400: #a6abb7;
-    --kua-gray800: #3d414a;
-    --kua-black100: #333333;
-    --kua-sky50: #f7f9fb;
-    --kua-sky100: #edf9ff;
-    --kua-sky300: #00aeef;
-    --kua-blue50: #f0f5ff;
-    --kua-blue300: #00aeef;
-    --kua-blue500: #1d3a82;
-    --kua-blue600: #1c2c5b;
-    --kua-darkblue800: #051726;
 }
 
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
+    --color-kua-main: #24408f;
+    --color-kua-white: #ffffff;
+    --color-kua-gray100: #f7f7f7;
+    --color-kua-gray250: #eaecf2;
+    --color-kua-gray400: #a6abb7;
+    --color-kua-gray800: #3d414a;
+    --color-kua-black100: #333333;
+    --color-kua-sky50: #f7f9fb;
+    --color-kua-sky100: #edf9ff;
+    --color-kua-sky300: #00aeef;
+    --color-kua-blue50: #f0f5ff;
+    --color-kua-blue300: #00aeef;
+    --color-kua-blue500: #1d3a82;
+    --color-kua-blue600: #1c2c5b;
+    --color-kua-darkblue800: #051726;
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
 }
