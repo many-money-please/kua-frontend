@@ -12,7 +12,7 @@ const navItems = [
 
 export const Header = () => {
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-[#E4E6EB] bg-white">
+        <header className="sticky top-0 z-50 w-full bg-white">
             <div className="mx-auto flex h-[84px] w-full max-w-[1200px] items-center justify-between px-[32px]">
                 <div className="flex items-center gap-[14px]">
                     <Image
