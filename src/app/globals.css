@@ -3,6 +3,19 @@
 :root {
     --background: #ffffff;
     --foreground: #171717;
+    --kua-white: #ffffff;
+    --kua-gray100: #f7f7f7;
+    --kua-gray400: #a6abb7;
+    --kua-gray800: #3d414a;
+    --kua-black100: #333333;
+    --kua-sky50: #f7f9fb;
+    --kua-sky100: #edf9ff;
+    --kua-sky300: #00aeef;
+    --kua-blue50: #f0f5ff;
+    --kua-blue300: #00aeef;
+    --kua-blue500: #1d3a82;
+    --kua-blue600: #1c2c5b;
+    --kua-darkblue800: #051726;
 }
 
 @theme inline {
