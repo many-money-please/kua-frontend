@@ -148,41 +148,43 @@ export const CompetitionSchedule = () => {
             <div className="flex w-[80%] max-w-[1200px] flex-col gap-6">
                 <div className="flex items-center justify-between">
                     <div className="text-[40px] font-bold">대회일정 안내</div>
-                    {totalPages > 1 && (
-                        <div className="flex h-12 items-center justify-end gap-4">
-                            <button
-                                type="button"
-                                onClick={handlePrev}
-                                disabled={pageIndex === 0}
-                                className={`bg-kua-white flex h-12 w-12 items-center justify-center rounded-full shadow transition-all ${
-                                    pageIndex === 0
-                                        ? "cursor-not-allowed opacity-50"
-                                        : "hover:bg-kua-sky50 cursor-pointer"
-                                }`}
-                            >
-                                <FaChevronLeft />
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleNext}
-                                disabled={pageIndex >= totalPages - 1}
-                                className={`bg-kua-white flex h-12 w-12 items-center justify-center rounded-full shadow transition-all ${
-                                    pageIndex >= totalPages - 1
-                                        ? "cursor-not-allowed opacity-50"
-                                        : "hover:bg-kua-sky50 cursor-pointer"
-                                }`}
-                            >
-                                <FaChevronRight />
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleNext}
-                                className="bg-kua-main text-kua-white hover:bg-kua-blue500 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow transition-all"
-                            >
-                                <FaPlus />
-                            </button>
-                        </div>
-                    )}
+                    <div className="flex h-12 items-center justify-end gap-4">
+                        {totalPages > 1 && (
+                            <div className="flex h-12 items-center justify-end gap-4">
+                                <button
+                                    type="button"
+                                    onClick={handlePrev}
+                                    disabled={pageIndex === 0}
+                                    className={`bg-kua-white flex h-12 w-12 items-center justify-center rounded-full shadow transition-all ${
+                                        pageIndex === 0
+                                            ? "cursor-not-allowed opacity-50"
+                                            : "hover:bg-kua-sky50 cursor-pointer"
+                                    }`}
+                                >
+                                    <FaChevronLeft />
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleNext}
+                                    disabled={pageIndex >= totalPages - 1}
+                                    className={`bg-kua-white flex h-12 w-12 items-center justify-center rounded-full shadow transition-all ${
+                                        pageIndex >= totalPages - 1
+                                            ? "cursor-not-allowed opacity-50"
+                                            : "hover:bg-kua-sky50 cursor-pointer"
+                                    }`}
+                                >
+                                    <FaChevronRight />
+                                </button>
+                            </div>
+                        )}
+                        <button
+                            type="button"
+                            onClick={handleNext}
+                            className="bg-kua-gray800 text-kua-white hover:bg-kua-blue500 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow transition-all"
+                        >
+                            <FaPlus />
+                        </button>
+                    </div>
                 </div>
                 <div
                     className={`grid w-full grid-cols-1 gap-6 md:grid-cols-2 ${
