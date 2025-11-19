@@ -4,7 +4,7 @@ import Link from "next/link";
 const navItems = [
     { label: "협회소개", href: "/" },
     { label: "핀수영 소개", href: "/" },
-    { label: "대회정보", href: "/" },
+    { label: "대회정보", href: "/competition_info" },
     { label: "커뮤니티", href: "/" },
     { label: "교육사업", href: "/" },
     { label: "로그인", href: "/" },
