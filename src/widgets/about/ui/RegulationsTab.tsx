@@ -240,10 +240,6 @@ export const RegulationsTab = () => {
     return (
         <div className="w-full bg-white pb-[150px]">
             <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-10">
-                <h2 className="text-kua-black100 text-[32px] font-bold">
-                    규정
-                </h2>
-
                 {/* 검색 UI */}
                 <SearchBar
                     totalCount={filteredData.length}
