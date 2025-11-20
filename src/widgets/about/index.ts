@@ -3,3 +3,4 @@ export { PresidentSpeech } from "./ui/PresidentSpeech";
 export { History } from "./ui/History";
 export { CI } from "./ui/CI";
 export { FindUs } from "./ui/FindUs";
+export { OrganizationTab } from "./ui/OrganizationTab";
