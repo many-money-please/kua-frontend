@@ -14,7 +14,7 @@ export const ScheduleTableSection = ({ data }: ScheduleTableSectionProps) => {
             title="대회일정"
             columns={createScheduleColumns()}
             data={data}
-            getRowLink={(row) => `/competition-info/${row.id}`}
+            getRowLink={(row) => `/competition-info/schedule/${row.id}`}
             searchOptions={["제목", "내용", "제목+내용"]}
             onSearch={(query, option) => console.log("search", query, option)}
         />

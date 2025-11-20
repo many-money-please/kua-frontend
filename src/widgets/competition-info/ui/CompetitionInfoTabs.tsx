@@ -3,10 +3,13 @@
 import { BaseTabs } from "@/shared/ui/Tabs";
 import { usePathname } from "next/navigation";
 
-const TABS_BASE_PATHS = ["/competition-info", "/competition-info/results"];
+const TABS_BASE_PATHS = [
+    "/competition-info/schedule",
+    "/competition-info/results",
+];
 
 const tabs = [
-    { label: "대회일정", path: "/competition-info" },
+    { label: "대회일정", path: "/competition-info/schedule" },
     { label: "대회결과", path: "/competition-info/results" },
 ];
 
