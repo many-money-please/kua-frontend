@@ -40,7 +40,18 @@ const pageConfig: Record<
 
 export const AboutBanner = () => {
     const pathname = usePathname();
-    const config = pageConfig[pathname] || pageConfig["/about"];
+
+    // 경로에 따라 설정 찾기
+    let config = pageConfig[pathname];
+
+    // 정확한 매칭이 없으면, 포함 여부로 확인 (detail 페이지 대응)
+    if (!config) {
+        // pageConfig의 키들 중에서 pathname에 포함된 것을 찾기
+        const matchedKey = Object.keys(pageConfig).find(
+            (key) => key !== "/about" && pathname.startsWith(key),
+        );
+        config = matchedKey ? pageConfig[matchedKey] : pageConfig["/about"];
+    }
 
     return (
         <PageBanner
