@@ -15,20 +15,22 @@ export const Header = () => {
         <header className="sticky top-0 z-50 w-full bg-white">
             <div className="mx-auto flex h-[84px] w-full max-w-[1200px] items-center justify-between px-[32px]">
                 <div className="flex items-center gap-[14px]">
-                    <Image
-                        src="/imgs/logos/Icon.svg"
-                        alt="Korea Underwater Association logo"
-                        width={44}
-                        height={44}
-                        priority
-                    />
-                    <Image
-                        src="/imgs/logos/Icon-Text.svg"
-                        alt="Korea Underwater Association text mark"
-                        width={182}
-                        height={40}
-                        priority
-                    />
+                    <Link href="/" className="flex items-center gap-[14px]">
+                        <Image
+                            src="/imgs/logos/Icon.svg"
+                            alt="Korea Underwater Association logo"
+                            width={44}
+                            height={44}
+                            priority
+                        />
+                        <Image
+                            src="/imgs/logos/Icon-Text.svg"
+                            alt="Korea Underwater Association text mark"
+                            width={182}
+                            height={40}
+                            priority
+                        />
+                    </Link>
                 </div>
 
                 <nav className="text-kua-gray800 flex items-center gap-[42px] text-[15px] font-semibold">
