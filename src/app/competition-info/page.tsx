@@ -1,4 +1,4 @@
-import { CompetitionInfoContent } from "@/widgets/competition_info";
+import { CompetitionInfoContent } from "@/widgets/competition-info";
 
 // 대회일정 데이터 타입
 type CompetitionSchedule = {
@@ -8,16 +8,18 @@ type CompetitionSchedule = {
     location: string;
     competitionPeriod: string;
     applicationPeriod: string;
-    status: string;
+    status: "모집중" | "신청 완료" | "대회 진행중" | "대회 종료";
 };
 
 // 대회결과 데이터 타입
 type CompetitionResult = {
     id: number;
+    category: "국제" | "국내";
     title: string;
-    date: string;
-    winner: string;
-    category: string;
+    location: string;
+    competitionPeriod: string;
+    applicationPeriod: string;
+    status: "결과 발표";
 };
 
 const scheduleData: CompetitionSchedule[] = Array.from(
@@ -35,21 +37,33 @@ const scheduleData: CompetitionSchedule[] = Array.from(
                 : "경기도 시흥시 거북섬 앞 수면(시화호)",
         competitionPeriod: "25-12-20 ~ 25-12-20",
         applicationPeriod: "25-12-20 ~ 25-12-20",
-        status: "결과 발표",
+        status:
+            index % 4 === 0
+                ? "모집중"
+                : index % 4 === 1
+                  ? "신청 완료"
+                  : index % 4 === 2
+                    ? "대회 진행중"
+                    : "대회 종료",
     }),
 );
 
 const resultData: CompetitionResult[] = Array.from(
-    { length: 20 },
+    { length: 32 },
     (_, index) => ({
         id: index + 1,
+        category: index % 2 === 0 ? "국내" : "국제",
         title:
             index % 2 === 0
-                ? "제8회 전국프리다이빙선수권대회"
-                : "2024 KUA 오픈워터 챔피언십",
-        date: "2024.10.15",
-        winner: index % 2 === 0 ? "홍길동" : "김철수",
-        category: index % 2 === 0 ? "남자 개인전" : "여자 개인전",
+                ? `제17회 전국해양스포츠제전 ${index + 1}`
+                : "제17회 전국해양스포츠제전 겸 제14회 대한체육회장배 전국생활체육 장거리...",
+        location:
+            index % 3 === 0
+                ? "경기도 시흥시 거북섬 앞"
+                : "경기도 시흥시 거북섬 앞 수면(시화호)",
+        competitionPeriod: "25-12-20 ~ 25-12-20",
+        applicationPeriod: "25-12-20 ~ 25-12-20",
+        status: "결과 발표",
     }),
 );
 
