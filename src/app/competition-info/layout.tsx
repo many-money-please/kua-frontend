@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import {
     CompetitionInfoBanner,
     CompetitionInfoTabs,
+    PlayerInfoTabs,
 } from "@/widgets/competition-info";
 
 export default function CompetitionInfoLayout({
@@ -14,6 +15,7 @@ export default function CompetitionInfoLayout({
             <main className="flex w-full flex-col items-center justify-between">
                 <CompetitionInfoBanner />
                 <CompetitionInfoTabs />
+                <PlayerInfoTabs />
                 {children}
             </main>
         </div>
