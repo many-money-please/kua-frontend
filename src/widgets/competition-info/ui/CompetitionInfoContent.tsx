@@ -46,6 +46,8 @@ export const CompetitionInfoContent = ({
     };
 
     const handleSearch = (_query: string, _option: string) => {
+        void _query;
+        void _option;
         router.push("/competition-info/create");
     };
 
@@ -82,7 +84,7 @@ export const CompetitionInfoContent = ({
         return `${baseClasses} ${statusClasses[status]}`;
     };
 
-    const scheduleColumns: Column<CompetitionSchedule>[] = [
+    const scheduleColumnsTyped: Column<CompetitionSchedule>[] = [
         {
             key: "category",
             header: "분류",
@@ -150,7 +152,7 @@ export const CompetitionInfoContent = ({
         },
     ];
 
-    const resultColumns: Column<CompetitionResult>[] = [
+    const resultColumnsTyped: Column<CompetitionResult>[] = [
         {
             key: "category",
             header: "분류",
@@ -222,16 +224,17 @@ export const CompetitionInfoContent = ({
         {
             id: "schedule",
             label: "대회일정",
-            columns: scheduleColumns,
+            columns: scheduleColumnsTyped as Column[],
             data: scheduleData,
-            onRowClick: handleScheduleRowClick,
+            onRowClick: (row) =>
+                handleScheduleRowClick(row as CompetitionSchedule),
         },
         {
             id: "result",
             label: "대회결과",
-            columns: resultColumns,
+            columns: resultColumnsTyped as Column[],
             data: resultData,
-            onRowClick: handleResultRowClick,
+            onRowClick: (row) => handleResultRowClick(row as CompetitionResult),
         },
     ];
 
