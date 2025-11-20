@@ -113,7 +113,7 @@ const getDummyNavigation = (
     };
 };
 
-export default function CompetitionInfoDetailPage() {
+export default function CompetitionScheduleDetailPage() {
     const params = useParams();
     const id = params.id as string;
 
@@ -125,8 +125,8 @@ export default function CompetitionInfoDetailPage() {
             pageTitle="대회 일정 안내"
             data={data}
             navigation={navigation}
-            listUrl="/competition-info"
-            detailUrlPattern={(id) => `/competition-info/${id}`}
+            listUrl="/competition-info/schedule"
+            detailUrlPattern={(id) => `/competition-info/schedule/${id}`}
         />
     );
 }

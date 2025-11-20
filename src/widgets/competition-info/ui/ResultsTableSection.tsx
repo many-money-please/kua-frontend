@@ -14,7 +14,7 @@ export const ResultsTableSection = ({ data }: ResultsTableSectionProps) => {
             title="대회결과"
             columns={createResultColumns()}
             data={data}
-            getRowLink={(row) => `/competition-info/${row.id}`}
+            getRowLink={(row) => `/competition-info/results/${row.id}`}
             searchOptions={["제목", "내용", "제목+내용"]}
             onSearch={(query, option) => console.log("search", query, option)}
         />

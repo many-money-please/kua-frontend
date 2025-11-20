@@ -6,3 +6,4 @@ const scheduleData = createMockScheduleData();
 export default function CompetitionSchedulePage() {
     return <ScheduleTableSection data={scheduleData} />;
 }
+

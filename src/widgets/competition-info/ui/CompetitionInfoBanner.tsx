@@ -11,7 +11,7 @@ const pageConfig: Record<
         breadcrumbs: string[];
     }
 > = {
-    "/competition-info": {
+    "/competition-info/schedule": {
         title: "대회일정",
         description: "대한수중핀수영협회의 대회 일정을 확인하세요.",
         breadcrumbs: ["대회정보", "대회일정"],
@@ -25,7 +25,8 @@ const pageConfig: Record<
 
 export const CompetitionInfoBanner = () => {
     const pathname = usePathname();
-    const config = pageConfig[pathname] ?? pageConfig["/competition-info"];
+    const config =
+        pageConfig[pathname] ?? pageConfig["/competition-info/schedule"];
 
     return (
         <PageBanner

@@ -29,7 +29,7 @@ export const Pagination = ({
     };
 
     return (
-        <div className="flex items-center justify-center gap-2 py-6">
+        <div className="flex items-center justify-center gap-2">
             <button
                 type="button"
                 className="text-kua-gray400 bg-kua-gray100 flex h-10 w-10 items-center justify-center rounded-lg text-sm font-medium disabled:opacity-40"

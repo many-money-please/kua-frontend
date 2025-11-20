@@ -33,7 +33,7 @@ export const DataTable = <T,>({
 }: DataTableProps<T>) => {
     return (
         <div
-            className={`border-kua-main w-full overflow-x-auto border-t-2 ${className}`}
+            className={`border-kua-main mb-4 w-full overflow-x-auto border-t-2 ${className}`}
         >
             <table className="border-kua-gray200 w-full border-collapse border-x-0">
                 <thead>
