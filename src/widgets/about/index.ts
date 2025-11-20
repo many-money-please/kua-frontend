@@ -7,3 +7,4 @@ export { OrganizationTab } from "./ui/OrganizationTab";
 export { ExecutivesTab } from "./ui/ExecutivesTab";
 export { RegulationsTab } from "./ui/RegulationsTab";
 export { DisclosureTab } from "./ui/DisclosureTab";
+export { AboutBanner } from "./ui/AboutBanner";
