@@ -36,3 +36,14 @@ body {
     color: var(--foreground);
     font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes revealFromTop {
+    from {
+        clip-path: inset(0 0 100% 0);
+        opacity: 0;
+    }
+    to {
+        clip-path: inset(0 0 0 0);
+        opacity: 1;
+    }
+}

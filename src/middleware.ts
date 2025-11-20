@@ -18,9 +18,16 @@ export function middleware(request: NextRequest) {
         );
     }
 
+    // /competition-info/player-info를 /competition-info/player-info/national로 리다이렉트
+    if (pathname === "/competition-info/player-info") {
+        return NextResponse.redirect(
+            new URL("/competition-info/player-info/national", request.url),
+        );
+    }
+
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/community", "/competition-info"],
+    matcher: ["/community", "/competition-info", "/competition-info/player-info"],
 };
