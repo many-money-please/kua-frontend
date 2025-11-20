@@ -7,18 +7,23 @@ import { AboutBanner, AboutTabs } from "@/widgets/about";
 export default function AboutLayout({ children }: { children: ReactNode }) {
     const pathname = usePathname();
 
-    // detail 페이지인지 확인 (경로가 /about/{tab}/[id] 형태인 경우)
-    const pathSegments = pathname.split("/").filter(Boolean);
-    const isDetailPage =
-        pathSegments.length >= 3 && // /about/{tab}/{id}
-        pathSegments[0] === "about" &&
-        !isNaN(Number(pathSegments[pathSegments.length - 1])); // 마지막이 숫자 (id)
+    // 탭이 표시되어야 하는 기본 경로들
+    const tabPaths = [
+        "/about",
+        "/about/organization",
+        "/about/executives",
+        "/about/regulations",
+        "/about/disclosure",
+    ];
+
+    // 현재 경로가 기본 탭 경로인지 확인
+    const shouldShowTabs = tabPaths.includes(pathname);
 
     return (
         <div className="bg-kua-white flex items-center justify-center">
             <main className="flex w-full flex-col items-center justify-between">
                 <AboutBanner />
-                {!isDetailPage && <AboutTabs />}
+                {shouldShowTabs && <AboutTabs />}
                 {children}
             </main>
         </div>
