@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react";
 
-export type Column<T = any> = {
+export type Column<T = unknown> = {
     key: string;
     header: string;
     accessor?: (row: T) => ReactNode;
@@ -10,7 +10,7 @@ export type Column<T = any> = {
     headerClassName?: string;
 };
 
-type DataTableProps<T = any> = {
+type DataTableProps<T = unknown> = {
     columns: Column<T>[];
     data: T[];
     emptyMessage?: string;
@@ -92,7 +92,14 @@ export const DataTable = <T,>({
                                         >
                                             {column.accessor
                                                 ? column.accessor(row)
-                                                : (row as any)[column.key]}
+                                                : (String(
+                                                      (
+                                                          row as Record<
+                                                              string,
+                                                              unknown
+                                                          >
+                                                      )[column.key] ?? "",
+                                                  ) as ReactNode)}
                                         </td>
                                     );
                                 })}
