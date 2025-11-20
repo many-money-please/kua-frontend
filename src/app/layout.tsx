@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Header } from "@/widgets/header";
+import { Footer } from "@/widgets/footer";
+import Script from "next/script";
 
 const pretendard = localFont({
     src: "../../public/fonts/pretendard/PretendardVariable.woff2",
@@ -25,8 +27,13 @@ export default function RootLayout({
             <body
                 className={`${pretendard.className} text-kua-black100 antialiased`}
             >
+                <Script
+                    src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false`}
+                    strategy="beforeInteractive"
+                />
                 <Header />
                 {children}
+                <Footer />
             </body>
         </html>
     );

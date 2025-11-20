@@ -1,0 +1,117 @@
+"use client";
+
+import { Map, MapMarker } from "react-kakao-maps-sdk";
+import Image from "next/image";
+
+export const FindUs = () => {
+    return (
+        <div className="bg-kua-sky50 w-full">
+            <div className="mx-auto flex w-full max-w-[1200px] flex-col items-start justify-center gap-12 py-44">
+                <h2 className="text-kua-darkblue800 text-[40px] font-bold">
+                    찾아오시는 길
+                </h2>
+                <div className="h-[585px] w-full">
+                    <Map
+                        center={{
+                            lat: 37.517347753646874,
+                            lng: 127.12632769374328,
+                        }}
+                        style={{ width: "100%", height: "100%" }}
+                        level={3} // 확대 레벨
+                    >
+                        <MapMarker
+                            position={{
+                                lat: 37.517347753646874,
+                                lng: 127.12632769374328,
+                            }}
+                        >
+                            <div style={{ color: "#000" }}>
+                                대한수중핀수영협회
+                            </div>
+                        </MapMarker>
+                    </Map>
+                </div>
+                <div className="flex w-full flex-col gap-20">
+                    {/* 주소 */}
+                    <div className="flex items-start gap-[50px]">
+                        <div className="border-kau-gray400 flex h-20 w-20 items-center justify-center rounded-[10px] border bg-white">
+                            <Image
+                                src="/imgs/about/marker.svg"
+                                alt="address"
+                                width={21}
+                                height={33.7}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <h3 className="text-kua-black100 text-2xl font-semibold">
+                                주소
+                            </h3>
+                            <div className="text-kua-gray800 flex flex-col text-base font-medium">
+                                <p>
+                                    (지번주소) 서울특별시 송파구 방이동 88-2
+                                    핸드볼경기장 112호
+                                </p>
+                                <p>
+                                    (도로명주소) 서울특별시 송파구 올림픽로 424
+                                    핸드볼경기장 112호
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 전화번호 */}
+                    <div className="flex items-start gap-[50px]">
+                        <div className="border-kau-gray400 flex h-20 w-20 items-center justify-center rounded-[10px] border bg-white">
+                            <Image
+                                src="/imgs/about/phone.svg"
+                                alt="phone"
+                                width={31.13}
+                                height={31.11}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <h3 className="text-kua-black100 text-2xl font-semibold">
+                                전화번호
+                            </h3>
+                            <div className="text-kua-gray800 flex flex-col text-base font-medium">
+                                <p>
+                                    <span className="font-bold">Tel.</span>{" "}
+                                    02-420-4293
+                                </p>
+                                <p>
+                                    <span className="font-bold">Fax.</span>{" "}
+                                    02-421-8898
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 지하철 이용 시 */}
+                    <div className="flex items-start gap-[50px]">
+                        <div className="border-kau-gray400 flex h-20 w-20 items-center justify-center rounded-[10px] border bg-white">
+                            <Image
+                                src="/imgs/about/subway.svg"
+                                alt="subway"
+                                width={26}
+                                height={34}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-3">
+                            <h3 className="text-kua-black100 text-2xl font-semibold">
+                                지하철 이용 시
+                            </h3>
+                            <div className="flex items-center">
+                                <div className="flex items-center justify-center rounded-md bg-[#8936E0] px-3 py-1 text-base font-bold text-white">
+                                    5호선
+                                </div>
+                                <p className="text-kua-gray800 text-base font-medium">
+                                    올림픽공원역 하차 3번출구 도보로 5분
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
