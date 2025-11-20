@@ -4,6 +4,7 @@ import { useState } from "react";
 import { DataTable, type Column } from "@/shared/ui/DataTable";
 import { Pagination } from "@/shared/ui/Pagination";
 import { SearchBar } from "@/shared/ui/SearchBar";
+import { useRouter } from "next/navigation";
 
 type Disclosure = {
     id: number;
@@ -137,6 +138,7 @@ const disclosureData: Disclosure[] = [
 ];
 
 export const DisclosureTab = () => {
+    const router = useRouter();
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchOption, setSearchOption] = useState("제목");
@@ -161,9 +163,8 @@ export const DisclosureTab = () => {
     };
 
     const handleRowClick = (row: Disclosure) => {
-        // 상세 페이지로 이동 또는 모달 열기
-        console.log("경영공시 상세:", row);
-        // router.push(`/about/disclosure/${row.id}`);
+        // 상세 페이지로 이동
+        router.push(`/about/disclosure/${row.id}`);
     };
 
     // 컬럼 정의
