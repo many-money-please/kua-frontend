@@ -71,6 +71,8 @@ type PostFormContextValue = {
     handleImagesSelected: (files: FileList | null) => void;
     handleRemoveImage: (id: string) => void;
     isSubmitting: boolean;
+    submitLabel: string;
+    resetLabel: string;
 };
 
 const PostFormContext = createContext<PostFormContextValue | null>(null);
@@ -375,7 +377,7 @@ const ImageField = () => {
 };
 
 const Actions = () => {
-    const { isSubmitting } = usePostFormContext();
+    const { isSubmitting, submitLabel } = usePostFormContext();
 
     return (
         <div className="flex justify-start gap-4">
@@ -384,7 +386,7 @@ const Actions = () => {
                 className="bg-kua-blue300 rounded-lg px-6 py-3 font-normal text-white disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={isSubmitting}
             >
-                {isSubmitting ? "등록 중..." : "등록하기"}
+                {isSubmitting ? "처리 중..." : submitLabel}
             </button>
         </div>
     );
