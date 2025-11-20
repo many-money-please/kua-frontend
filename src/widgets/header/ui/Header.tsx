@@ -2,12 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 const navItems = [
-    { label: "협회소개", href: "/" },
-    { label: "핀수영 소개", href: "/" },
-    { label: "대회정보", href: "/competition_info" },
-    { label: "커뮤니티", href: "/" },
-    { label: "교육사업", href: "/" },
-    { label: "로그인", href: "/" },
+    { label: "협회소개", href: "/about" },
+    { label: "핀수영 소개", href: "/fin-swimming" },
+    { label: "대회정보", href: "/competition-info" },
+    { label: "커뮤니티", href: "/community" },
+    { label: "교육사업", href: "/education-business" },
+    { label: "로그인", href: "/login" },
 ];
 
 export const Header = () => {
