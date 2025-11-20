@@ -12,6 +12,35 @@ import {
 import Image from "next/image";
 import { PostEditor } from "@/shared/ui/PostEditor";
 
+/**
+ * PostForm
+ *
+ * 콘텐츠 작성 화면에서 자주 사용되는 필드(제목, 본문, 첨부파일, 이미지 등록)를
+ * 레고 블록처럼 조립할 수 있도록 만든 컴포넌트 세트입니다.
+ *
+ * 사용 예시:
+ * ```tsx
+ * <PostForm.Root onSubmit={handleSubmit}>
+ *   <PostForm.TitleField />
+ *   <CustomCategoryField />
+ *   <PostForm.ContentField />
+ *   <PostForm.ImageField />
+ *   <PostForm.AttachmentField />
+ *   <PostForm.Actions />
+ * </PostForm.Root>
+ * ```
+ *
+ * 구성 요소:
+ * - `Root`: 상태 관리와 전송을 담당. `onSubmit`, `initialValues`, `isSubmitting` 등을 받습니다.
+ * - `TitleField`: 제목 입력 필드.
+ * - `ContentField`: WYSIWYG 에디터(`PostEditor`)를 통한 본문 입력.
+ * - `ImageField`: 이미지 업로드, 썸네일 미리보기, 삭제 및 용량/형식 안내.
+ * - `AttachmentField`: 일반 파일 업로드와 목록 관리.
+ * - `Actions`: 제출 버튼(필요 시 원하는 버튼으로 교체 가능).
+ *
+ * 추가 필드를 끼워 넣고 싶다면 `Root` 자식에 직접 JSX를 작성하면 됩니다.
+ */
+
 export type PostAttachment = {
     id: string;
     name: string;
