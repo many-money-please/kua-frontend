@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { DataTable, type Column } from "@/shared/ui/DataTable";
 import { Pagination } from "@/shared/ui/Pagination";
+import { SearchBar } from "@/shared/ui/SearchBar";
 
 type Regulation = {
     id: number;
@@ -244,46 +245,16 @@ export const RegulationsTab = () => {
                 </h2>
 
                 {/* 검색 UI */}
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <span className="text-lg font-bold">목록</span>
-                        <span className="text-kua-gray800">
-                            총{" "}
-                            <span className="text-kua-blue300">
-                                {filteredData.length.toLocaleString()}
-                            </span>
-                            건
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <select
-                            value={searchOption}
-                            onChange={(e) => setSearchOption(e.target.value)}
-                            className="bg-kua-gray100 rounded-lg px-3 py-2"
-                        >
-                            <option value="제목">제목</option>
-                        </select>
-                        <input
-                            type="text"
-                            placeholder="검색어를 입력하세요"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    handleSearch();
-                                }
-                            }}
-                            className="bg-kua-gray100 text-kua-gray400 w-64 rounded-lg px-4 py-2"
-                        />
-                        <button
-                            type="button"
-                            onClick={handleSearch}
-                            className="bg-kua-blue500 text-kua-white hover:bg-kua-blue600 rounded-lg px-6 py-2 font-semibold transition-colors"
-                        >
-                            검색
-                        </button>
-                    </div>
-                </div>
+                <SearchBar
+                    totalCount={filteredData.length}
+                    searchQuery={searchQuery}
+                    searchOption={searchOption}
+                    searchOptions={["제목"]}
+                    onSearchQueryChange={setSearchQuery}
+                    onSearchOptionChange={setSearchOption}
+                    onSearch={handleSearch}
+                    placeholder="검색어를 입력하세요"
+                />
 
                 {/* 규정 문서 테이블 */}
                 <div className="w-full">
