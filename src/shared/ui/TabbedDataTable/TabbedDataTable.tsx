@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TabNavigation, type TabItem } from "@/shared/ui/TabNavigation";
 import { DataTable, type Column } from "@/shared/ui/DataTable";
 import { Pagination } from "@/shared/ui/Pagination";
@@ -22,20 +22,20 @@ const DEFAULT_PAGE_SIZE = 15;
  * @property initialPage - 탭별 초기 페이지 (선택적, 기본값 1)
  * @property onPageChange - 페이지 전환 시 실행될 콜백 (서버 연동 시 활용)
  */
-export type TabData<T = any> = {
+export type TabData = {
     id: string;
     label: string;
-    columns: Column<T>[];
-    data: T[];
-    onRowClick?: (row: T) => void;
+    columns: Column[];
+    data: unknown[];
+    onRowClick?: (row: unknown) => void;
     totalItems?: number;
     pageSize?: number;
     initialPage?: number;
     onPageChange?: (page: number) => void;
 };
 
-type TabbedDataTableProps<T = any> = {
-    tabs: TabData<T>[];
+type TabbedDataTableProps = {
+    tabs: TabData[];
     defaultTabId?: string;
     searchOptions?: {
         options?: string[];
@@ -61,7 +61,7 @@ type TabbedDataTableProps<T = any> = {
  * 각 탭마다 독립적인 컬럼 정의와 데이터를 가질 수 있으며, 검색 및 페이지네이션 기능을 포함합니다.
  */
 
-export const TabbedDataTable = <T,>({
+export const TabbedDataTable = ({
     tabs,
     defaultTabId,
     searchOptions,
@@ -71,7 +71,7 @@ export const TabbedDataTable = <T,>({
     headerClassName = "",
     rowClassName = "",
     pagination,
-}: TabbedDataTableProps<T>) => {
+}: TabbedDataTableProps) => {
     const [activeTab, setActiveTab] = useState(
         defaultTabId || tabs[0]?.id || "",
     );
@@ -91,22 +91,11 @@ export const TabbedDataTable = <T,>({
         ),
     );
 
-    useEffect(() => {
-        setPageByTab((prev) => {
-            const next: Record<string, number> = {};
-            tabs.forEach((tab) => {
-                next[tab.id] =
-                    prev[tab.id] ?? tab.initialPage ?? fallbackInitialPage;
-            });
-            return next;
-        });
-    }, [tabs, fallbackInitialPage]);
-
     const activeTabData = tabs.find((tab) => tab.id === activeTab);
     const totalCount =
         activeTabData?.totalItems ?? activeTabData?.data.length ?? 0;
 
-    const getPaginationInfo = (tab: TabData<T>) => {
+    const getPaginationInfo = (tab: TabData) => {
         const pageSize =
             tab.pageSize ?? pagination?.pageSize ?? DEFAULT_PAGE_SIZE;
         const storedPage =
