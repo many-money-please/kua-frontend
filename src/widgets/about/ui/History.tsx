@@ -178,7 +178,7 @@ export const History = () => {
                         <button
                             key={period}
                             onClick={() => setActivePeriod(period)}
-                            className={`flex h-[80px] items-center justify-between rounded-[10px] px-8 text-2xl font-bold transition-all ${
+                            className={`flex h-[80px] cursor-pointer items-center justify-between rounded-[10px] px-8 text-2xl font-bold transition-all ${
                                 activePeriod === period
                                     ? "bg-kua-main text-white"
                                     : "border-kua-main text-kua-main hover:bg-kua-main border bg-white hover:text-white"

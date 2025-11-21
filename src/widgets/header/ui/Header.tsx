@@ -89,8 +89,36 @@ const navItems: NavItem[] = [
         href: "/community",
         description: "공지사항과 자료실을 확인하세요.",
         subMenus: [
-            { label: "공지사항", href: "/community/notices" },
-            { label: "자료실", href: "/community/resources" },
+            // { label: "공지사항", href: "/community/notices" },
+            // { label: "자료실", href: "/community/resources" },
+            {
+                label: "커뮤니티",
+                children: [
+                    { label: "공지사항", href: "/community/notices" },
+                    { label: "자료실", href: "/community/resources" },
+                ],
+            },
+            {
+                label: "협회소식",
+                children: [
+                    {
+                        label: "소식 및 활동",
+                        href: "/community/news-and-activities",
+                    },
+                    {
+                        label: "보도자료",
+                        href: "/community/press-releases",
+                    },
+                    {
+                        label: "핀수영 TV",
+                        href: "/community/fin-swimming-tv",
+                    },
+                ],
+            },
+            {
+                label: "문의하기",
+                href: "/community/contact",
+            },
         ],
     },
     {
@@ -178,7 +206,7 @@ export const Header = () => {
                         return (
                             <div
                                 key={item.label}
-                                className="hover:text-kua-blue300 relative flex h-full items-center"
+                                className="hover:text-kua-blue300 relative flex h-full cursor-pointer items-center"
                                 onMouseEnter={() => setHoveredNav(item.label)}
                                 onMouseLeave={() => {
                                     // GNB가 열려있을 때는 닫지 않음
@@ -200,8 +228,12 @@ export const Header = () => {
                                 {/* 헤더와 GNB 사이에 걸치는 동그란 요소 */}
                                 {isHovered && (
                                     <div
-                                        className="bg-kua-blue300 absolute left-1/2 z-40 h-1.5 w-1.5 -translate-x-1/2 rounded-full"
-                                        style={{ top: "81px" }}
+                                        className="bg-kua-blue300 absolute left-1/2 z-40 h-1.5 w-1.5 -translate-x-1/2 scale-150 rounded-full"
+                                        style={{
+                                            top: "81px",
+                                            animation:
+                                                "revealFromTop 0.3s ease-out forwards",
+                                        }}
                                     />
                                 )}
                             </div>

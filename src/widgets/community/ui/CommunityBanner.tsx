@@ -36,6 +36,15 @@ const pageConfig: Record<
 export const CommunityBanner = () => {
     const pathname = usePathname();
 
+    // 커뮤니티 섹션(공지사항, 자료실)에서만 렌더링
+    const shouldRender =
+        pathname.startsWith("/community/notices") ||
+        pathname.startsWith("/community/resources");
+
+    if (!shouldRender) {
+        return null;
+    }
+
     let config = pageConfig[pathname];
     if (!config) {
         if (pathname.startsWith("/community/notices/")) {
@@ -55,4 +64,3 @@ export const CommunityBanner = () => {
         />
     );
 };
-

@@ -185,7 +185,7 @@ export const ExecutivesTab = () => {
                     {isAdmin && (
                         <button
                             onClick={handleCreate}
-                            className="bg-kua-main hover:bg-kua-blue600 rounded-lg px-6 py-3 font-semibold text-white transition-colors"
+                            className="bg-kua-main hover:bg-kua-blue600 cursor-pointer rounded-lg px-6 py-3 font-semibold text-white transition-colors"
                         >
                             추가
                         </button>
@@ -241,7 +241,7 @@ export const ExecutivesTab = () => {
                                 <div className="flex w-full justify-center gap-3 px-4 pt-2 pb-4">
                                     <button
                                         onClick={() => handleEdit(executive.id)}
-                                        className="hover:bg-kua-sky300 hover:text-kua-white text-kua-sky300 border-kua-sky300 w-16 rounded-md border py-2 text-[15px] font-medium transition-colors"
+                                        className="hover:bg-kua-sky300 hover:text-kua-white text-kua-sky300 border-kua-sky300 w-16 cursor-pointer rounded-md border py-2 text-[15px] font-medium transition-colors"
                                     >
                                         수정
                                     </button>
@@ -249,7 +249,7 @@ export const ExecutivesTab = () => {
                                         onClick={() =>
                                             handleDelete(executive.id)
                                         }
-                                        className="hover:bg-kua-orange500 hover:text-kua-white text-kua-orange500 border-kua-orange500 w-16 rounded-md border py-2 text-[15px] font-medium transition-colors"
+                                        className="hover:bg-kua-orange500 hover:text-kua-white text-kua-orange500 border-kua-orange500 w-16 cursor-pointer rounded-md border py-2 text-[15px] font-medium transition-colors"
                                     >
                                         삭제
                                     </button>

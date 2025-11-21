@@ -33,13 +33,13 @@ export const ConfirmModal = ({
                 <div className="flex justify-end gap-3">
                     <button
                         onClick={onCancel}
-                        className="bg-kua-gray300 hover:bg-kua-gray400 rounded-md px-4 py-2 transition-colors"
+                        className="bg-kua-gray300 hover:bg-kua-gray400 cursor-pointer rounded-md px-4 py-2 transition-colors"
                     >
                         {cancelText}
                     </button>
                     <button
                         onClick={onConfirm}
-                        className={`rounded-md px-4 py-2 transition-colors ${confirmButtonClass}`}
+                        className={`cursor-pointer rounded-md px-4 py-2 transition-colors ${confirmButtonClass}`}
                     >
                         {confirmText}
                     </button>
