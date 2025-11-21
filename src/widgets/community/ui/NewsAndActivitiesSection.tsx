@@ -120,6 +120,7 @@ export const NewsAndActivitiesSection = ({
                         onSearchOptionChange={setSearchOption}
                         onSearch={handleSearch}
                         onRegister={handleRegister}
+                        buttonText="추가하기"
                     />
                 ) : (
                     <SearchBar

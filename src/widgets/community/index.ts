@@ -16,3 +16,5 @@ export {
 } from "./ui/NewsAndActivitiesSection";
 export { NewsAndActivitiesCreate } from "./ui/NewsAndActivitiesCreate";
 export { NewsAndActivitiesEdit } from "./ui/NewsAndActivitiesEdit";
+export { ContactSection, type ContactPost } from "./ui/ContactSection";
+export { ContactCreate } from "./ui/ContactCreate";
