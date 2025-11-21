@@ -31,15 +31,21 @@ const pageConfig: Record<
         description: "공지사항과 자료실 소식을 확인하세요.",
         breadcrumbs: ["커뮤니티", "자료실", "상세"],
     },
+    "/community/contact": {
+        title: "문의하기",
+        description: "궁금하거나 도움이 필요한 경우 문의해주세요.",
+        breadcrumbs: ["커뮤니티", "문의하기"],
+    },
 };
 
 export const CommunityBanner = () => {
     const pathname = usePathname();
 
-    // 커뮤니티 섹션(공지사항, 자료실)에서만 렌더링
+    // 커뮤니티 섹션(공지사항, 자료실, 문의하기)에서만 렌더링
     const shouldRender =
         pathname.startsWith("/community/notices") ||
-        pathname.startsWith("/community/resources");
+        pathname.startsWith("/community/resources") ||
+        pathname.startsWith("/community/contact");
 
     if (!shouldRender) {
         return null;

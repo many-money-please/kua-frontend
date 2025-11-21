@@ -10,6 +10,7 @@ type AdminSearchBarProps = {
     onSearch: () => void;
     onRegister: () => void;
     placeholder?: string;
+    buttonText: string;
 };
 
 export const AdminSearchBar = ({
@@ -22,6 +23,7 @@ export const AdminSearchBar = ({
     onSearch,
     onRegister,
     placeholder = "검색어를 입력하세요",
+    buttonText,
 }: AdminSearchBarProps) => {
     return (
         <div className="flex h-[40px] items-center justify-between">
@@ -67,7 +69,7 @@ export const AdminSearchBar = ({
                     onClick={onRegister}
                     className="hover:bg-kua-main hover:text-kua-white text-kua-main border-kua-main h-full cursor-pointer rounded-lg border px-6 py-2 font-semibold whitespace-nowrap transition-colors"
                 >
-                    추가하기
+                    {buttonText}
                 </button>
             </div>
         </div>
