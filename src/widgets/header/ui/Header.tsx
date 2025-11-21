@@ -51,7 +51,35 @@ const navItems: NavItem[] = [
         label: "핀수영 소개",
         href: "/fin-swimming",
         description: "핀수영에 대해 알아보세요.",
-        subMenus: [],
+        subMenus: [
+            {
+                label: "유래",
+                href: "/fin-swimming/history",
+                children: [
+                    {
+                        label: "역사적 기원",
+                    },
+                    {
+                        label: "경기 구성",
+                    },
+                    {
+                        label: "핀수영의 특징",
+                    },
+                    {
+                        label: "한국 핀수영의 발전",
+                    },
+                ],
+            },
+            {
+                label: "기술 및 훈련",
+                href: "/fin-swimming/skills-and-training",
+                children: [
+                    { label: "기초기술" },
+                    { label: "응용기술" },
+                    { label: "훈련방법" },
+                ],
+            },
+        ],
     },
     {
         label: "대회정보",

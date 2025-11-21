@@ -25,6 +25,12 @@ export function proxy(request: NextRequest) {
         );
     }
 
+    if (pathname === "/fin-swimming") {
+        return NextResponse.redirect(
+            new URL("/fin-swimming/history", request.url),
+        );
+    }
+
     return NextResponse.next();
 }
 
@@ -33,5 +39,6 @@ export const config = {
         "/community",
         "/competition-info",
         "/competition-info/player-info",
+        "/fin-swimming",
     ],
 };
