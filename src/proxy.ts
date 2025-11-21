@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // /community를 /community/notices로 리다이렉트
@@ -29,5 +29,9 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/community", "/competition-info", "/competition-info/player-info"],
+    matcher: [
+        "/community",
+        "/competition-info",
+        "/competition-info/player-info",
+    ],
 };
