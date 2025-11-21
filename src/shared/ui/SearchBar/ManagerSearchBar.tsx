@@ -1,39 +1,33 @@
 "use client";
 
-type SearchBarProps = {
-    totalCount: number;
+type ManagerSearchBarProps = {
     searchQuery: string;
     searchOption: string;
     searchOptions?: string[];
     onSearchQueryChange: (query: string) => void;
     onSearchOptionChange: (option: string) => void;
+    selectedCount?: number;
     onSearch: () => void;
+    onAdd: () => void;
+    onDelete: () => void;
     placeholder?: string;
 };
 
-export const SearchBar = ({
-    totalCount,
+export const ManagerSearchBar = ({
     searchQuery,
     searchOption,
     searchOptions = ["제목"],
     onSearchQueryChange,
     onSearchOptionChange,
+    selectedCount = 0,
     onSearch,
+    onAdd,
+    onDelete,
     placeholder = "검색어를 입력하세요",
-}: SearchBarProps) => {
+}: ManagerSearchBarProps) => {
     return (
         <div className="flex h-[40px] items-center justify-between">
             <div className="flex h-full items-center gap-4">
-                <span className="text-lg font-bold">목록</span>
-                <span className="text-kua-gray800">
-                    총{" "}
-                    <span className="text-kua-blue300">
-                        {totalCount.toLocaleString()}
-                    </span>
-                    건
-                </span>
-            </div>
-            <div className="items-cente flex h-full gap-4">
                 {searchOptions.length > 1 && (
                     <select
                         value={searchOption}
@@ -62,9 +56,26 @@ export const SearchBar = ({
                 <button
                     type="button"
                     onClick={onSearch}
-                    className="bg-kua-blue500 text-kua-white hover:bg-kua-blue600 h-full rounded-lg px-6 py-2 font-semibold transition-colors"
+                    className="bg-kua-blue500 text-kua-white hover:bg-kua-blue600 h-full cursor-pointer rounded-lg px-6 py-2 font-semibold transition-colors"
                 >
                     검색
+                </button>
+            </div>
+            <div className="flex h-full items-center gap-4">
+                <button
+                    type="button"
+                    onClick={onAdd}
+                    className="bg-kua-main text-kua-white hover:bg-kua-blue600 h-full cursor-pointer rounded-lg px-4 py-2 transition-colors"
+                >
+                    추가하기
+                </button>
+                <button
+                    type="button"
+                    onClick={onDelete}
+                    className={`${selectedCount > 0 ? "bg-kua-orange500 text-kua-white cursor-pointer hover:bg-orange-600" : "bg-kua-gray250 text-kua-gray400"} h-full rounded-lg px-4 py-2 transition-colors duration-200`}
+                    disabled={selectedCount === 0}
+                >
+                    삭제 {selectedCount > 0 ? `(${selectedCount})` : ""}
                 </button>
             </div>
         </div>
