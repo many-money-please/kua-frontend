@@ -223,7 +223,7 @@ const TitleField = ({
     return (
         <div className="flex flex-col gap-2">
             <label className="text-lg font-semibold" htmlFor="post-title">
-                제목
+                제목 <span className="text-kua-orange500 text-sm">(필수)</span>
             </label>
             <input
                 id="post-title"
@@ -242,7 +242,9 @@ const ContentField = () => {
     const { content, setContent } = usePostFormContext();
     return (
         <div className="flex flex-col gap-2">
-            <label className="text-lg font-semibold">내용</label>
+            <label className="text-lg font-semibold">
+                내용 <span className="text-kua-orange500 text-sm">(필수)</span>
+            </label>
             <PostEditor value={content} onChange={setContent} />
         </div>
     );
@@ -259,7 +261,7 @@ const AttachmentField = () => {
             <div className="flex items-center gap-3">
                 <button
                     type="button"
-                    className="border-kua-gray200 rounded-lg border px-4 py-2"
+                    className="border-kua-gray200 cursor-pointer rounded-lg border px-4 py-2"
                     onClick={() => fileInputRef.current?.click()}
                 >
                     파일 선택
@@ -322,7 +324,7 @@ const ImageField = () => {
                 <div className="text-lg font-semibold">이미지 등록</div>
                 <button
                     type="button"
-                    className="border-kua-gray200 w-fit rounded-lg border px-4 py-2 text-sm font-semibold"
+                    className="border-kua-gray200 w-fit cursor-pointer rounded-lg border px-4 py-2 text-sm font-semibold"
                     onClick={() => fileInputRef.current?.click()}
                 >
                     이미지 추가하기
@@ -383,7 +385,7 @@ const Actions = () => {
         <div className="flex justify-start gap-4">
             <button
                 type="submit"
-                className="bg-kua-blue300 rounded-lg px-6 py-3 font-normal text-white disabled:cursor-not-allowed disabled:opacity-50"
+                className="bg-kua-blue300 cursor-pointer rounded-lg px-6 py-3 font-normal text-white disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={isSubmitting}
             >
                 {isSubmitting ? "처리 중..." : submitLabel}

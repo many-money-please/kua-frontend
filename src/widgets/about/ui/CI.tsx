@@ -24,7 +24,7 @@ export const CI = () => {
                             정비례로 확대, 축소하여 사용하도록 한다.
                         </p>
                         {/* 다운로드 버튼 */}
-                        <button className="border-kua-gray500 bg-kua-gray100 text-kua-gray500 flex w-[152px] items-center justify-center gap-2.5 rounded-[5px] border px-4 py-[7px] text-lg font-medium transition-colors hover:bg-[#E5E7EB]">
+                        <button className="border-kua-gray500 bg-kua-gray100 text-kua-gray500 flex w-[152px] cursor-pointer items-center justify-center gap-2.5 rounded-[5px] border px-4 py-[7px] text-lg font-medium transition-colors hover:bg-[#E5E7EB]">
                             CI 다운로드
                             <Image
                                 src="/imgs/about/download.svg"
