@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DataTable, type Column } from "@/shared/ui/DataTable";
 import { Pagination } from "@/shared/ui/Pagination";
-import { SearchBar } from "@/shared/ui/SearchBar";
+import { SearchBar, ManagerSearchBar } from "@/shared/ui/SearchBar";
 
 type CompetitionInfoTableProps<T> = {
     title: string;
@@ -29,12 +29,14 @@ export const CompetitionInfoTable = <T,>({
     getRowLink,
     pageSize = 15,
 }: CompetitionInfoTableProps<T>) => {
+    const isManager = true;
     const router = useRouter();
     const [page, setPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchOption, setSearchOption] = useState(
         searchOptions?.[0] ?? "제목",
     );
+    const [selectedRows, setSelectedRows] = useState<T[]>([]);
 
     const paginationInfo = useMemo(() => {
         const totalItems = totalCount ?? data.length;
@@ -53,15 +55,42 @@ export const CompetitionInfoTable = <T,>({
         <div className="mb-12 flex w-full max-w-[1200px] flex-col gap-6">
             <div className="flex flex-col gap-2">
                 <span className="text-lg font-bold">{title}</span>
-                <SearchBar
-                    totalCount={paginationInfo.totalItems}
-                    searchQuery={searchQuery}
-                    searchOption={searchOption}
-                    searchOptions={searchOptions}
-                    onSearchQueryChange={setSearchQuery}
-                    onSearchOptionChange={setSearchOption}
-                    onSearch={handleSearch}
-                />
+                {isManager ? (
+                    <ManagerSearchBar
+                        searchQuery={searchQuery}
+                        searchOption={searchOption}
+                        searchOptions={searchOptions}
+                        onSearchQueryChange={setSearchQuery}
+                        onSearchOptionChange={setSearchOption}
+                        onSearch={handleSearch}
+                        onAdd={() => {
+                            router.push(`/competition-info/create`);
+                        }}
+                        onDelete={() => {
+                            if (selectedRows.length > 0) {
+                                const selectedIds = selectedRows.map((row) => {
+                                    // row에 id 속성이 있다고 가정
+                                    return (row as { id?: string | number }).id;
+                                });
+                                console.log("선택된 행들의 ID:", selectedIds);
+                                // TODO: 실제 삭제 로직 구현
+                            } else {
+                                console.log("선택된 행이 없습니다.");
+                            }
+                        }}
+                        selectedCount={selectedRows.length}
+                    />
+                ) : (
+                    <SearchBar
+                        totalCount={paginationInfo.totalItems}
+                        searchQuery={searchQuery}
+                        searchOption={searchOption}
+                        searchOptions={searchOptions}
+                        onSearchQueryChange={setSearchQuery}
+                        onSearchOptionChange={setSearchOption}
+                        onSearch={handleSearch}
+                    />
+                )}
             </div>
 
             <DataTable
@@ -78,6 +107,14 @@ export const CompetitionInfoTable = <T,>({
                         : undefined
                 }
                 rowClassName="hover:bg-kua-sky50"
+                canDelete={isManager}
+                onSelectionChange={(rows) => {
+                    setSelectedRows(rows);
+                }}
+                getRowId={(row) => {
+                    // row에 id 속성이 있다고 가정
+                    return (row as { id?: string | number }).id ?? "";
+                }}
             />
 
             {paginationInfo.totalPages > 1 && (
