@@ -64,9 +64,9 @@ export const AppliedTechniques = () => {
                             <h3 className="text-kua-main text-2xl font-bold">
                                 {technique.title}
                             </h3>
-                            <p className="text-kua-gray800 text-lg leading-relaxed">
+                            <div className="text-kua-gray800 text-lg leading-relaxed">
                                 {technique.description}
-                            </p>
+                            </div>
                         </div>
                     </div>
                 ))}
