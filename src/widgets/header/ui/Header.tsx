@@ -254,16 +254,11 @@ export const Header = () => {
                             >
                                 {item.label}
                                 {/* 헤더와 GNB 사이에 걸치는 동그란 요소 */}
-                                {isHovered && (
-                                    <div
-                                        className="bg-kua-blue300 absolute left-1/2 z-40 min-h-1 min-w-1 -translate-x-1/2 scale-150 rounded-full"
-                                        style={{
-                                            top: "82px",
-                                            animation:
-                                                "revealFromTop 0.3s ease-out forwards",
-                                        }}
-                                    />
-                                )}
+                                <div
+                                    className={`bg-kua-blue300 absolute top-[82px] left-1/2 z-40 min-h-1 min-w-1 -translate-x-1/2 scale-150 rounded-full transition-opacity duration-200 ${
+                                        isHovered ? "opacity-100" : "opacity-0"
+                                    }`}
+                                />
                             </div>
                         );
                     })}
@@ -325,17 +320,17 @@ export const Header = () => {
                                                                     null,
                                                                 )
                                                             }
-                                                            className={`hover:bg-kua-sky100 bg-kua-gray100 flex w-[200px] items-center justify-between rounded-lg p-2 text-base transition-colors ${
+                                                            className={`group hover:bg-kua-sky100 bg-kua-gray100 flex w-[200px] items-center justify-between rounded-lg p-2 text-base font-medium transition-colors ${
                                                                 isSubMenuActive
                                                                     ? "text-kua-main font-semibold"
-                                                                    : "text-kua-gray800 hover:text-kua-main"
+                                                                    : "text-kua-gray800 hover:text-kua-blue300"
                                                             }`}
                                                         >
                                                             {subMenu.label}
-                                                            <FaChevronRight className="text-kua-gray800" />
+                                                            <FaChevronRight className="text-kua-gray800 group-hover:text-kua-blue300 text-sm font-medium transition-colors" />
                                                         </Link>
                                                     ) : (
-                                                        <div className="bg-kua-gray100 text-kua-gray800 block w-[200px] rounded-lg p-2 text-base">
+                                                        <div className="bg-kua-gray100 text-kua-gray800 block w-[200px] rounded-lg p-2 text-base font-medium">
                                                             {subMenu.label}
                                                         </div>
                                                     )}
@@ -360,12 +355,26 @@ export const Header = () => {
                                                                                     null,
                                                                                 )
                                                                             }
-                                                                            className="hover:bg-kua-sky100 text-kua-gray800 hover:text-kua-main flex w-full items-center justify-between rounded-lg px-2 py-1 text-sm transition-colors"
+                                                                            className="text-kua-gray800 hover:text-kua-blue300 flex w-full items-center gap-2 rounded-lg px-2 py-1 text-sm transition-colors hover:underline"
                                                                         >
                                                                             {
                                                                                 child.label
                                                                             }
-                                                                            <FaChevronRight className="text-kua-gray800" />
+                                                                            <svg
+                                                                                width="10"
+                                                                                height="10"
+                                                                                viewBox="0 0 10 10"
+                                                                                fill="none"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                className="hover:text-kua-blue300"
+                                                                            >
+                                                                                <path
+                                                                                    d="M2.91666 8.87091L7.08333 5.00186L2.91666 1.13281"
+                                                                                    stroke="currentColor"
+                                                                                    strokeLinecap="round"
+                                                                                    strokeLinejoin="round"
+                                                                                />
+                                                                            </svg>
                                                                         </Link>
                                                                     ) : (
                                                                         <span
