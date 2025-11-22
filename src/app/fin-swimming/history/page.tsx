@@ -8,7 +8,7 @@ import {
 
 export default function HistoryPage() {
     return (
-        <div className="mx-auto w-full pb-16">
+        <div className="mx-auto w-full">
             <div className="mx-auto flex w-full flex-col gap-16">
                 <Origin />
                 <HistoricalOrigin />
