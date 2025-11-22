@@ -256,9 +256,9 @@ export const Header = () => {
                                 {/* 헤더와 GNB 사이에 걸치는 동그란 요소 */}
                                 {isHovered && (
                                     <div
-                                        className="bg-kua-blue300 absolute left-1/2 z-40 h-1.5 w-1.5 -translate-x-1/2 scale-150 rounded-full"
+                                        className="bg-kua-blue300 absolute left-1/2 z-40 min-h-1 min-w-1 -translate-x-1/2 scale-150 rounded-full"
                                         style={{
-                                            top: "81px",
+                                            top: "82px",
                                             animation:
                                                 "revealFromTop 0.3s ease-out forwards",
                                         }}
@@ -325,7 +325,7 @@ export const Header = () => {
                                                                     null,
                                                                 )
                                                             }
-                                                            className={`hover:bg-kua-gray200 bg-kua-gray100 flex w-[200px] items-center justify-between rounded-lg p-2 text-base transition-colors ${
+                                                            className={`hover:bg-kua-sky100 bg-kua-gray100 flex w-[200px] items-center justify-between rounded-lg p-2 text-base transition-colors ${
                                                                 isSubMenuActive
                                                                     ? "text-kua-main font-semibold"
                                                                     : "text-kua-gray800 hover:text-kua-main"
