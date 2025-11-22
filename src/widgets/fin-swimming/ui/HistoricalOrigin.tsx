@@ -35,7 +35,7 @@ export const HistoricalOrigin = () => {
                 </p>
             </div>
             <div className="mx-auto grid w-full max-w-[1200px] grid-cols-2 gap-16">
-                <div className="relative h-full w-full overflow-hidden rounded-2xl">
+                <div className="relative h-full w-full overflow-hidden rounded-[10px]">
                     <Image
                         src="/imgs/fin-swimming/fin-swimming02.jpg"
                         alt="핀수영"
@@ -51,18 +51,17 @@ export const HistoricalOrigin = () => {
                             </div>
                         ) : (
                             <div className="relative">
-                                {/* 세로 라인 */}
-                                <div className="bg-kua-gray300 absolute top-[11px] left-[7px] h-full w-px"></div>
-
                                 {historyData.map((yearData, yearIndex) => (
                                     <div
                                         key={yearIndex}
-                                        className="border-b-kua-gray400 dashed relative flex w-full flex-col gap-2 pt-8"
+                                        className="relative flex w-full flex-col gap-2"
                                     >
                                         {/* 연도 */}
-                                        <div className="flex w-full items-center justify-center gap-4">
-                                            <div className="border-kua-sky50 bg-kua-main relative z-10 flex min-h-[16px] min-w-[16px] items-center justify-center rounded-full">
-                                                <div className="min-h-[8px] min-w-[8px] rounded-full bg-white"></div>
+                                        <div className="flex w-full items-start justify-center gap-4">
+                                            <div className="flex h-[48px] items-center">
+                                                <div className="bg-kua-main relative z-10 flex min-h-[16px] min-w-[16px] items-center justify-center rounded-full">
+                                                    <div className="min-h-[8px] min-w-[8px] rounded-full bg-white"></div>
+                                                </div>
                                             </div>
                                             <span className="text-kua-main w-full text-[32px] font-bold">
                                                 {yearData.year}
@@ -75,6 +74,11 @@ export const HistoricalOrigin = () => {
                                                 {yearData.content}
                                             </span>
                                         </div>
+
+                                        {/* 세로 라인 - 마지막 아이템이 아닐 때만 표시 */}
+                                        {yearIndex < historyData.length - 1 && (
+                                            <div className="bg-kua-gray300 absolute top-[30px] left-[7px] h-full w-px"></div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
