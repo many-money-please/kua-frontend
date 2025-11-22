@@ -12,6 +12,7 @@ const getDummyData = (id: string): DetailPageData => ({
     title: "문의합니다.",
     registrationDate: "2025-11-12",
     views: 3948,
+    isSecret: true,
     content: `
         <p>궁금하거나 도움이 필요한 경우 문의글을 남겨주세요.</p>
         <p>궁금하거나 도움이 필요한 경우 문의글을 남겨주세요.</p>
@@ -64,6 +65,8 @@ export default function ContactDetailPage() {
             navigation={navigation}
             listUrl="/community/contact"
             detailUrlPattern={(id) => `/community/contact/${id}`}
+            isContactInquiry={true}
+            isSecret={data.isSecret}
         />
     );
 }
