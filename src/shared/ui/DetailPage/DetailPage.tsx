@@ -10,7 +10,7 @@ export type DetailPageData = {
     title: string;
     registrationDate: string;
     views: number;
-    isSecret: boolean;
+    isSecret?: boolean;
     content: string;
     attachments?: { name: string; url: string }[];
 };
