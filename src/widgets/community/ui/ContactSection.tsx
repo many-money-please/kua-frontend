@@ -263,7 +263,15 @@ export const ContactSection = ({
                     </div>
 
                     <div className="mt-10 text-center">
-                        <button className="bg-kua-main hover:bg-kua-blue500 inline-flex cursor-pointer items-center justify-center gap-4 rounded-lg px-8 py-3 text-xl font-bold text-white transition-colors">
+                        <button
+                            onClick={() =>
+                                window.open(
+                                    "https://www.k-sec.or.kr/",
+                                    "_blank",
+                                )
+                            }
+                            className="bg-kua-main hover:bg-kua-blue500 inline-flex cursor-pointer items-center justify-center gap-4 rounded-lg px-8 py-3 text-xl font-bold text-white transition-colors"
+                        >
                             스포츠윤리센터 바로가기{" "}
                             <Image
                                 src="/imgs/about/arrow-right.svg"
