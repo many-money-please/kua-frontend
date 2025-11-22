@@ -153,7 +153,7 @@ export const DataTable = <T,>({
                             return (
                                 <th
                                     key={column.key}
-                                    className={`text-kua-gray800 border-kua-gray200 border px-4 py-3 text-center text-sm font-semibold ${borderClass} ${column.headerClassName || ""}`}
+                                    className={`text-kua-gray800 border-kua-gray200 border px-4 py-3 text-center text-lg font-semibold ${borderClass} ${column.headerClassName || ""}`}
                                 >
                                     {column.header}
                                 </th>
@@ -228,7 +228,7 @@ export const DataTable = <T,>({
                                         return (
                                             <td
                                                 key={column.key}
-                                                className={`border-kua-gray200 border px-4 py-4 text-center text-sm ${borderClass} ${cellClassName} ${column.className || ""}`}
+                                                className={`border-kua-gray200 border px-4 py-4 text-center text-lg ${borderClass} ${cellClassName} ${column.className || ""}`}
                                             >
                                                 {column.accessor
                                                     ? column.accessor(row)
