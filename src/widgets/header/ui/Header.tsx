@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -48,7 +48,7 @@ const navItems: NavItem[] = [
         ],
     },
     {
-        label: "핀수영 소개",
+        label: "종목 소개",
         href: "/fin-swimming",
         description: "핀수영에 대해 알아보세요.",
         subMenus: [
@@ -168,16 +168,6 @@ export const Header = () => {
     const [hoveredNav, setHoveredNav] = useState<string | null>(null);
     const gnbRef = useRef<HTMLDivElement>(null);
     const navRef = useRef<HTMLElement>(null);
-
-    // 현재 경로에 따라 활성 nav 결정
-    const activeNav = useMemo(() => {
-        const currentNav = navItems.find((nav) => {
-            if (nav.href === pathname) return true;
-            if (pathname.startsWith(nav.href + "/")) return true;
-            return false;
-        });
-        return currentNav?.label ?? null;
-    }, [pathname]);
 
     // GNB 외부 클릭 시 닫기 (nav 영역은 제외)
     useEffect(() => {
