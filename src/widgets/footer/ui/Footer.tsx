@@ -2,23 +2,23 @@ import Image from "next/image";
 
 export const Footer = () => {
     return (
-        <footer className="h-80 w-full bg-[#051726]">
+        <footer className="bg-kua-darkblue800 h-80 w-full">
             <div className="mx-auto flex flex-col items-center justify-center text-white">
                 {/* footer 상단 */}
-                <div className="flex h-60 w-full max-w-[1200px] items-center">
+                <div className="flex h-60 w-full max-w-[1200px] py-[57px]">
                     {/* 로고 이미지 */}
-                    <div className="flex flex-1 items-center justify-center gap-1.5">
+                    <div className="ml-[34px] flex flex-1 items-start justify-start gap-1.5">
                         <Image
                             src="/imgs/logos/Icon-Footer.svg"
                             alt="logo"
-                            width={64}
-                            height={64}
+                            width={37.93}
+                            height={36.12}
                         />
                         <Image
                             src="/imgs/logos/Icon-Footer-Text.svg"
                             alt="logo"
-                            width={284}
-                            height={64}
+                            width={158.58}
+                            height={35.33}
                         />
                     </div>
                     {/* 목록 */}
@@ -29,7 +29,7 @@ export const Footer = () => {
                             </p>
                             <p className="text-base font-medium">이용약관</p>
                         </div>
-                        <div className="flex gap-5">
+                        <div className="mt-5 flex gap-5">
                             <p className="text-base font-medium">
                                 도로명 주소 : 서울특별시 송파구 올림픽로 424
                                 올림픽핸드볼경기장 112호
