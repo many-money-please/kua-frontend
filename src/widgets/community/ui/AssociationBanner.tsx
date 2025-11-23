@@ -21,7 +21,7 @@ const pageConfig: Record<
         description: "대한수중핀수영협회의 협회소식 입니다.",
         breadcrumbs: ["커뮤니티", "협회소식", "포토 갤러리"],
     },
-    "/community/press-releases": {
+    "/community/press-release": {
         title: "협회소식",
         description: "대한수중핀수영협회의 협회소식 입니다.",
         breadcrumbs: ["커뮤니티", "협회소식", "보도 자료"],
@@ -40,7 +40,7 @@ export const AssociationBanner = () => {
     const shouldRender =
         pathname.startsWith("/community/news-and-activities") ||
         pathname.startsWith("/community/photo-gallery") ||
-        pathname.startsWith("/community/press-releases") ||
+        pathname.startsWith("/community/press-release") ||
         pathname.startsWith("/community/fin-swimming-tv");
 
     if (!shouldRender) {
