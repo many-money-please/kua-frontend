@@ -6,14 +6,14 @@ import { usePathname } from "next/navigation";
 const ASSOCIATION_NEWS_TAB_PATHS = [
     "/community/news-and-activities",
     "/community/photo-gallery",
-    "/community/press-releases",
+    "/community/press-release",
     "/community/fin-swimming-tv",
 ] as const;
 
 const tabs = [
     { label: "소식 및 활동", path: "/community/news-and-activities" },
     { label: "포토 갤러리", path: "/community/photo-gallery" },
-    { label: "보도 자료", path: "/community/press-releases" },
+    { label: "보도 자료", path: "/community/press-release" },
     { label: "핀수영 TV", path: "/community/fin-swimming-tv" },
 ];
 

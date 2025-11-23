@@ -18,3 +18,9 @@ export { NewsAndActivitiesCreate } from "./ui/NewsAndActivitiesCreate";
 export { NewsAndActivitiesEdit } from "./ui/NewsAndActivitiesEdit";
 export { ContactSection, type ContactPost } from "./ui/ContactSection";
 export { ContactCreate } from "./ui/ContactCreate";
+export {
+    FinSwimmingTVSection,
+    type FinSwimmingTVPost,
+} from "./ui/FinSwimmingTVSection";
+export { FinSwimmingTVCreate } from "./ui/FinSwimmingTVCreate";
+export { FinSwimmingTVEdit } from "./ui/FinSwimmingTVEdit";
