@@ -119,11 +119,11 @@ const navItems: NavItem[] = [
                 children: [
                     {
                         label: "대회 참가 신청",
-                        href: "/competition-info/registration",
+                        href: "/competition-info/registration/competition-application",
                     },
                     {
                         label: "경기인 등록",
-                        href: "/competition-info/registration/game-registration",
+                        href: "/competition-info/registration/athlete-registration",
                     },
                     {
                         label: "증명서 발급",

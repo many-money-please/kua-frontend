@@ -3,6 +3,7 @@ import {
     CompetitionInfoBanner,
     CompetitionInfoTabs,
     PlayerInfoTabs,
+    RegistrationTabs,
 } from "@/widgets/competition-info";
 
 export default function CompetitionInfoLayout({
@@ -16,6 +17,7 @@ export default function CompetitionInfoLayout({
                 <CompetitionInfoBanner />
                 <CompetitionInfoTabs />
                 <PlayerInfoTabs />
+                <RegistrationTabs />
                 {children}
             </main>
         </div>
