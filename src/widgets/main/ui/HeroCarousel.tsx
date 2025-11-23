@@ -64,7 +64,7 @@ export const HeroCarousel = () => {
         <div className="h-fit w-full px-8">
             <div
                 id="hero-section"
-                className="relative flex h-[min(800px,calc(100vw/2.25),100vh-80px)] max-h-[800px] min-h-[500px] w-full max-w-[1800px] items-center justify-center overflow-hidden rounded-[30px] px-12"
+                className="relative mx-auto flex h-[min(800px,calc(100vw/2.25),100vh-80px)] max-h-[800px] min-h-[500px] w-full max-w-[1800px] items-center justify-center overflow-hidden rounded-[30px] px-12"
             >
                 <Image
                     src={slides[currentSlide].image}
