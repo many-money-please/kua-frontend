@@ -119,11 +119,11 @@ const navItems: NavItem[] = [
                 children: [
                     {
                         label: "대회 참가 신청",
-                        href: "/competition-info/registration",
+                        href: "/competition-info/registration/competition-application",
                     },
                     {
                         label: "경기인 등록",
-                        href: "/competition-info/registration/game-registration",
+                        href: "/competition-info/registration/athlete-registration",
                     },
                     {
                         label: "증명서 발급",
@@ -155,7 +155,7 @@ const navItems: NavItem[] = [
                     },
                     {
                         label: "보도자료",
-                        href: "/community/press-releases",
+                        href: "/community/press-release",
                     },
                     {
                         label: "핀수영 TV",

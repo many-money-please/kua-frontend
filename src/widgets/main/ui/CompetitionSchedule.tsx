@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight, FaPlus } from "react-icons/fa6";
 
 type ScheduleInfo = {
@@ -113,7 +113,23 @@ const CARDS_PER_PAGE = 4;
 
 export const CompetitionSchedule = () => {
     const [pageIndex, setPageIndex] = useState(0);
+    const [logoHeight, setLogoHeight] = useState<number>(0);
+    const sectionRef = useRef<HTMLDivElement>(null);
     const totalPages = Math.ceil(scheduleData.length / CARDS_PER_PAGE);
+
+    // 섹션 높이의 2/3로 로고 높이 설정
+    useEffect(() => {
+        const updateLogoHeight = () => {
+            if (sectionRef.current) {
+                const sectionHeight = sectionRef.current.offsetHeight;
+                setLogoHeight(sectionHeight * 0.8);
+            }
+        };
+
+        updateLogoHeight();
+        window.addEventListener("resize", updateLogoHeight);
+        return () => window.removeEventListener("resize", updateLogoHeight);
+    }, [pageIndex]);
 
     const visibleSchedules = useMemo(() => {
         const start = pageIndex * CARDS_PER_PAGE;
@@ -141,11 +157,28 @@ export const CompetitionSchedule = () => {
     };
 
     return (
-        <div className="bg-kua-sky50 flex w-full flex-col items-center justify-center rounded-tl-[200] p-16">
-            <div className="relative flex w-full justify-end">
-                <Image src="/imgs/logos/Icon-Footer.svg" alt="logo" fill />
-            </div>
-            <div className="flex w-[80%] max-w-[1200px] flex-col gap-6">
+        <div
+            ref={sectionRef}
+            className="bg-kua-sky50 relative flex w-full flex-col items-center justify-center rounded-tl-[200] p-16"
+        >
+            {/* 배경 로고 이미지 - 우측 중앙 배치, 높이 섹션의 2/3 */}
+            {logoHeight > 0 && (
+                <div
+                    className="pointer-events-none absolute top-1/4 right-16 z-0 -translate-y-1/4"
+                    style={{ height: `${logoHeight}px` }}
+                >
+                    <Image
+                        src="/imgs/logos/Icon-Blue.svg"
+                        alt="logo"
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        className="h-full w-auto object-contain"
+                        style={{ width: "auto", height: "100%" }}
+                    />
+                </div>
+            )}
+            <div className="relative z-10 flex w-[80%] max-w-[1200px] flex-col gap-6">
                 <div className="flex items-center justify-between">
                     <div className="text-[40px] font-bold">대회일정 안내</div>
                     <div className="flex h-12 items-center justify-end gap-4">

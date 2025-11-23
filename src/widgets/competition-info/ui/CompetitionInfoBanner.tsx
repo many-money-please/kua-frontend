@@ -41,14 +41,37 @@ const pageConfig: Record<
         description: "대한수중핀수영협회의 선수 정보를 확인하세요.",
         breadcrumbs: ["대회정보", "선수정보", "상비군선수"],
     },
+    "/competition-info/new-records": {
+        title: "신기록 현황",
+        description: "대한수중핀수영협회의 신기록 현황을 확인하세요.",
+        breadcrumbs: ["대회정보", "신기록 현황"],
+    },
+    "/competition-info/registration": {
+        title: "대회 참가 신청",
+        description: "대한수중핀수영협회의 대회 참가 신청을 확인하세요.",
+        breadcrumbs: ["대회정보", "신청/발급", "대회 참가 신청"],
+    },
+    "/competition-info/registration/athlete-registration": {
+        title: "경기인 등록",
+        description: "대한수중핀수영협회의 경기인 등록을 확인하세요.",
+        breadcrumbs: ["대회정보", "신청/발급", "경기인 등록"],
+    },
+    "/competition-info/registration/certificate-issuance": {
+        title: "증명서 발급",
+        description: "대한수중핀수영협회의 증명서 발급을 확인하세요.",
+        breadcrumbs: ["대회정보", "신청/발급", "증명서 발급"],
+    },
 };
 
 export const CompetitionInfoBanner = () => {
     const pathname = usePathname();
-    
+
     // 선수정보 상세 페이지 처리
     let configKey = pathname;
-    if (pathname.startsWith("/competition-info/player-info/") && pathname !== "/competition-info/player-info") {
+    if (
+        pathname.startsWith("/competition-info/player-info/") &&
+        pathname !== "/competition-info/player-info"
+    ) {
         // /competition-info/player-info/[id] 같은 상세 페이지는 기본 선수정보로 처리
         const pathParts = pathname.split("/");
         if (pathParts.length === 5 && !isNaN(Number(pathParts[4]))) {
@@ -59,10 +82,34 @@ export const CompetitionInfoBanner = () => {
             configKey = pathname;
         }
     }
-    
+
+    // 신기록 현황 상세 페이지 처리
+    if (
+        pathname.startsWith("/competition-info/new-records/") &&
+        pathname !== "/competition-info/new-records"
+    ) {
+        const pathParts = pathname.split("/");
+        if (pathParts.length === 4 && !isNaN(Number(pathParts[3]))) {
+            // 숫자 ID인 경우 (상세 페이지)
+            configKey = "/competition-info/new-records";
+        }
+    }
+
+    // 신청/발급 상세 페이지 처리
+    if (pathname.startsWith("/competition-info/registration/")) {
+        const pathParts = pathname.split("/");
+        if (pathParts.length === 5 && !isNaN(Number(pathParts[4]))) {
+            // 숫자 ID인 경우 (상세 페이지)
+            configKey = pathname.substring(0, pathname.lastIndexOf("/"));
+        } else if (pathParts.length === 4) {
+            // 하위 경로인 경우 (game-registration, certificate-issuance)
+            configKey = pathname;
+        }
+    }
+
     const config =
-        pageConfig[configKey] ?? 
-        (pathname.startsWith("/competition-info/player-info") 
+        pageConfig[configKey] ??
+        (pathname.startsWith("/competition-info/player-info")
             ? pageConfig["/competition-info/player-info"]
             : pageConfig["/competition-info/schedule"]);
 
