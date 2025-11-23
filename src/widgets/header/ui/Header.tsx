@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -48,7 +48,7 @@ const navItems: NavItem[] = [
         ],
     },
     {
-        label: "핀수영 소개",
+        label: "종목 소개",
         href: "/fin-swimming",
         description: "핀수영에 대해 알아보세요.",
         subMenus: [
@@ -110,15 +110,35 @@ const navItems: NavItem[] = [
                     },
                 ],
             },
+            {
+                label: "신기록 현황",
+                href: "/competition-info/new-records",
+            },
+            {
+                label: "신청/발급",
+                children: [
+                    {
+                        label: "대회 참가 신청",
+                        href: "/competition-info/registration",
+                    },
+                    {
+                        label: "경기인 등록",
+                        href: "/competition-info/registration/game-registration",
+                    },
+                    {
+                        label: "증명서 발급",
+                        href: "/competition-info/registration/certificate-issuance",
+                    },
+                ],
+            },
         ],
     },
     {
         label: "커뮤니티",
         href: "/community",
-        description: "공지사항과 자료실을 확인하세요.",
+        description:
+            "협회 소식, 공지사항 등 유익한 자료를 전달하고 다양한 정보를 공유하는 열린 공간입니다.",
         subMenus: [
-            // { label: "공지사항", href: "/community/notices" },
-            // { label: "자료실", href: "/community/resources" },
             {
                 label: "커뮤니티",
                 children: [
@@ -152,14 +172,40 @@ const navItems: NavItem[] = [
     {
         label: "교육사업",
         href: "/education-business",
-        description: "교육사업에 대해 알아보세요.",
-        subMenus: [],
+        description:
+            "KUA·CMAS 교육 철학과 과정을 소개하고 체계적인 국제 인증 교육장을 안내합니다.",
+        subMenus: [
+            {
+                label: "KUA & CMAS",
+                href: "/education-business/kua-cmas",
+                children: [
+                    {
+                        label: "교육 철학 및 국제 인증 안내",
+                    },
+                    {
+                        label: "교육장 안내",
+                    },
+                    {
+                        label: "교육 참여 안내",
+                    },
+                ],
+            },
+        ],
     },
     {
         label: "로그인",
         href: "/login",
-        description: "로그인하세요.",
-        subMenus: [],
+        description: "회원 서비스를 이용하기 위해 로그인해주세요.",
+        subMenus: [
+            {
+                label: "로그인",
+                href: "/auth/login",
+            },
+            {
+                label: "회원가입",
+                href: "/auth/register",
+            },
+        ],
     },
 ];
 
@@ -168,16 +214,6 @@ export const Header = () => {
     const [hoveredNav, setHoveredNav] = useState<string | null>(null);
     const gnbRef = useRef<HTMLDivElement>(null);
     const navRef = useRef<HTMLElement>(null);
-
-    // 현재 경로에 따라 활성 nav 결정
-    const activeNav = useMemo(() => {
-        const currentNav = navItems.find((nav) => {
-            if (nav.href === pathname) return true;
-            if (pathname.startsWith(nav.href + "/")) return true;
-            return false;
-        });
-        return currentNav?.label ?? null;
-    }, [pathname]);
 
     // GNB 외부 클릭 시 닫기 (nav 영역은 제외)
     useEffect(() => {
@@ -254,16 +290,11 @@ export const Header = () => {
                             >
                                 {item.label}
                                 {/* 헤더와 GNB 사이에 걸치는 동그란 요소 */}
-                                {isHovered && (
-                                    <div
-                                        className="bg-kua-blue300 absolute left-1/2 z-40 h-1.5 w-1.5 -translate-x-1/2 scale-150 rounded-full"
-                                        style={{
-                                            top: "81px",
-                                            animation:
-                                                "revealFromTop 0.3s ease-out forwards",
-                                        }}
-                                    />
-                                )}
+                                <div
+                                    className={`bg-kua-blue300 absolute top-[82px] left-1/2 z-40 min-h-1 min-w-1 -translate-x-1/2 scale-150 rounded-full transition-opacity duration-200 ${
+                                        isHovered ? "opacity-100" : "opacity-0"
+                                    }`}
+                                />
                             </div>
                         );
                     })}
@@ -325,17 +356,17 @@ export const Header = () => {
                                                                     null,
                                                                 )
                                                             }
-                                                            className={`hover:bg-kua-gray200 bg-kua-gray100 flex w-[200px] items-center justify-between rounded-lg p-2 text-base transition-colors ${
+                                                            className={`group hover:bg-kua-sky100 bg-kua-gray100 flex w-[200px] items-center justify-between rounded-lg p-2 text-base font-medium transition-colors ${
                                                                 isSubMenuActive
                                                                     ? "text-kua-main font-semibold"
-                                                                    : "text-kua-gray800 hover:text-kua-main"
+                                                                    : "text-kua-gray800 hover:text-kua-blue300"
                                                             }`}
                                                         >
                                                             {subMenu.label}
-                                                            <FaChevronRight className="text-kua-gray800" />
+                                                            <FaChevronRight className="text-kua-gray800 group-hover:text-kua-blue300 text-sm font-medium transition-colors" />
                                                         </Link>
                                                     ) : (
-                                                        <div className="bg-kua-gray100 text-kua-gray800 block w-[200px] rounded-lg p-2 text-base">
+                                                        <div className="bg-kua-gray100 text-kua-gray800 block w-[200px] rounded-lg p-2 text-base font-medium">
                                                             {subMenu.label}
                                                         </div>
                                                     )}
@@ -360,12 +391,26 @@ export const Header = () => {
                                                                                     null,
                                                                                 )
                                                                             }
-                                                                            className="hover:bg-kua-sky100 text-kua-gray800 hover:text-kua-main flex w-full items-center justify-between rounded-lg px-2 py-1 text-sm transition-colors"
+                                                                            className="text-kua-gray800 hover:text-kua-blue300 flex w-full items-center gap-2 rounded-lg px-2 py-1 text-sm transition-colors hover:underline"
                                                                         >
                                                                             {
                                                                                 child.label
                                                                             }
-                                                                            <FaChevronRight className="text-kua-gray800" />
+                                                                            <svg
+                                                                                width="10"
+                                                                                height="10"
+                                                                                viewBox="0 0 10 10"
+                                                                                fill="none"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                className="hover:text-kua-blue300"
+                                                                            >
+                                                                                <path
+                                                                                    d="M2.91666 8.87091L7.08333 5.00186L2.91666 1.13281"
+                                                                                    stroke="currentColor"
+                                                                                    strokeLinecap="round"
+                                                                                    strokeLinejoin="round"
+                                                                                />
+                                                                            </svg>
                                                                         </Link>
                                                                     ) : (
                                                                         <span

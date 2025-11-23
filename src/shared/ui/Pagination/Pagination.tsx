@@ -32,7 +32,7 @@ export const Pagination = ({
         <div className="flex items-center justify-center gap-2">
             <button
                 type="button"
-                className="text-kua-gray400 bg-kua-gray100 flex h-10 w-10 items-center justify-center rounded-lg text-sm font-medium disabled:opacity-40"
+                className="text-kua-gray400 bg-kua-gray100 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40"
                 onClick={() => goToPage(1)}
                 disabled={currentPage === 1}
                 aria-label="첫 페이지"
@@ -41,7 +41,7 @@ export const Pagination = ({
             </button>
             <button
                 type="button"
-                className="text-kua-gray400 bg-kua-gray100 flex h-10 w-10 items-center justify-center rounded-lg text-sm font-medium disabled:opacity-40"
+                className="text-kua-gray400 bg-kua-gray100 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40"
                 onClick={() => goToPage(currentPage - 1)}
                 disabled={currentPage === 1}
                 aria-label="이전 페이지"
@@ -52,7 +52,7 @@ export const Pagination = ({
                 <button
                     key={page}
                     type="button"
-                    className={`flex h-10 w-10 items-center justify-center rounded-lg text-sm font-semibold transition-colors ${
+                    className={`flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-sm font-semibold transition-colors ${
                         page === currentPage
                             ? "bg-kua-blue50 text-kua-main"
                             : "bg-kua-gray100 text-kua-gray800 hover:bg-kua-sky50"
@@ -65,7 +65,7 @@ export const Pagination = ({
             ))}
             <button
                 type="button"
-                className="text-kua-gray400 bg-kua-gray100 flex h-10 w-10 items-center justify-center rounded-lg text-sm font-medium disabled:opacity-40"
+                className="text-kua-gray400 bg-kua-gray100 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40"
                 onClick={() => goToPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
                 aria-label="다음 페이지"
@@ -74,7 +74,7 @@ export const Pagination = ({
             </button>
             <button
                 type="button"
-                className="text-kua-gray400 bg-kua-gray100 flex h-10 w-10 items-center justify-center rounded-lg text-sm font-medium disabled:opacity-40"
+                className="text-kua-gray400 bg-kua-gray100 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40"
                 onClick={() => goToPage(totalPages)}
                 disabled={currentPage === totalPages}
                 aria-label="마지막 페이지"
