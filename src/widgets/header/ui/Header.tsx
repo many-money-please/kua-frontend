@@ -110,15 +110,35 @@ const navItems: NavItem[] = [
                     },
                 ],
             },
+            {
+                label: "신기록 현황",
+                href: "/competition-info/new-records",
+            },
+            {
+                label: "신청/발급",
+                children: [
+                    {
+                        label: "대회 참가 신청",
+                        href: "/competition-info/registration",
+                    },
+                    {
+                        label: "경기인 등록",
+                        href: "/competition-info/registration/game-registration",
+                    },
+                    {
+                        label: "증명서 발급",
+                        href: "/competition-info/registration/certificate-issuance",
+                    },
+                ],
+            },
         ],
     },
     {
         label: "커뮤니티",
         href: "/community",
-        description: "공지사항과 자료실을 확인하세요.",
+        description:
+            "협회 소식, 공지사항 등 유익한 자료를 전달하고 다양한 정보를 공유하는 열린 공간입니다.",
         subMenus: [
-            // { label: "공지사항", href: "/community/notices" },
-            // { label: "자료실", href: "/community/resources" },
             {
                 label: "커뮤니티",
                 children: [
@@ -152,14 +172,40 @@ const navItems: NavItem[] = [
     {
         label: "교육사업",
         href: "/education-business",
-        description: "교육사업에 대해 알아보세요.",
-        subMenus: [],
+        description:
+            "KUA·CMAS 교육 철학과 과정을 소개하고 체계적인 국제 인증 교육장을 안내합니다.",
+        subMenus: [
+            {
+                label: "KUA & CMAS",
+                href: "/education-business/kua-cmas",
+                children: [
+                    {
+                        label: "교육 철학 및 국제 인증 안내",
+                    },
+                    {
+                        label: "교육장 안내",
+                    },
+                    {
+                        label: "교육 참여 안내",
+                    },
+                ],
+            },
+        ],
     },
     {
         label: "로그인",
         href: "/login",
-        description: "로그인하세요.",
-        subMenus: [],
+        description: "회원 서비스를 이용하기 위해 로그인해주세요.",
+        subMenus: [
+            {
+                label: "로그인",
+                href: "/auth/login",
+            },
+            {
+                label: "회원가입",
+                href: "/auth/register",
+            },
+        ],
     },
 ];
 
