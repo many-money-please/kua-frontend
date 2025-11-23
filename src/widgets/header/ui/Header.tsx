@@ -155,7 +155,7 @@ const navItems: NavItem[] = [
                     },
                     {
                         label: "보도자료",
-                        href: "/community/press-releases",
+                        href: "/community/press-release",
                     },
                     {
                         label: "핀수영 TV",
