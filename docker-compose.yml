@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+    frontend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "3000:3000"
+        environment:
+            - NODE_ENV=production
+            - NEXT_PUBLIC_KAKAO_MAP_KEY=${NEXT_PUBLIC_KAKAO_MAP_KEY}
+            # 백엔드 API URL은 배포 환경에 맞게 설정 필요
+            - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://backend:8000}
+        restart: unless-stopped
+        networks:
+            - kua-network
+
+networks:
+    kua-network:
+        driver: bridge
+
