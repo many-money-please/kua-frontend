@@ -100,7 +100,7 @@ export const DataTable = <T,>({
             onSelectionChange(selectedData);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedRowIds, data]);
+    }, [selectedRowIds]);
 
     // 전체 선택 여부 (현재 페이지의 모든 행이 선택되었는지)
     const isAllSelected = useMemo(() => {
