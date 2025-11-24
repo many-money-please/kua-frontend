@@ -15,6 +15,7 @@ export const LoginForm = () => {
         e.preventDefault();
         console.log("로그인:", { username, password });
         // TODO: API 연동
+        router.push("/auth/change-password");
         alert("로그인 기능은 추후 구현됩니다.");
     };
 
@@ -94,9 +95,7 @@ export const LoginForm = () => {
                 <div className="text-kua-gray800 flex items-center justify-center gap-4 text-xs sm:text-lg">
                     <button
                         type="button"
-                        onClick={() =>
-                            alert("아이디 찾기 기능은 추후 구현됩니다.")
-                        }
+                        onClick={() => router.push("/auth/find-id")}
                         className="hover:text-kua-gray800 text-kua-gray400 cursor-pointer transition-colors"
                     >
                         아이디찾기
@@ -104,9 +103,7 @@ export const LoginForm = () => {
                     <span className="text-kua-gray400">|</span>
                     <button
                         type="button"
-                        onClick={() =>
-                            alert("비밀번호 찾기 기능은 추후 구현됩니다.")
-                        }
+                        onClick={() => router.push("/auth/find-password")}
                         className="hover:text-kua-gray800 text-kua-gray400 cursor-pointer transition-colors"
                     >
                         비밀번호찾기
