@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState, useRef, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight, FaPlus } from "react-icons/fa6";
 
@@ -248,9 +249,10 @@ export const CompetitionSchedule = () => {
                                 aria-hidden="true"
                             />
                         ) : (
-                            <div
+                            <Link
                                 key={competition.id}
-                                className="bg-kua-white flex h-full w-full flex-col justify-between rounded-3xl p-10 shadow-sm"
+                                href={`/competition-info/schedule/${competition.id}`}
+                                className="bg-kua-white hover:shadow-md flex h-full w-full flex-col justify-between rounded-3xl p-10 shadow-sm transition-all duration-300 cursor-pointer"
                             >
                                 <div className="mb-6 flex w-full flex-col gap-4">
                                     <div className="bg-kua-main text-kua-white w-fit rounded-full px-4 py-2 text-sm font-semibold">
@@ -272,7 +274,7 @@ export const CompetitionSchedule = () => {
                                         ),
                                     )}
                                 </div>
-                            </div>
+                            </Link>
                         ),
                     )}
                 </div>
@@ -315,8 +317,9 @@ export const CompetitionSchedule = () => {
                             if (!isActive && !isNext) return null;
 
                             return (
-                                <div
+                                <Link
                                     key={competition.id}
+                                    href={`/competition-info/schedule/${competition.id}`}
                                     className={`absolute w-[calc(100%-6rem)] transition-all duration-500 ${
                                         isActive
                                             ? "z-20 scale-100 opacity-100"
@@ -326,7 +329,7 @@ export const CompetitionSchedule = () => {
                                         height: isActive ? "100%" : "90%",
                                     }}
                                 >
-                                    <div className="bg-kua-white flex h-full w-full flex-col justify-between rounded-3xl p-6 shadow-lg">
+                                    <div className="bg-kua-white hover:shadow-xl flex h-full w-full flex-col justify-between rounded-3xl p-6 shadow-lg transition-all duration-300 cursor-pointer">
                                         <div className="mb-4 flex w-full flex-col gap-3">
                                             <div className="bg-kua-main text-kua-white w-fit rounded-full px-3 py-1.5 text-xs font-semibold">
                                                 {competition.status}
@@ -349,7 +352,7 @@ export const CompetitionSchedule = () => {
                                             )}
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             );
                         })}
                     </div>

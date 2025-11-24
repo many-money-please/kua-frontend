@@ -1,29 +1,42 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 
-const data = [
+type CommunityItem = {
+    id: number;
+    category: string;
+    title: string;
+    date: string;
+};
+
+const data: CommunityItem[] = [
     {
+        id: 1,
         category: "공지사항",
         title: "「제26회 문화체육관광부장관기 전국생활체육 수중스포츠 대회」 개최 안내",
         date: "2025-01-01",
     },
     {
+        id: 2,
         category: "협회소식",
         title: "「제27회 문화체육관광부장관기 전국생활체육 수중스포츠 대회」 개최 안내",
         date: "2025-01-01",
     },
     {
+        id: 3,
         category: "보도자료",
         title: "「제28회 문화체육관광부장관기 전국생활체육 수중스포츠 대회」 개최 안내",
         date: "2025-01-01",
     },
     {
+        id: 4,
         category: "공지사항",
         title: "「제28회 문화체육관광부장관기 전국생활체육 수중스포츠 대회」 개최 안내",
         date: "2025-01-01",
     },
     {
+        id: 5,
         category: "공지사항",
         title: "「제28회 문화체육관광부장관기 전국생활체육 수중스포츠 대회」 개최 안내",
         date: "2025-01-01",
@@ -47,6 +60,19 @@ export const Community = () => {
             return;
         }
         setSelectedTab(tab);
+    };
+
+    const getDetailUrl = (item: CommunityItem): string => {
+        switch (item.category) {
+            case "공지사항":
+                return `/community/notices/${item.id}`;
+            case "협회소식":
+                return `/community/news-and-activities/${item.id}`;
+            case "보도자료":
+                return `/community/press-release/${item.id}`;
+            default:
+                return `/community/notices/${item.id}`;
+        }
     };
 
     return (
@@ -78,9 +104,10 @@ export const Community = () => {
             </div>
             <div className="flex h-120 w-full flex-col gap-4">
                 {filteredData.map((item, i) => (
-                    <div
-                        key={i}
-                        className="bg-kua-sky50 hover:bg-kua-blue50 flex h-20 w-full items-center justify-between rounded-[20px] px-4 sm:px-10"
+                    <Link
+                        key={item.id}
+                        href={getDetailUrl(item)}
+                        className="bg-kua-sky50 hover:bg-kua-blue50 hover:shadow-md flex h-20 w-full items-center justify-between rounded-[20px] px-4 transition-all duration-300 cursor-pointer sm:px-10"
                     >
                         <div className="flex min-w-0 flex-1 items-center gap-4">
                             <div className="text-kua-blue300 bg-kua-white border-kua-blue300 flex shrink-0 items-center rounded-full border px-4 py-1 text-xs font-medium sm:text-base">
@@ -93,7 +120,7 @@ export const Community = () => {
                         <div className="text-kua-gray400 text-[0px] sm:text-base">
                             {item.date}
                         </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </div>
