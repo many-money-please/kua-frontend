@@ -8,19 +8,26 @@
         "start": "next start",
         "lint": "eslint",
         "format": "prettier --write .",
-        "format:check": "prettier --check ."
+        "format:check": "prettier --check .",
+        "docker:build": "docker build -t kua-frontend:latest .",
+        "docker:run": "docker run -p 3000:3000 --env-file .env kua-frontend:latest",
+        "docker:test": "docker-compose up --build",
+        "docker:stop": "docker-compose down"
     },
     "dependencies": {
+        "leaflet": "^1.9.4",
         "next": "16.0.3",
         "react": "19.2.0",
         "react-dom": "19.2.0",
         "react-icons": "^5.5.0",
         "react-kakao-maps-sdk": "^1.2.0",
+        "react-leaflet": "^5.0.0",
         "suneditor": "^2.47.8",
         "suneditor-react": "^3.6.1"
     },
     "devDependencies": {
         "@tailwindcss/postcss": "^4",
+        "@types/leaflet": "^1.9.21",
         "@types/node": "^20",
         "@types/react": "^19",
         "@types/react-dom": "^19",
