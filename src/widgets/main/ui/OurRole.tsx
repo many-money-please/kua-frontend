@@ -64,13 +64,15 @@ export const OurRole = () => {
     }, [textHeight]);
 
     return (
-        <div className="flex max-w-[1200px] flex-col items-center gap-8 text-center">
-            <div className="text-kua-main text-xl font-bold">우리의 역할</div>
-            <div className="text-3xl font-medium">
+        <div className="flex max-w-[1200px] flex-col items-center gap-8 px-5 text-center sm:px-0">
+            <div className="text-kua-main text-[15px] font-bold sm:text-xl">
+                우리의 역할
+            </div>
+            <div className="text-xl font-medium sm:text-3xl">
                 건전한 스포츠 정신과 명랑한 기풍으로
                 <br /> 대한민국 수중스포츠의 미래를 만들어갑니다.
             </div>
-            <div className="text-lg">
+            <div className="text-sm sm:text-lg">
                 대한수중·핀수영협회는 수중스포츠를 국민에게 널리 보급하고,
                 건강한 체력 향상과 스포츠 문화 발전에 기여하는 기관입니다.
                 <br />
@@ -81,15 +83,15 @@ export const OurRole = () => {
                 {images.map((image, i) => (
                     <div
                         key={i}
-                        className={`flex w-32 items-center justify-center gap-2 transition-all duration-500 ${
+                        className={`flex w-[88px] items-center justify-center gap-2 transition-all duration-500 sm:w-32 ${
                             i < visibleCount
                                 ? "translate-y-0 opacity-100"
                                 : "translate-y-4 opacity-0"
                         }`}
                     >
-                        <div className="group flex flex-col items-center justify-center transition-all duration-200 hover:scale-110">
-                            <div className="bg-kua-sky50 group-hover:bg-kua-sky100 flex h-32 w-32 items-center justify-center rounded-full transition-colors duration-200">
-                                <div className="relative flex h-12 w-12 items-center justify-center">
+                        <div className="group flex flex-col items-center justify-center gap-3 transition-all duration-200 hover:scale-110">
+                            <div className="bg-kua-sky50 group-hover:bg-kua-sky100 flex h-22 w-22 items-center justify-center rounded-full transition-colors duration-200 sm:h-32 sm:w-32">
+                                <div className="relative flex h-10 w-10 items-center justify-center sm:h-12 sm:w-12">
                                     <Image
                                         src={image.src}
                                         alt={`introduce-logo-${i}`}
@@ -104,7 +106,7 @@ export const OurRole = () => {
                                     textRefs.current[i] = el;
                                 }}
                                 style={{ minHeight: textHeight }}
-                                className="text-kua-gray800 flex items-center text-base break-keep"
+                                className="text-kua-gray800 flex items-center text-sm break-keep sm:text-base"
                             >
                                 {image.name}
                             </div>

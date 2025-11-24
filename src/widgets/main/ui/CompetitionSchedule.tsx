@@ -113,6 +113,7 @@ const CARDS_PER_PAGE = 4;
 
 export const CompetitionSchedule = () => {
     const [pageIndex, setPageIndex] = useState(0);
+    const [mobileCardIndex, setMobileCardIndex] = useState(0);
     const [logoHeight, setLogoHeight] = useState<number>(0);
     const sectionRef = useRef<HTMLDivElement>(null);
     const totalPages = Math.ceil(scheduleData.length / CARDS_PER_PAGE);
@@ -156,15 +157,25 @@ export const CompetitionSchedule = () => {
         setPageIndex((prev) => Math.min(prev + 1, totalPages - 1));
     };
 
+    const handleMobilePrev = () => {
+        setMobileCardIndex((prev) => Math.max(prev - 1, 0));
+    };
+
+    const handleMobileNext = () => {
+        setMobileCardIndex((prev) =>
+            Math.min(prev + 1, scheduleData.length - 1),
+        );
+    };
+
     return (
         <div
             ref={sectionRef}
-            className="bg-kua-sky50 relative flex w-full flex-col items-center justify-center rounded-tl-[200] p-16"
+            className="bg-kua-sky50 relative flex w-full flex-col items-center justify-center rounded-tl-[100px] px-5 py-25 sm:rounded-tl-[200px]"
         >
-            {/* 배경 로고 이미지 - 우측 중앙 배치, 높이 섹션의 2/3 */}
+            {/* 배경 로고 이미지 - 우측 중앙 배치, 높이 섹션의 2/3 (데스크탑만) */}
             {logoHeight > 0 && (
                 <div
-                    className="pointer-events-none absolute top-1/4 right-16 z-0 -translate-y-1/4"
+                    className="pointer-events-none absolute top-1/4 right-16 z-0 -translate-y-1/4 sm:block"
                     style={{ height: `${logoHeight}px` }}
                 >
                     <Image
@@ -178,49 +189,54 @@ export const CompetitionSchedule = () => {
                     />
                 </div>
             )}
-            <div className="relative z-10 flex w-[80%] max-w-[1200px] flex-col gap-6">
+            <div className="relative z-10 flex w-full flex-col gap-6 sm:max-w-[1200px]">
+                {/* 헤더 */}
                 <div className="flex items-center justify-between">
-                    <div className="text-[32px] font-bold">대회일정 안내</div>
-                    <div className="flex h-12 items-center justify-end gap-4">
+                    <div className="text-2xl font-bold sm:text-[32px]">
+                        대회일정 안내
+                    </div>
+                    <div className="flex h-10 items-center justify-end gap-2 sm:h-12 sm:gap-4">
                         {totalPages > 1 && (
-                            <div className="flex h-12 items-center justify-end gap-4">
+                            <div className="hidden h-10 items-center justify-end gap-2 sm:flex sm:h-12 sm:gap-4">
                                 <button
                                     type="button"
                                     onClick={handlePrev}
                                     disabled={pageIndex === 0}
-                                    className={`bg-kua-white flex h-12 w-12 items-center justify-center rounded-full shadow transition-all ${
+                                    className={`bg-kua-white flex h-10 w-10 items-center justify-center rounded-full shadow transition-all sm:h-12 sm:w-12 ${
                                         pageIndex === 0
                                             ? "cursor-not-allowed opacity-50"
                                             : "hover:bg-kua-sky50 cursor-pointer"
                                     }`}
                                 >
-                                    <FaChevronLeft />
+                                    <FaChevronLeft className="text-sm sm:text-base" />
                                 </button>
                                 <button
                                     type="button"
                                     onClick={handleNext}
                                     disabled={pageIndex >= totalPages - 1}
-                                    className={`bg-kua-white flex h-12 w-12 items-center justify-center rounded-full shadow transition-all ${
+                                    className={`bg-kua-white flex h-10 w-10 items-center justify-center rounded-full shadow transition-all sm:h-12 sm:w-12 ${
                                         pageIndex >= totalPages - 1
                                             ? "cursor-not-allowed opacity-50"
                                             : "hover:bg-kua-sky50 cursor-pointer"
                                     }`}
                                 >
-                                    <FaChevronRight />
+                                    <FaChevronRight className="text-sm sm:text-base" />
                                 </button>
                             </div>
                         )}
                         <button
                             type="button"
                             onClick={handleNext}
-                            className="bg-kua-gray800 text-kua-white hover:bg-kua-blue500 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full shadow transition-all"
+                            className="bg-kua-gray800 text-kua-white hover:bg-kua-blue500 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full shadow transition-all sm:h-12 sm:w-12"
                         >
-                            <FaPlus />
+                            <FaPlus className="text-sm sm:text-base" />
                         </button>
                     </div>
                 </div>
+
+                {/* 데스크탑: Grid 레이아웃 */}
                 <div
-                    className={`grid w-full grid-cols-1 gap-6 md:grid-cols-2 ${
+                    className={`hidden w-full grid-cols-1 gap-6 sm:grid md:grid-cols-2 ${
                         visibleSchedules.hasPlaceholder ? "md:grid-rows-2" : ""
                     }`}
                 >
@@ -259,6 +275,84 @@ export const CompetitionSchedule = () => {
                             </div>
                         ),
                     )}
+                </div>
+
+                {/* 모바일: 캐러셀 레이아웃 */}
+                <div className="relative block sm:hidden">
+                    {/* 왼쪽 버튼 */}
+                    <button
+                        type="button"
+                        onClick={handleMobilePrev}
+                        disabled={mobileCardIndex === 0}
+                        className={`border-kua-gray250 absolute top-1/2 left-[-18px] z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border bg-white shadow-lg transition-all ${
+                            mobileCardIndex === 0
+                                ? "cursor-not-allowed opacity-30"
+                                : "hover:bg-kua-sky50 cursor-pointer opacity-80 hover:opacity-100"
+                        }`}
+                    >
+                        <FaChevronLeft className="text-sm" />
+                    </button>
+
+                    {/* 오른쪽 버튼 */}
+                    <button
+                        type="button"
+                        onClick={handleMobileNext}
+                        disabled={mobileCardIndex >= scheduleData.length - 1}
+                        className={`border-kua-gray250 absolute top-1/2 right-18 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border bg-white shadow-lg transition-all ${
+                            mobileCardIndex >= scheduleData.length - 1
+                                ? "cursor-not-allowed opacity-30"
+                                : "hover:bg-kua-sky50 cursor-pointer opacity-80 hover:opacity-100"
+                        }`}
+                    >
+                        <FaChevronRight className="text-sm" />
+                    </button>
+
+                    <div className="relative flex h-[320px] items-center overflow-visible">
+                        {scheduleData.map((competition, index) => {
+                            const isActive = index === mobileCardIndex;
+                            const isNext = index === mobileCardIndex + 1;
+
+                            if (!isActive && !isNext) return null;
+
+                            return (
+                                <div
+                                    key={competition.id}
+                                    className={`absolute w-[calc(100%-6rem)] transition-all duration-500 ${
+                                        isActive
+                                            ? "z-20 scale-100 opacity-100"
+                                            : "z-10 translate-x-full scale-90 opacity-60"
+                                    }`}
+                                    style={{
+                                        height: isActive ? "100%" : "90%",
+                                    }}
+                                >
+                                    <div className="bg-kua-white flex h-full w-full flex-col justify-between rounded-3xl p-6 shadow-lg">
+                                        <div className="mb-4 flex w-full flex-col gap-3">
+                                            <div className="bg-kua-main text-kua-white w-fit rounded-full px-3 py-1.5 text-xs font-semibold">
+                                                {competition.status}
+                                            </div>
+                                            <div className="line-clamp-3 text-lg font-semibold wrap-break-word">
+                                                {competition.title}
+                                            </div>
+                                        </div>
+                                        <div className="border-kua-gray250 flex flex-col gap-1 border-t pt-4 text-sm">
+                                            {competition.info.map(
+                                                (detail: ScheduleInfo) => (
+                                                    <div
+                                                        key={detail.label}
+                                                        className="text-kua-gray800"
+                                                    >
+                                                        {detail.label} :{" "}
+                                                        {detail.value}
+                                                    </div>
+                                                ),
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
         </div>
