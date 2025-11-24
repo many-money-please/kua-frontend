@@ -10,6 +10,7 @@ import {
     FaXmark,
     FaChevronDown,
 } from "react-icons/fa6";
+import { useUserRole } from "@/shared/lib/UserRoleContext";
 
 type NavItem = {
     label: string;
@@ -27,7 +28,8 @@ const navItems: NavItem[] = [
     {
         label: "협회소개",
         href: "/about",
-        description: "대한수중핀수영협회를 소개합니다.",
+        description: `대한수중핀수영협회의 설립 배경, 조직 구조 등
+협회의 전반적인 체계와 정체성을 소개합니다.`,
         subMenus: [
             {
                 label: "협회소개",
@@ -62,32 +64,22 @@ const navItems: NavItem[] = [
             "협회에서 운영하는 수중·안전 분야의 주요 종목들의 특징, 목적, 기본 기술과 교육 체계를 체계적으로 안내합니다.",
         subMenus: [
             {
-                label: "유래",
+                label: "핀수영",
                 href: "/fin-swimming/history",
                 showChevron: true,
                 children: [
                     {
-                        label: "역사적 기원",
+                        label: "유래",
+                        href: "/fin-swimming/history",
                     },
                     {
-                        label: "경기 구성",
+                        label: "기술 및 훈련",
+                        href: "/fin-swimming/skills-and-training",
                     },
                     {
-                        label: "핀수영의 특징",
+                        label: "민간자격등록",
+                        href: "/fin-swimming/private-qualification",
                     },
-                    {
-                        label: "한국 핀수영의 발전",
-                    },
-                ],
-            },
-            {
-                label: "기술 및 훈련",
-                href: "/fin-swimming/skills-and-training",
-                showChevron: true,
-                children: [
-                    { label: "기초기술" },
-                    { label: "응용기술" },
-                    { label: "훈련방법" },
                 ],
             },
         ],
@@ -95,7 +87,8 @@ const navItems: NavItem[] = [
     {
         label: "대회정보",
         href: "/competition-info",
-        description: "대회 일정과 결과를 확인하세요.",
+        description: `대회 일정, 선수/국가대표 정보, 증명서 발급 등
+대회 운영 및 참여 관련 정보를 제공합니다.`,
         subMenus: [
             {
                 label: "대회정보",
@@ -225,6 +218,7 @@ const navItems: NavItem[] = [
 export const Header = () => {
     const router = useRouter();
     const pathname = usePathname();
+    const { role, toggleRole } = useUserRole();
     const [hoveredNav, setHoveredNav] = useState<string | null>(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(
@@ -325,6 +319,13 @@ export const Header = () => {
                     ref={navRef}
                     className="text-kua-gray800 relative hidden h-full items-center gap-[42px] text-[15px] font-semibold sm:flex"
                 >
+                    {/* 역할 토글 버튼 (개발용) */}
+                    <button
+                        onClick={toggleRole}
+                        className="text-kua-gray800 hover:text-kua-main text-xs font-medium transition-colors"
+                    >
+                        {role === "admin" ? "👤 관리자" : "👤 일반"}
+                    </button>
                     {navItems.map((item) => {
                         const isHovered = hoveredNav === item.label;
                         const hasSubMenus =
@@ -389,7 +390,7 @@ export const Header = () => {
                         <div className="mx-auto w-full max-w-[1200px] px-[32px] py-8">
                             <div className="flex gap-8">
                                 {/* 좌측: Nav 이름 및 설명 */}
-                                <div className="flex w-[30%] flex-col gap-2">
+                                <div className="flex w-[30%] flex-col gap-6 pr-8">
                                     <h2 className="text-kua-gray900 text-3xl font-bold">
                                         {currentNav.label}
                                     </h2>
@@ -567,6 +568,17 @@ export const Header = () => {
                     className="absolute top-[64px] right-0 left-0 max-h-[calc(100vh-64px)] overflow-y-auto bg-white shadow-lg sm:hidden"
                 >
                     <nav className="flex flex-col">
+                        {/* 역할 토글 버튼 (모바일) */}
+                        <div className="border-kua-gray200 bg-kua-gray50 border-b px-6 py-3">
+                            <button
+                                onClick={toggleRole}
+                                className="text-kua-gray800 hover:text-kua-main text-sm font-medium transition-colors"
+                            >
+                                {role === "admin"
+                                    ? "👤 관리자 모드"
+                                    : "👤 일반 사용자 모드"}
+                            </button>
+                        </div>
                         {navItems.map((item) => {
                             const isExpanded =
                                 expandedMobileMenu === item.label;
