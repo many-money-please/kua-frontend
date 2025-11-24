@@ -4,7 +4,8 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DataTable, type Column } from "@/shared/ui/DataTable";
 import { Pagination } from "@/shared/ui/Pagination";
-import { SearchBar } from "@/shared/ui/SearchBar";
+import { SearchBar, ManagerSearchBar } from "@/shared/ui/SearchBar";
+import { useUserRole } from "@/shared/lib/UserRoleContext";
 
 export type PlayerInfoSummary = {
     id: number;
@@ -35,12 +36,14 @@ export const PlayerInfoTableSection = ({
     pageSize = 15,
 }: PlayerInfoTableSectionProps) => {
     const router = useRouter();
+    const { isAdmin } = useUserRole();
     const [page, setPage] = useState(1);
     const [searchInput, setSearchInput] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const [searchOption, setSearchOption] = useState(
         searchOptions?.[0] ?? "제목",
     );
+    const [selectedRows, setSelectedRows] = useState<PlayerInfoSummary[]>([]);
 
     const filteredData = useMemo(() => {
         if (!searchQuery.trim()) {
@@ -83,15 +86,41 @@ export const PlayerInfoTableSection = ({
         <section className="mb-12 flex w-full max-w-[1200px] flex-col gap-6">
             <div className="flex flex-col gap-2">
                 <span className="text-lg font-bold">{title}</span>
-                <SearchBar
-                    totalCount={paginationInfo.totalItems}
-                    searchQuery={searchInput}
-                    searchOption={searchOption}
-                    searchOptions={searchOptions}
-                    onSearchQueryChange={setSearchInput}
-                    onSearchOptionChange={setSearchOption}
-                    onSearch={handleSearch}
-                />
+                {isAdmin ? (
+                    <ManagerSearchBar
+                        searchQuery={searchInput}
+                        searchOption={searchOption}
+                        searchOptions={searchOptions}
+                        onSearchQueryChange={setSearchInput}
+                        onSearchOptionChange={setSearchOption}
+                        onSearch={handleSearch}
+                        onAdd={() => {
+                            router.push(`${detailBasePath}/create`);
+                        }}
+                        onDelete={() => {
+                            if (selectedRows.length > 0) {
+                                const selectedIds = selectedRows.map(
+                                    (row) => row.id,
+                                );
+                                console.log("선택된 행들의 ID:", selectedIds);
+                                // TODO: 실제 삭제 로직 구현
+                            } else {
+                                console.log("선택된 행이 없습니다.");
+                            }
+                        }}
+                        selectedCount={selectedRows.length}
+                    />
+                ) : (
+                    <SearchBar
+                        totalCount={paginationInfo.totalItems}
+                        searchQuery={searchInput}
+                        searchOption={searchOption}
+                        searchOptions={searchOptions}
+                        onSearchQueryChange={setSearchInput}
+                        onSearchOptionChange={setSearchOption}
+                        onSearch={handleSearch}
+                    />
+                )}
             </div>
 
             <DataTable
@@ -99,6 +128,13 @@ export const PlayerInfoTableSection = ({
                 data={paginationInfo.visibleData}
                 onRowClick={(row) => router.push(`${detailBasePath}/${row.id}`)}
                 rowClassName="hover:bg-kua-sky50"
+                canDelete={isAdmin}
+                onSelectionChange={(rows) => {
+                    setSelectedRows(rows as PlayerInfoSummary[]);
+                }}
+                getRowId={(row) => {
+                    return (row as PlayerInfoSummary).id ?? "";
+                }}
             />
 
             {paginationInfo.totalPages > 1 && (

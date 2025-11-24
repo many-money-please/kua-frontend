@@ -6,6 +6,7 @@ import { Pagination } from "@/shared/ui/Pagination";
 import { SearchBar, AdminSearchBar } from "@/shared/ui/SearchBar";
 import { ImageFallback } from "@/shared/ui/ImageFallback";
 import { ConfirmModal } from "@/shared/ui/ConfirmModal";
+import { useUserRole } from "@/shared/lib/UserRoleContext";
 
 export type FinSwimmingTVPost = {
     id: number;
@@ -53,11 +54,13 @@ export const FinSwimmingTVSection = ({
     data,
     searchOptions,
     pageSize = 16,
-    isAdmin = true,
+    isAdmin: isAdminProp,
     onEdit,
     onDelete,
     onRegister,
 }: FinSwimmingTVSectionProps) => {
+    const { isAdmin: isAdminFromContext } = useUserRole();
+    const isAdmin = isAdminProp ?? isAdminFromContext;
     const [page, setPage] = useState(1);
     const [searchInput, setSearchInput] = useState("");
     const [searchQuery, setSearchQuery] = useState("");

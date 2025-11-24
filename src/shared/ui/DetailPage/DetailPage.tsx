@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import Image from "next/image";
 import { useState } from "react";
+import { useUserRole } from "@/shared/lib/UserRoleContext";
 
 export type DetailPageData = {
     id: number;
@@ -44,6 +45,7 @@ export const DetailPage = ({
     isSecret,
 }: DetailPageProps) => {
     const router = useRouter();
+    const { isAdmin } = useUserRole();
     const [replyContent, setReplyContent] = useState("");
     const [submittedReply, setSubmittedReply] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -153,25 +155,27 @@ export const DetailPage = ({
                                     {submittedReply}
                                 </p>
                             </div>
-                            <div className="flex items-start gap-2">
-                                <button
-                                    onClick={handleEditClick}
-                                    className="hover:bg-kua-main bg-kua-white border-kua-main text-kua-black100 cursor-pointer rounded-[5px] border px-4 py-1.5 text-sm font-medium transition-colors hover:text-white"
-                                >
-                                    수정하기
-                                </button>
-                                <button
-                                    onClick={handleDeleteClick}
-                                    className="border-kua-orange500 hover:bg-kua-orange500 cursor-pointer rounded-[5px] border bg-white px-4 py-1.5 text-sm font-medium transition-colors hover:text-white"
-                                >
-                                    삭제하기
-                                </button>
-                            </div>
+                            {isAdmin && (
+                                <div className="flex items-start gap-2">
+                                    <button
+                                        onClick={handleEditClick}
+                                        className="hover:bg-kua-main bg-kua-white border-kua-main text-kua-black100 cursor-pointer rounded-[5px] border px-4 py-1.5 text-sm font-medium transition-colors hover:text-white"
+                                    >
+                                        수정하기
+                                    </button>
+                                    <button
+                                        onClick={handleDeleteClick}
+                                        className="border-kua-orange500 hover:bg-kua-orange500 cursor-pointer rounded-[5px] border bg-white px-4 py-1.5 text-sm font-medium transition-colors hover:text-white"
+                                    >
+                                        삭제하기
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     )}
 
-                    {/* 답변 수정 중인 경우 */}
-                    {isEditing && (
+                    {/* 답변 수정 중인 경우 (관리자만 가능) */}
+                    {isEditing && isAdmin && (
                         <div className="flex flex-col gap-3">
                             <p className="text-kua-black100 text-[17px] font-bold">
                                 답변 수정하기
@@ -199,8 +203,8 @@ export const DetailPage = ({
                         </div>
                     )}
 
-                    {/* 답변 작성 폼 (답변이 없고 수정 중이 아닐 때만 표시) */}
-                    {!submittedReply && !isEditing && (
+                    {/* 답변 작성 폼 (답변이 없고 수정 중이 아닐 때만 표시, 관리자만 가능) */}
+                    {!submittedReply && !isEditing && isAdmin && (
                         <div className="flex flex-col gap-3">
                             <p className="text-kua-black100 text-[17px] font-bold">
                                 답변하기
@@ -221,6 +225,12 @@ export const DetailPage = ({
                                     답변 등록
                                 </button>
                             </div>
+                        </div>
+                    )}
+                    {/* 일반 사용자에게는 답변 대기 메시지 표시 */}
+                    {!submittedReply && !isEditing && !isAdmin && (
+                        <div className="bg-kua-gray100 text-kua-gray600 rounded-[10px] px-4 py-6 text-center text-base">
+                            답변 대기 중입니다.
                         </div>
                     )}
                 </div>
