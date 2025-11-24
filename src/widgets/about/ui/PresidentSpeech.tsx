@@ -8,7 +8,15 @@ export const PresidentSpeech = () => {
             </p>
             <div className="flex items-center justify-center gap-20">
                 <div className="bg-kua-blue50 h-[636px] w-[536px] rounded-[40px] px-[36px] pt-12">
-                    <div className="this relative h-full w-full">
+                    <div className="relative h-full w-full">
+                        <div className="absolute top-0 left-0 flex flex-col">
+                            <p className="text-kua-main font-medium">
+                                제15대 대한수중핀수영협회 회장
+                            </p>
+                            <p className="text-kua-main text-[32px] font-bold">
+                                강철식
+                            </p>
+                        </div>
                         <Image
                             src="/imgs/about/president.png"
                             alt="president"
