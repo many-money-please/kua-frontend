@@ -70,10 +70,10 @@ export const CompetitionNews = () => {
     };
 
     return (
-        <div className="bg-kua-sky50 flex min-w-screen justify-center px-5 py-16 sm:py-25">
+        <div className="bg-kua-sky50 flex min-w-screen justify-center py-16 pl-5 sm:py-25 sm:pr-5">
             <div className="flex w-full max-w-[1200px] flex-col gap-6 sm:gap-10">
                 {/* 헤더 */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between pr-5 pl-5 sm:pr-0">
                     <div className="text-2xl font-bold sm:text-[32px]">
                         대회소식
                     </div>
@@ -185,7 +185,7 @@ export const CompetitionNews = () => {
                         <FaChevronRight className="text-sm" />
                     </button>
 
-                    <div className="relative flex h-[304px] items-center overflow-visible">
+                    <div className="relative flex h-[304px] items-center overflow-hidden">
                         {data.map((item, index) => {
                             const isActive = index === mobileCardIndex;
                             const isNext = index === mobileCardIndex + 1;
