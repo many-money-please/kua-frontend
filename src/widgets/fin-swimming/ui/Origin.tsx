@@ -4,12 +4,12 @@ export const Origin = () => {
     return (
         <>
             <div className="mx-auto w-full max-w-[1200px]">
-                <h2 className="mb-4 text-[40px] font-bold">핀수영의 유래</h2>
+                <h2 className="mb-4 text-[32px] font-bold">핀수영의 유래</h2>
                 <p className="text-kua-gray600 text-2xl leading-relaxed">
                     핀수영은 수중에서 핀을 이용해 빠르게 이동하는 스포츠로,
                     <br />
-                    자유형보다 약 1.3배 빠른 속도와 돌고래 같은 역동적
-                    움직임을 자랑합니다. <br />
+                    자유형보다 약 1.3배 빠른 속도와 돌고래 같은 역동적 움직임을
+                    자랑합니다. <br />
                     1950년대 유럽에서 시작되어 오늘날 전 세계적으로 사랑받는
                     수중 스포츠입니다.
                 </p>
@@ -25,4 +25,3 @@ export const Origin = () => {
         </>
     );
 };
-

@@ -33,7 +33,7 @@ const trainingSteps: TrainingStep[] = [
 export const TrainingMethods = () => {
     return (
         <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-8 pb-16">
-            <h2 className="text-[40px] font-bold">훈련 방법</h2>
+            <h2 className="text-[32px] font-bold">훈련 방법</h2>
             <div className="grid grid-cols-4 gap-4">
                 {trainingSteps.map((step, index) => (
                     <div

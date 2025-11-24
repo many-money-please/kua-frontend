@@ -21,7 +21,7 @@ export const LoginForm = () => {
     return (
         <div className="flex flex-col items-center gap-10">
             <div className="flex flex-col items-center gap-5">
-                <h2 className="text-kua-darkblue800 text-[40px] font-bold">
+                <h2 className="text-kua-darkblue800 text-[32px] font-bold">
                     로그인
                 </h2>
                 <p className="text-kua-gray800 text-2xl font-medium">

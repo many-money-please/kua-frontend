@@ -27,7 +27,7 @@ type CertificateSectionCardProps = {
 function CertificateSectionCard({ section }: CertificateSectionCardProps) {
     return (
         <div className="flex w-full max-w-[1200px] flex-col gap-8">
-            <h2 className="text-[40px] font-bold">{section.title}</h2>
+            <h2 className="text-[32px] font-bold">{section.title}</h2>
 
             <div className="bg-kua-sky50 flex flex-col gap-4 p-6">
                 {/* 서브타이틀 바 */}
@@ -107,4 +107,3 @@ export function CertificateSections({ sections }: CertificateSectionsProps) {
         </div>
     );
 }
-

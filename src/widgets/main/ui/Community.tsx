@@ -52,7 +52,7 @@ export const Community = () => {
     return (
         <div className="flex w-full max-w-[1200px] flex-col gap-10">
             <div className="flex items-center justify-between">
-                <div className="text-[40px] font-bold">커뮤니티</div>
+                <div className="text-[32px] font-bold">커뮤니티</div>
                 <div className="flex items-center gap-4">
                     {tabs.map((tab, i) => (
                         <div key={i} className="flex items-center gap-4">

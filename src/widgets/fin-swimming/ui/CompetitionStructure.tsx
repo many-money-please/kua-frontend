@@ -110,7 +110,7 @@ export const CompetitionStructure = () => {
         <div className="bg-kua-blue50 mx-auto w-full py-16">
             <div className="mx-auto flex w-full max-w-[1200px] flex-col justify-between gap-16">
                 <div>
-                    <h2 className="mb-8 text-[40px] font-bold">경기 구성</h2>
+                    <h2 className="mb-8 text-[32px] font-bold">경기 구성</h2>
                     <div className="flex flex-col justify-center">
                         <p className="text-kua-gray600 text-xl leading-relaxed">
                             핀수영은 1950년대 유럽에서 시작되어 1986년 IOC가

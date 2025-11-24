@@ -261,7 +261,7 @@ export const OrganizationTab = () => {
             <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-50">
                 {/* 협회 조직도 섹션 */}
                 <div className="flex w-full flex-col">
-                    <h2 className="text-kua-darkblue800 text-[40px] font-bold">
+                    <h2 className="text-kua-darkblue800 text-[32px] font-bold">
                         협회 조직도
                     </h2>
                     <Image

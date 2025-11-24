@@ -64,7 +64,7 @@ export const CompetitionNews = () => {
         <div className="bg-kua-sky50 flex min-w-screen justify-center p-16">
             <div className="flex w-full max-w-[1200px] flex-col gap-10">
                 <div className="flex items-center justify-between">
-                    <div className="text-[40px] font-bold">대회소식</div>
+                    <div className="text-[32px] font-bold">대회소식</div>
 
                     <div className="flex h-12 items-center justify-end gap-4">
                         {totalPages > 1 && (

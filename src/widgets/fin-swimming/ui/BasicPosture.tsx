@@ -34,7 +34,7 @@ const basicPostureData = [
 export const BasicPosture = () => {
     return (
         <div className="mx-auto w-full max-w-[1200px]">
-            <h2 className="mb-4 text-[40px] font-bold">모노핀 착용</h2>
+            <h2 className="mb-4 text-[32px] font-bold">모노핀 착용</h2>
             <div className="grid grid-cols-2 grid-rows-2 gap-4">
                 {basicPostureData.map((item, index) => (
                     <div

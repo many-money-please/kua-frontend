@@ -59,7 +59,7 @@ const FeatureCard = ({ feature }: { feature: FeatureCard }) => {
 export const Features = () => {
     return (
         <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-8 py-8">
-            <h2 className="text-[40px] font-bold">핀수영의 특징</h2>
+            <h2 className="text-[32px] font-bold">핀수영의 특징</h2>
             <p className="text-kua-gray600 text-2xl leading-relaxed">
                 핀수영은 강력한 추진력과 유연한 동작이 결합된, 가장 역동적인
                 수중 경기입니다.
