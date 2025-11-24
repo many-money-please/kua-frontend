@@ -10,7 +10,7 @@ export const AuthTabs = ({ activeTab }: AuthTabsProps) => {
     const router = useRouter();
 
     return (
-        <div className="flex gap-3 py-20">
+        <div className="flex gap-3 px-5 py-10 sm:py-20">
             <button
                 onClick={() => router.push("/auth/login")}
                 className={`flex-1 cursor-pointer rounded-[10px] border px-6 py-5 text-xl transition-colors ${
