@@ -26,6 +26,11 @@ const pageConfig: Record<
         description: "핀수영의 기술과 훈련 방법을 소개합니다.",
         breadcrumbs: ["핀수영 소개", "기술 및 훈련"],
     },
+    "/fin-swimming/private-qualification": {
+        title: "민간자격등록",
+        description: "핀수영 관련 민간자격 등록 정보를 확인하세요.",
+        breadcrumbs: ["핀수영 소개", "민간자격등록"],
+    },
 };
 
 export const FinSwimmingBanner = () => {
@@ -53,4 +58,3 @@ export const FinSwimmingBanner = () => {
         />
     );
 };
-

@@ -63,7 +63,7 @@ function StepCard({ stepNumber, title, description, isLast }: StepCardProps) {
                     <h3 className="text-kua-white text-3xl font-bold">
                         {title}
                     </h3>
-                    <p className="text-kua-white">{description}</p>
+                    <div className="text-kua-white">{description}</div>
                 </div>
             </div>
             {!isLast && <div className="bg-kua-blue300/50 h-px w-full" />}

@@ -191,8 +191,6 @@ const PHOTO_GALLERY: NewsAndActivityPost[] = [
 export default function PhotoGalleryPage() {
     const router = useRouter();
 
-    const isAdmin = true;
-
     const handleEdit = (id: number) => {
         console.log("Edit:", id);
         router.push(`/community/photo-gallery/edit/${id}`);
@@ -214,7 +212,6 @@ export default function PhotoGalleryPage() {
             data={PHOTO_GALLERY}
             detailBasePath="/community/photo-gallery"
             searchOptions={["제목", "내용", "제목+내용"]}
-            isAdmin={isAdmin}
             onEdit={handleEdit}
             onDelete={handleDelete}
             onRegister={handleRegister}

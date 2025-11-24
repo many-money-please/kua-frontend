@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { DataTable, type Column } from "@/shared/ui/DataTable";
 import { Pagination } from "@/shared/ui/Pagination";
-import { SearchBar } from "@/shared/ui/SearchBar";
+import { SearchBar, ManagerSearchBar } from "@/shared/ui/SearchBar";
 import { useRouter } from "next/navigation";
+import { useUserRole } from "@/shared/lib/UserRoleContext";
 
 type Disclosure = {
     id: number;
@@ -139,9 +140,11 @@ const disclosureData: Disclosure[] = [
 
 export const DisclosureTab = () => {
     const router = useRouter();
+    const { isAdmin } = useUserRole();
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchOption, setSearchOption] = useState("제목");
+    const [selectedRows, setSelectedRows] = useState<Disclosure[]>([]);
 
     const pageSize = 15;
 
@@ -167,6 +170,28 @@ export const DisclosureTab = () => {
         router.push(`/about/disclosure/${row.id}`);
     };
 
+    const handleAdd = () => {
+        router.push("/about/disclosure/create");
+    };
+
+    const handleDelete = () => {
+        if (selectedRows.length > 0) {
+            console.log("Selected for deletion:", selectedRows.map((row) => row.id));
+            // TODO: Implement actual delete logic
+            setSelectedRows([]); // Clear selection after action
+        } else {
+            alert("삭제할 항목을 선택해주세요.");
+        }
+    };
+
+    const handleSelectionChange = useCallback((rows: Disclosure[]) => {
+        setSelectedRows(rows);
+    }, []);
+
+    const getRowId = useCallback((row: Disclosure) => {
+        return row.id ?? "";
+    }, []);
+
     // 컬럼 정의
     const columns: Column<Disclosure>[] = [
         {
@@ -191,16 +216,30 @@ export const DisclosureTab = () => {
         <div className="w-full bg-white pb-[150px]">
             <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-10">
                 {/* 검색 UI */}
-                <SearchBar
-                    totalCount={filteredData.length}
-                    searchQuery={searchQuery}
-                    searchOption={searchOption}
-                    searchOptions={["제목"]}
-                    onSearchQueryChange={setSearchQuery}
-                    onSearchOptionChange={setSearchOption}
-                    onSearch={handleSearch}
-                    placeholder="검색어를 입력하세요"
-                />
+                {isAdmin ? (
+                    <ManagerSearchBar
+                        searchQuery={searchQuery}
+                        searchOption={searchOption}
+                        searchOptions={["제목"]}
+                        onSearchQueryChange={setSearchQuery}
+                        onSearchOptionChange={setSearchOption}
+                        onSearch={handleSearch}
+                        onAdd={handleAdd}
+                        onDelete={handleDelete}
+                        selectedCount={selectedRows.length}
+                    />
+                ) : (
+                    <SearchBar
+                        totalCount={filteredData.length}
+                        searchQuery={searchQuery}
+                        searchOption={searchOption}
+                        searchOptions={["제목"]}
+                        onSearchQueryChange={setSearchQuery}
+                        onSearchOptionChange={setSearchOption}
+                        onSearch={handleSearch}
+                        placeholder="검색어를 입력하세요"
+                    />
+                )}
 
                 {/* 경영공시 테이블 */}
                 <div className="w-full">
@@ -209,6 +248,9 @@ export const DisclosureTab = () => {
                         data={currentData}
                         onRowClick={handleRowClick}
                         rowClassName="cursor-pointer hover:bg-kua-sky50"
+                        canDelete={isAdmin}
+                        onSelectionChange={handleSelectionChange}
+                        getRowId={getRowId}
                     />
                     {totalPages > 1 && (
                         <Pagination

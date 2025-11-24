@@ -57,6 +57,7 @@ export type PostFormValues = {
     content: string;
     attachments: PostAttachment[];
     images: PostImage[];
+    isPinned?: boolean;
 };
 
 type PostFormContextValue = {
@@ -70,6 +71,8 @@ type PostFormContextValue = {
     images: PostImage[];
     handleImagesSelected: (files: FileList | null) => void;
     handleRemoveImage: (id: string) => void;
+    isPinned: "none" | "pinned";
+    setIsPinned: (value: "none" | "pinned") => void;
     isSubmitting: boolean;
     submitLabel: string;
     resetLabel: string;
@@ -89,9 +92,12 @@ const usePostFormContext = () => {
 
 type PostFormRootProps = {
     onSubmit: (values: PostFormValues) => Promise<void> | void;
-    initialValues?: Partial<Omit<PostFormValues, "attachments">> & {
+    initialValues?: Partial<
+        Omit<PostFormValues, "attachments" | "isPinned">
+    > & {
         attachments?: PostAttachment[];
         images?: PostImage[];
+        isPinned?: boolean;
     };
     children: ReactNode;
     isSubmitting?: boolean;
@@ -114,6 +120,9 @@ const Root = ({
     );
     const [images, setImages] = useState<PostImage[]>(
         initialValues?.images ?? [],
+    );
+    const [isPinned, setIsPinned] = useState<"none" | "pinned">(
+        initialValues?.isPinned ? "pinned" : "none",
     );
 
     const handleFilesSelected = useCallback((files: FileList | null) => {
@@ -171,7 +180,13 @@ const Root = ({
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        await onSubmit({ title, content, attachments, images });
+        await onSubmit({
+            title,
+            content,
+            attachments,
+            images,
+            isPinned: isPinned === "pinned",
+        });
     };
 
     const value = useMemo<PostFormContextValue>(
@@ -186,6 +201,8 @@ const Root = ({
             images,
             handleImagesSelected,
             handleRemoveImage,
+            isPinned,
+            setIsPinned,
             isSubmitting,
             submitLabel,
             resetLabel,
@@ -198,6 +215,7 @@ const Root = ({
             handleImagesSelected,
             handleRemoveImage,
             images,
+            isPinned,
             isSubmitting,
             resetLabel,
             submitLabel,
@@ -378,6 +396,46 @@ const ImageField = () => {
     );
 };
 
+const PinField = () => {
+    const { isPinned, setIsPinned } = usePostFormContext();
+
+    return (
+        <div className="flex flex-col gap-3">
+            <label className="text-lg font-semibold">
+                상단고정 <span className="text-kua-orange500">(필수)</span>
+            </label>
+            <div className="flex gap-6">
+                <label className="flex cursor-pointer items-center gap-2">
+                    <input
+                        type="radio"
+                        name="isPinned"
+                        value="none"
+                        checked={isPinned === "none"}
+                        onChange={(e) =>
+                            setIsPinned(e.target.value as "none" | "pinned")
+                        }
+                        className="accent-kua-main h-5 w-5 cursor-pointer"
+                    />
+                    <span className="text-base">설정안함</span>
+                </label>
+                <label className="flex cursor-pointer items-center gap-2">
+                    <input
+                        type="radio"
+                        name="isPinned"
+                        value="pinned"
+                        checked={isPinned === "pinned"}
+                        onChange={(e) =>
+                            setIsPinned(e.target.value as "none" | "pinned")
+                        }
+                        className="accent-kua-main h-5 w-5 cursor-pointer"
+                    />
+                    <span className="text-base">상단고정</span>
+                </label>
+            </div>
+        </div>
+    );
+};
+
 const Actions = () => {
     const { isSubmitting, submitLabel } = usePostFormContext();
 
@@ -400,5 +458,6 @@ export const PostForm = {
     ContentField,
     AttachmentField,
     ImageField,
+    PinField,
     Actions,
 };

@@ -29,7 +29,6 @@ export default function CompetitionNewRecordsPage() {
             data={NEW_RECORDS}
             detailBasePath="/competition-info/new-records"
             searchOptions={["제목", "내용", "제목+내용"]}
-            isManager={true}
         />
     );
 }

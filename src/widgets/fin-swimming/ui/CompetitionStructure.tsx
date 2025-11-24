@@ -119,7 +119,7 @@ export const CompetitionStructure = () => {
                         </p>
                     </div>
                 </div>
-                <div className="grid grid-cols-2 grid-rows-2 gap-6">
+                <div className="grid grid-cols-2 grid-rows-2 gap-8">
                     {competitionCards.map((card) => (
                         <CompetitionCard key={card.title} card={card} />
                     ))}

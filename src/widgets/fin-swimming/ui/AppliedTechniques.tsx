@@ -53,12 +53,12 @@ export const AppliedTechniques = () => {
                         className="border-kua-gray400 flex flex-col overflow-hidden rounded-[10px] border"
                     >
                         <div className="relative h-[300px] w-full bg-gray-200">
-                            <Image
+                            {/* <Image
                                 src={technique.image}
                                 alt={technique.title}
                                 fill
                                 className="object-cover"
-                            />
+                            /> */}
                         </div>
                         <div className="flex flex-col gap-2 bg-white p-8">
                             <h3 className="text-kua-main text-2xl font-bold">

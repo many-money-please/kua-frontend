@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { DataTable, type Column } from "@/shared/ui/DataTable";
 import { Pagination } from "@/shared/ui/Pagination";
 import { SearchBar, ManagerSearchBar } from "@/shared/ui/SearchBar";
+import { useUserRole } from "@/shared/lib/UserRoleContext";
 
 type CompetitionInfoTableProps<T> = {
     title: string;
@@ -29,7 +30,8 @@ export const CompetitionInfoTable = <T,>({
     getRowLink,
     pageSize = 15,
 }: CompetitionInfoTableProps<T>) => {
-    const isManager = true;
+    const { isAdmin } = useUserRole();
+    const isManager = isAdmin; // 관리자 = 매니저로 동일하게 처리
     const router = useRouter();
     const [page, setPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");

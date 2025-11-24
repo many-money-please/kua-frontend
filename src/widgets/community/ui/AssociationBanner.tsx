@@ -36,12 +36,14 @@ const pageConfig: Record<
 export const AssociationBanner = () => {
     const pathname = usePathname();
 
-    // 협회소식 섹션에서만 렌더링
+    // 협회소식 섹션에서만 렌더링 (create/edit 페이지 제외 - CommunityBanner가 담당)
     const shouldRender =
-        pathname.startsWith("/community/news-and-activities") ||
-        pathname.startsWith("/community/photo-gallery") ||
-        pathname.startsWith("/community/press-release") ||
-        pathname.startsWith("/community/fin-swimming-tv");
+        (pathname.startsWith("/community/news-and-activities") ||
+            pathname.startsWith("/community/photo-gallery") ||
+            pathname.startsWith("/community/press-release") ||
+            pathname.startsWith("/community/fin-swimming-tv")) &&
+        !pathname.includes("/create") &&
+        !pathname.includes("/edit");
 
     if (!shouldRender) {
         return null;

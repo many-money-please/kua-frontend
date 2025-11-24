@@ -69,6 +69,7 @@ export const CompetitionInfoCreate = () => {
 
     return (
         <PostForm.Root onSubmit={handleSubmit} isSubmitting={isSubmitting}>
+            <PostForm.PinField />
             <PostForm.TitleField />
 
             <div className="flex flex-col gap-2">

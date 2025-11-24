@@ -131,8 +131,6 @@ const NEWS_AND_ACTIVITIES: NewsAndActivityPost[] = [
 export default function NewsAndActivitiesPage() {
     const router = useRouter();
 
-    const isAdmin = true;
-
     const handleEdit = (id: number) => {
         console.log("Edit:", id);
         router.push(`/community/news-and-activities/edit/${id}`);
@@ -154,7 +152,6 @@ export default function NewsAndActivitiesPage() {
             data={NEWS_AND_ACTIVITIES}
             detailBasePath="/community/news-and-activities"
             searchOptions={["제목", "내용", "제목+내용"]}
-            isAdmin={isAdmin}
             onEdit={handleEdit}
             onDelete={handleDelete}
             onRegister={handleRegister}
