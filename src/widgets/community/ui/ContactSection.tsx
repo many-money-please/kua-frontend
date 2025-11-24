@@ -56,7 +56,7 @@ const columns: Column<ContactPost>[] = [
         header: "답변상태",
         accessor: (value) => (
             <span
-                className={`rounded-full px-3 py-1 text-lg font-semibold ${
+                className={`min-w-fit rounded-full px-3 py-1 text-base font-semibold ${
                     value.status === "답변 완료"
                         ? "text-kua-main bg-kua-blue50"
                         : "text-kua-gray400 bg-kua-gray250"

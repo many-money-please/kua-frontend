@@ -25,6 +25,16 @@ export function proxy(request: NextRequest) {
         );
     }
 
+    // /competition-info/registration을 /competition-info/registration/competition-application로 리다이렉트
+    if (pathname === "/competition-info/registration") {
+        return NextResponse.redirect(
+            new URL(
+                "/competition-info/registration/competition-application",
+                request.url,
+            ),
+        );
+    }
+
     if (pathname === "/fin-swimming") {
         return NextResponse.redirect(
             new URL("/fin-swimming/history", request.url),
@@ -39,6 +49,7 @@ export const config = {
         "/community",
         "/competition-info",
         "/competition-info/player-info",
+        "/competition-info/registration",
         "/fin-swimming",
     ],
 };

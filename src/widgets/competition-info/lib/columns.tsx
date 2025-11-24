@@ -15,7 +15,7 @@ const getStatusButtonClassName = (
     status: "모집중" | "신청 완료" | "대회 진행중" | "대회 종료" | "결과 발표",
 ) => {
     const baseClasses =
-        "rounded-full px-2.5 py-1 font-semibold transition-colors";
+        "rounded-full px-2.5 py-1 font-semibold transition-colors text-sm whitespace-nowrap min-w-fit text-center";
     const statusClasses: Record<
         "모집중" | "신청 완료" | "대회 진행중" | "대회 종료" | "결과 발표",
         string
