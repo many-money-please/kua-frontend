@@ -27,7 +27,7 @@ export const KoreaDevelopment = () => {
     return (
         <div className="bg-kua-sky50 flex w-full flex-col gap-16 py-24">
             <div className="mx-auto w-full max-w-[1200px]">
-                <h2 className="mb-4 text-[40px] font-bold">
+                <h2 className="mb-4 text-[32px] font-bold">
                     한국 핀수영의 발전
                 </h2>
                 <p className="text-kua-gray600 text-2xl leading-relaxed">

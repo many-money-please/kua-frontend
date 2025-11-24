@@ -7,7 +7,7 @@ export const FindUs = () => {
     return (
         <div className="bg-kua-sky50 w-full">
             <div className="mx-auto flex w-full max-w-[1200px] flex-col items-start justify-center gap-12 py-44">
-                <h2 className="text-kua-darkblue800 text-[40px] font-bold">
+                <h2 className="text-kua-darkblue800 text-[32px] font-bold">
                     찾아오시는 길
                 </h2>
                 <div className="h-[585px] w-full">

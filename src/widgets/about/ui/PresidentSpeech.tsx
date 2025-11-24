@@ -3,7 +3,7 @@ import Image from "next/image";
 export const PresidentSpeech = () => {
     return (
         <div className="mx-auto flex w-full max-w-[1200px] flex-col items-start justify-center gap-10 pb-40">
-            <p className="text-kua-darkblue800 text-[40px] font-bold">
+            <p className="text-kua-darkblue800 text-[32px] font-bold">
                 협회장 인사말
             </p>
             <div className="flex items-center justify-center gap-20">

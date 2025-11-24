@@ -49,7 +49,7 @@ const athleteRegistrationData: AthleteRegistrationItem[] = [
 export default function AthleteRegistrationPage() {
     return (
         <div className="flex w-full max-w-[1200px] flex-col gap-8 pb-24">
-            <h2 className="text-[40px] font-bold">
+            <h2 className="text-[32px] font-bold">
                 경기인 등록 (선수, 지도자, 심판 등 동호인 등록 신청)
             </h2>
             {athleteRegistrationData.map((item) => (

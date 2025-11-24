@@ -27,7 +27,7 @@ export const HistoricalOrigin = () => {
     return (
         <>
             <div className="mx-auto w-full max-w-[1200px]">
-                <h2 className="mb-4 text-[40px] font-bold">역사적 기원</h2>
+                <h2 className="mb-4 text-[32px] font-bold">역사적 기원</h2>
                 <p className="text-kua-gray600 text-2xl leading-relaxed">
                     핀수영은 1950년대 유럽에서 시작되어
                     <br /> 1986년 IOC가 정식 종목으로 승인하면서 세계적인 수중

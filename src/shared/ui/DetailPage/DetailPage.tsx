@@ -99,7 +99,7 @@ export const DetailPage = ({
                         height={21.45}
                     />
                 )}
-                <h1 className="text-[40px] font-bold">{pageTitle}</h1>
+                <h1 className="text-[32px] font-bold">{pageTitle}</h1>
             </div>
             <div className="border-t-kua-main border-b-kua-gray300 flex flex-col gap-4 border-t-2 border-b py-4">
                 <h2 className="text-2xl font-semibold">{data.title}</h2>

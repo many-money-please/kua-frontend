@@ -5,7 +5,7 @@ export const CI = () => {
         <div className="mx-auto flex w-full max-w-[1200px] flex-col items-start justify-center gap-[93px] py-44">
             <div className="flex flex-col gap-28">
                 <div className="flex flex-col gap-10">
-                    <h2 className="text-kua-darkblue800 text-[40px] font-bold">
+                    <h2 className="text-kua-darkblue800 text-[32px] font-bold">
                         C.I 소개
                     </h2>
                     <div className="flex flex-col gap-5">

@@ -45,7 +45,7 @@ const appliedTechniques: AppliedTechnique[] = [
 export const AppliedTechniques = () => {
     return (
         <div className="mx-auto w-full max-w-[1200px]">
-            <h2 className="mb-8 text-[40px] font-bold">응용 기술</h2>
+            <h2 className="mb-8 text-[32px] font-bold">응용 기술</h2>
             <div className="grid grid-cols-3 gap-4">
                 {appliedTechniques.map((technique) => (
                     <div

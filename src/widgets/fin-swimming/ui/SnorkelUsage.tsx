@@ -50,7 +50,7 @@ export const SnorkelUsage = () => {
     return (
         <div className="bg-kua-blue50 w-full py-16">
             <div className="mx-auto w-full max-w-[1200px] gap-4 rounded-[10px]">
-                <h2 className="mb-8 text-[40px] font-bold">스노클 사용법</h2>
+                <h2 className="mb-8 text-[32px] font-bold">스노클 사용법</h2>
                 <div className="grid grid-cols-3 gap-4">
                     {snorkelSteps.map((step) => (
                         <div

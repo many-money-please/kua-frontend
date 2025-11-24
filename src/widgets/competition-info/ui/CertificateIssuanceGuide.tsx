@@ -57,7 +57,7 @@ function StepCard({ stepNumber, title, description, isLast }: StepCardProps) {
             <div className="flex items-center gap-8">
                 <div className="text-kua-main flex h-28 w-28 shrink-0 flex-col items-center justify-center rounded-[10px] bg-[#B3D3F3] font-bold">
                     <span className="text-xl">STEP</span>
-                    <span className="text-[40px]">{stepNumber}</span>
+                    <span className="text-[32px]">{stepNumber}</span>
                 </div>
                 <div className="flex flex-col gap-2">
                     <h3 className="text-kua-white text-3xl font-bold">
@@ -75,7 +75,7 @@ export function CertificateIssuanceGuide() {
     return (
         <div className="bg-kua-main w-full">
             <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-12 py-24">
-                <h2 className="text-kua-white text-[40px] font-bold">
+                <h2 className="text-kua-white text-[32px] font-bold">
                     대한수중·핀수영협회 증명서 발급 안내
                 </h2>
                 <div className="flex w-full items-stretch gap-8">

@@ -180,7 +180,7 @@ export const CompetitionSchedule = () => {
             )}
             <div className="relative z-10 flex w-[80%] max-w-[1200px] flex-col gap-6">
                 <div className="flex items-center justify-between">
-                    <div className="text-[40px] font-bold">대회일정 안내</div>
+                    <div className="text-[32px] font-bold">대회일정 안내</div>
                     <div className="flex h-12 items-center justify-end gap-4">
                         {totalPages > 1 && (
                             <div className="flex h-12 items-center justify-end gap-4">
