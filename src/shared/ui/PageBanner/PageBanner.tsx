@@ -27,7 +27,7 @@ export const PageBanner = ({
                 height={400}
                 className="absolute inset-0 h-full w-full object-contain"
             />
-            <div className="relative z-10 mx-auto flex h-full max-w-[1200px] flex-col items-start justify-center gap-6 px-5 text-white sm:px-0">
+            <div className="relative z-10 mx-auto flex h-full max-w-[1200px] flex-col items-start justify-center gap-6 px-5 text-white 2xl:px-0">
                 <div className="flex items-center justify-center gap-5">
                     <Image
                         src="/imgs/about/home.svg"
