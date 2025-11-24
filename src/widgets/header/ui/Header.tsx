@@ -4,7 +4,12 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaChevronRight } from "react-icons/fa6";
+import {
+    FaChevronRight,
+    FaBars,
+    FaXmark,
+    FaChevronDown,
+} from "react-icons/fa6";
 
 type NavItem = {
     label: string;
@@ -194,26 +199,20 @@ const navItems: NavItem[] = [
     },
     {
         label: "로그인",
-        href: "/login",
-        description: "회원 서비스를 이용하기 위해 로그인해주세요.",
-        subMenus: [
-            {
-                label: "로그인",
-                href: "/auth/login",
-            },
-            {
-                label: "회원가입",
-                href: "/auth/register",
-            },
-        ],
+        href: "/auth/login",
     },
 ];
 
 export const Header = () => {
     const pathname = usePathname();
     const [hoveredNav, setHoveredNav] = useState<string | null>(null);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(
+        null,
+    );
     const gnbRef = useRef<HTMLDivElement>(null);
     const navRef = useRef<HTMLElement>(null);
+    const mobileMenuRef = useRef<HTMLDivElement>(null);
 
     // GNB 외부 클릭 시 닫기 (nav 영역은 제외)
     useEffect(() => {
@@ -235,43 +234,83 @@ export const Header = () => {
         };
     }, []);
 
+    // 모바일 메뉴 열릴 때 스크롤 방지
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, [isMobileMenuOpen]);
+
     const currentNav = hoveredNav
         ? navItems.find((nav) => nav.label === hoveredNav)
         : null;
 
     return (
-        <header className="sticky top-0 z-50 w-full bg-white">
-            <div className="mx-auto flex h-[84px] w-full max-w-[1200px] items-center justify-between px-[32px]">
-                <div className="flex items-center gap-[14px]">
-                    <Link href="/" className="flex items-center gap-[14px]">
+        <header className="sticky top-0 z-50 w-full bg-white shadow-sm">
+            <div className="mx-auto flex h-[64px] w-full max-w-[1200px] items-center justify-between px-4 sm:h-[84px] sm:px-8">
+                {/* 로고 */}
+                <div className="flex items-center gap-2 sm:gap-[14px]">
+                    <Link
+                        href="/"
+                        className="flex items-center gap-2 sm:gap-[14px]"
+                    >
                         <Image
                             src="/imgs/logos/Icon.svg"
                             alt="Korea Underwater Association logo"
-                            width={44}
-                            height={44}
+                            width={32}
+                            height={32}
+                            className="sm:h-[44px] sm:w-[44px]"
                             priority
                         />
                         <Image
                             src="/imgs/logos/Icon-Text.svg"
                             alt="Korea Underwater Association text mark"
-                            width={182}
-                            height={40}
+                            width={140}
+                            height={30}
+                            className="sm:h-[40px] sm:w-[182px]"
                             priority
                         />
                     </Link>
                 </div>
 
+                {/* 모바일 햄버거 메뉴 버튼 */}
+                <button
+                    type="button"
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    className="text-kua-gray800 flex h-10 w-10 cursor-pointer items-center justify-center sm:hidden"
+                    aria-label="메뉴"
+                >
+                    {isMobileMenuOpen ? (
+                        <FaXmark className="text-2xl" />
+                    ) : (
+                        <FaBars className="text-2xl" />
+                    )}
+                </button>
+
+                {/* 데스크탑 네비게이션 */}
                 <nav
                     ref={navRef}
-                    className="text-kua-gray800 relative flex h-full items-center gap-[42px] text-[15px] font-semibold"
+                    className="text-kua-gray800 relative hidden h-full items-center gap-[42px] text-[15px] font-semibold sm:flex"
                 >
                     {navItems.map((item) => {
                         const isHovered = hoveredNav === item.label;
+                        const hasSubMenus =
+                            item.subMenus && item.subMenus.length > 0;
+
                         return (
                             <div
                                 key={item.label}
                                 className="hover:text-kua-blue300 relative flex h-full cursor-pointer items-center"
-                                onMouseEnter={() => setHoveredNav(item.label)}
+                                onMouseEnter={() => {
+                                    if (hasSubMenus) {
+                                        setHoveredNav(item.label);
+                                    }
+                                }}
                                 onMouseLeave={() => {
                                     // GNB가 열려있을 때는 닫지 않음
                                     if (!gnbRef.current) {
@@ -279,35 +318,39 @@ export const Header = () => {
                                     }
                                 }}
                                 onClick={() => {
-                                    // 클릭 시에도 hover 상태 유지
-                                    if (
-                                        item.subMenus &&
-                                        item.subMenus.length > 0
-                                    ) {
+                                    if (hasSubMenus) {
+                                        // 서브메뉴가 있으면 hover 상태 유지
                                         setHoveredNav(item.label);
+                                    } else if (item.href) {
+                                        // 서브메뉴가 없으면 바로 이동
+                                        window.location.href = item.href;
                                     }
                                 }}
                             >
                                 {item.label}
                                 {/* 헤더와 GNB 사이에 걸치는 동그란 요소 */}
-                                <div
-                                    className={`bg-kua-blue300 absolute top-[82px] left-1/2 z-40 min-h-1 min-w-1 -translate-x-1/2 scale-150 rounded-full transition-opacity duration-200 ${
-                                        isHovered ? "opacity-100" : "opacity-0"
-                                    }`}
-                                />
+                                {hasSubMenus && (
+                                    <div
+                                        className={`bg-kua-blue300 absolute top-[82px] left-1/2 z-40 min-h-1 min-w-1 -translate-x-1/2 scale-150 rounded-full transition-opacity duration-200 ${
+                                            isHovered
+                                                ? "opacity-100"
+                                                : "opacity-0"
+                                        }`}
+                                    />
+                                )}
                             </div>
                         );
                     })}
                 </nav>
             </div>
 
-            {/* GNB */}
+            {/* 데스크탑 GNB */}
             {currentNav &&
                 currentNav.subMenus &&
                 currentNav.subMenus.length > 0 && (
                     <div
                         ref={gnbRef}
-                        className="border-kua-gray200 absolute right-0 left-0 border-t border-b bg-white shadow-lg"
+                        className="border-kua-gray200 absolute right-0 left-0 hidden border-t border-b bg-white shadow-lg sm:block"
                         onMouseEnter={() => setHoveredNav(currentNav.label)}
                         onMouseLeave={() => setHoveredNav(null)}
                         style={{
@@ -437,6 +480,136 @@ export const Header = () => {
                         </div>
                     </div>
                 )}
+
+            {/* 모바일 메뉴 */}
+            {isMobileMenuOpen && (
+                <div
+                    ref={mobileMenuRef}
+                    className="absolute top-[64px] right-0 left-0 max-h-[calc(100vh-64px)] overflow-y-auto bg-white shadow-lg sm:hidden"
+                >
+                    <nav className="flex flex-col">
+                        {navItems.map((item) => {
+                            const isExpanded =
+                                expandedMobileMenu === item.label;
+                            const hasSubMenus =
+                                item.subMenus && item.subMenus.length > 0;
+
+                            return (
+                                <div
+                                    key={item.label}
+                                    className="border-kua-gray200 border-b"
+                                >
+                                    {/* 메인 메뉴 아이템 */}
+                                    <div
+                                        className="text-kua-gray800 flex cursor-pointer items-center justify-between px-6 py-4 font-semibold"
+                                        onClick={() => {
+                                            if (hasSubMenus) {
+                                                setExpandedMobileMenu(
+                                                    isExpanded
+                                                        ? null
+                                                        : item.label,
+                                                );
+                                            } else if (item.href) {
+                                                setIsMobileMenuOpen(false);
+                                                window.location.href =
+                                                    item.href;
+                                            }
+                                        }}
+                                    >
+                                        <span>{item.label}</span>
+                                        {hasSubMenus && (
+                                            <FaChevronDown
+                                                className={`text-kua-gray600 text-sm transition-transform ${
+                                                    isExpanded
+                                                        ? "rotate-180"
+                                                        : ""
+                                                }`}
+                                            />
+                                        )}
+                                    </div>
+
+                                    {/* 서브메뉴 */}
+                                    {hasSubMenus && isExpanded && (
+                                        <div className="bg-kua-gray50 px-6 py-2">
+                                            {item.subMenus!.map((subMenu) => (
+                                                <div
+                                                    key={subMenu.label}
+                                                    className="py-2"
+                                                >
+                                                    {/* 서브메뉴 헤더 */}
+                                                    {subMenu.href ? (
+                                                        <Link
+                                                            href={subMenu.href}
+                                                            onClick={() =>
+                                                                setIsMobileMenuOpen(
+                                                                    false,
+                                                                )
+                                                            }
+                                                            className="text-kua-gray800 hover:text-kua-blue300 block py-2 font-medium"
+                                                        >
+                                                            {subMenu.label}
+                                                        </Link>
+                                                    ) : (
+                                                        <div className="text-kua-gray800 py-2 font-medium">
+                                                            {subMenu.label}
+                                                        </div>
+                                                    )}
+
+                                                    {/* 서브메뉴 children */}
+                                                    {subMenu.children && (
+                                                        <div className="ml-4 flex flex-col gap-1">
+                                                            {subMenu.children.map(
+                                                                (child) =>
+                                                                    child.href ? (
+                                                                        <Link
+                                                                            key={
+                                                                                child.label
+                                                                            }
+                                                                            href={
+                                                                                child.href
+                                                                            }
+                                                                            onClick={() =>
+                                                                                setIsMobileMenuOpen(
+                                                                                    false,
+                                                                                )
+                                                                            }
+                                                                            className="text-kua-gray600 hover:text-kua-blue300 flex items-center gap-2 py-2 text-sm"
+                                                                        >
+                                                                            <span>
+                                                                                •
+                                                                            </span>
+                                                                            {
+                                                                                child.label
+                                                                            }
+                                                                        </Link>
+                                                                    ) : (
+                                                                        <span
+                                                                            key={
+                                                                                child.label
+                                                                            }
+                                                                            className="text-kua-gray600 flex items-center gap-2 py-2 text-sm"
+                                                                        >
+                                                                            <span>
+                                                                                •
+                                                                            </span>
+                                                                            {
+                                                                                child.label
+                                                                            }
+                                                                        </span>
+                                                                    ),
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </nav>
+                </div>
+            )}
         </header>
     );
 };

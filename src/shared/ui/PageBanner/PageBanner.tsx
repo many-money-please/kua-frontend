@@ -12,9 +12,9 @@ export const PageBanner = ({
     breadcrumbs,
 }: PageBannerProps) => {
     return (
-        <div className="relative h-[400px] w-full rounded-[20px]">
+        <div className="relative h-[250px] w-full overflow-hidden rounded-b-[20px] sm:h-[400px]">
             <div
-                className="absolute inset-0 mx-[60px] rounded-[20px]"
+                className="absolute inset-0 2xl:mx-[60px] 2xl:rounded-[20px] 2xl:px-0"
                 style={{
                     background:
                         "linear-gradient(90deg, rgba(36, 64, 143) 0%, rgba(64, 102, 159) 100%)",
@@ -27,7 +27,7 @@ export const PageBanner = ({
                 height={400}
                 className="absolute inset-0 h-full w-full object-contain"
             />
-            <div className="relative z-10 mx-auto flex h-full max-w-[1200px] flex-col items-start justify-center gap-6 text-white">
+            <div className="relative z-10 mx-auto flex h-full max-w-[1200px] flex-col items-start justify-center gap-6 px-5 text-white sm:px-0">
                 <div className="flex items-center justify-center gap-5">
                     <Image
                         src="/imgs/about/home.svg"
@@ -47,8 +47,10 @@ export const PageBanner = ({
                         </div>
                     ))}
                 </div>
-                <p className="text-[40px] font-bold">{title}</p>
-                <p className="text-kua-gray300">{description}</p>
+                <p className="text-3xl font-bold sm:text-[40px]">{title}</p>
+                <p className="text-kua-gray300 text-sm sm:text-base">
+                    {description}
+                </p>
             </div>
         </div>
     );

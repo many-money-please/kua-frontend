@@ -61,10 +61,10 @@ export const HeroCarousel = () => {
     };
 
     return (
-        <div className="h-fit w-full px-8">
+        <div className="h-fit w-full sm:px-8">
             <div
                 id="hero-section"
-                className="relative mx-auto flex h-[min(800px,calc(100vw/2.25),100vh-80px)] max-h-[800px] min-h-[500px] w-full max-w-[1800px] items-center justify-center overflow-hidden rounded-[30px] px-12"
+                className="relative mx-auto flex h-[min(800px,calc(100vw/2.25),100vh-80px)] max-h-[800px] min-h-[500px] w-full max-w-[1800px] items-center justify-center overflow-hidden rounded-b-[30px] sm:rounded-[30px] sm:px-12"
             >
                 <Image
                     src={slides[currentSlide].image}
@@ -72,11 +72,13 @@ export const HeroCarousel = () => {
                     fill={true}
                     className="object-cover"
                 />
-                <div className="text-kua-white relative flex min-h-[80%] min-w-4/5 flex-col items-start justify-end gap-4 pb-[14%] text-[1em] text-shadow-lg">
-                    <div className="text-[2em]">
+                <div className="text-kua-white relative flex min-h-[80%] min-w-4/5 flex-col items-start justify-center gap-4 py-[14%] text-[1em] text-shadow-lg">
+                    <div className="text-2xl sm:text-[2em]">
                         {slides[currentSlide].title}
                     </div>
-                    <div>{slides[currentSlide].subtitle}</div>
+                    <div className="text-[15px] sm:text-xl">
+                        {slides[currentSlide].subtitle}
+                    </div>
                     <div className="bg-kua-gray800/20 flex items-center justify-center gap-4 rounded-full px-4 py-2">
                         <button
                             type="button"
