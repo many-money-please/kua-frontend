@@ -170,7 +170,7 @@ export const CompetitionSchedule = () => {
     return (
         <div
             ref={sectionRef}
-            className="bg-kua-sky50 relative flex w-full flex-col items-center justify-center rounded-tl-[100px] px-5 py-25 sm:rounded-tl-[200px]"
+            className="bg-kua-sky50 relative flex w-full flex-col items-center justify-center rounded-tl-[100px] py-25 pl-5 sm:rounded-tl-[200px] sm:pr-5"
         >
             {/* 배경 로고 이미지 - 우측 중앙 배치, 높이 섹션의 2/3 (데스크탑만) */}
             {logoHeight > 0 && (
@@ -191,7 +191,7 @@ export const CompetitionSchedule = () => {
             )}
             <div className="relative z-10 flex w-full flex-col gap-6 sm:max-w-[1200px]">
                 {/* 헤더 */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between pr-5 sm:pr-0">
                     <div className="text-2xl font-bold sm:text-[32px]">
                         대회일정 안내
                     </div>
@@ -307,7 +307,7 @@ export const CompetitionSchedule = () => {
                         <FaChevronRight className="text-sm" />
                     </button>
 
-                    <div className="relative flex h-[320px] items-center overflow-visible">
+                    <div className="relative flex h-[320px] items-center overflow-hidden">
                         {scheduleData.map((competition, index) => {
                             const isActive = index === mobileCardIndex;
                             const isNext = index === mobileCardIndex + 1;
