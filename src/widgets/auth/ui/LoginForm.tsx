@@ -1,22 +1,67 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import Image from "next/image";
+import { useUserRole } from "@/shared/lib/UserRoleContext";
 
 export const LoginForm = () => {
     const router = useRouter();
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const { setRole } = useUserRole();
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [isPending, startTransition] = useTransition();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("로그인:", { username, password });
-        // TODO: API 연동
-        router.push("/auth/change-password");
-        alert("로그인 기능은 추후 구현됩니다.");
+        setError(null);
+
+        const formData = new FormData(e.currentTarget);
+        const loginId = formData.get("loginId") as string;
+        const password = formData.get("password") as string;
+
+        startTransition(async () => {
+            try {
+                // Route Handler를 통해 로그인 (브라우저가 Set-Cookie를 받을 수 있음)
+                const loginResponse = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include", // 쿠키 포함
+                    body: JSON.stringify({ loginId, password }),
+                });
+
+                const loginResult = await loginResponse.json();
+
+                if (!loginResult.success) {
+                    setError(loginResult.error || "로그인에 실패했습니다.");
+                    return;
+                }
+
+                // 로그인 응답에 사용자 정보가 포함되어 있음
+                if (loginResult.success && loginResult.data?.user) {
+                    const user = loginResult.data.user;
+                    const userRole =
+                        user.role === "ADMIN" || user.role === "USER"
+                            ? user.role.toLowerCase()
+                            : "user";
+                    setRole(userRole as "user" | "admin");
+                    router.push("/");
+                    router.refresh();
+                } else {
+                    // 사용자 정보가 없으면 에러 (일반적으로는 발생하지 않음)
+                    setError("사용자 정보를 가져오지 못했습니다.");
+                }
+            } catch (error) {
+                setError(
+                    error instanceof Error
+                        ? error.message
+                        : "로그인에 실패했습니다.",
+                );
+            }
+        });
     };
 
     return (
@@ -34,6 +79,11 @@ export const LoginForm = () => {
                 onSubmit={handleSubmit}
                 className="flex w-full max-w-[700px] flex-col gap-2.5 sm:gap-6"
             >
+                {error && (
+                    <div className="rounded border border-red-200 bg-red-50 px-4 py-3 text-red-700">
+                        {error}
+                    </div>
+                )}
                 {/* 아이디 입력 */}
                 <div className="relative">
                     <div className="absolute top-1/2 left-9 -translate-y-1/2 text-lg">
@@ -46,10 +96,11 @@ export const LoginForm = () => {
                     </div>
                     <input
                         type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        name="loginId"
                         placeholder="아이디를 입력해 주세요."
-                        className="border-kua-gray300 focus:border-kua-main w-full rounded-[5px] border bg-white px-18 py-4 text-xl outline-none placeholder:text-sm sm:placeholder:text-lg"
+                        required
+                        disabled={isPending}
+                        className="border-kua-gray300 focus:border-kua-main w-full rounded-[5px] border bg-white px-18 py-4 text-xl outline-none placeholder:text-sm disabled:opacity-50 sm:placeholder:text-lg"
                     />
                 </div>
 
@@ -65,15 +116,17 @@ export const LoginForm = () => {
                     </div>
                     <input
                         type={showPassword ? "text" : "password"}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        name="password"
                         placeholder="비밀번호를 입력해 주세요."
-                        className="border-kua-gray300 focus:border-kua-main w-full rounded-[5px] border bg-white px-18 py-4 text-xl outline-none placeholder:text-sm sm:placeholder:text-lg"
+                        required
+                        disabled={isPending}
+                        className="border-kua-gray300 focus:border-kua-main w-full rounded-[5px] border bg-white px-18 py-4 text-xl outline-none placeholder:text-sm disabled:opacity-50 sm:placeholder:text-lg"
                     />
                     <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute top-1/2 right-9 -translate-y-1/2"
+                        disabled={isPending}
                     >
                         {showPassword ? (
                             <FiEyeOff className="text-kua-gray400 h-5 w-5" />
@@ -86,9 +139,10 @@ export const LoginForm = () => {
                 {/* 로그인 버튼 */}
                 <button
                     type="submit"
+                    disabled={isPending}
                     className="bg-kua-main hover:bg-kua-blue500 my-2.5 h-15 w-full cursor-pointer rounded-[10px] text-base text-white transition-colors sm:mt-4 sm:mb-0 sm:h-18 sm:text-2xl"
                 >
-                    로그인
+                    {isPending ? "로그인 중..." : "로그인"}
                 </button>
 
                 {/* 아이디찾기 / 비밀번호찾기 / 회원가입 */}
