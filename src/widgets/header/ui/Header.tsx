@@ -82,6 +82,90 @@ const navItems: NavItem[] = [
                     },
                 ],
             },
+            {
+                label: "스쿠버다이빙",
+                href: "/scuba-diving/history",
+                showChevron: true,
+                children: [
+                    {
+                        label: "유래",
+                        href: "/scuba-diving/history",
+                    },
+                    {
+                        label: "기술 및 훈련",
+                        href: "/scuba-diving/skills-and-training",
+                    },
+                    {
+                        label: "민간자격등록",
+                        href: "/scuba-diving/private-qualification",
+                    },
+                ],
+            },
+            {
+                label: "프리다이빙",
+                href: "/free-diving/history",
+                showChevron: true,
+                children: [
+                    {
+                        label: "유래",
+                        href: "/free-diving/history",
+                    },
+                    {
+                        label: "기술 및 훈련",
+                        href: "/free-diving/skills-and-training",
+                    },
+                    {
+                        label: "민간자격등록",
+                        href: "/free-diving/private-qualification",
+                    },
+                ],
+            },
+            {
+                label: "인명구조",
+                href: "/lifesaving/history",
+                showChevron: true,
+                children: [
+                    {
+                        label: "유래",
+                        href: "/lifesaving/history",
+                    },
+                    {
+                        label: "기술 및 훈련",
+                        href: "/lifesaving/skills-and-training",
+                    },
+                    {
+                        label: "민간자격등록",
+                        href: "/lifesaving/private-qualification",
+                    },
+                    {
+                        label: "교육 안내",
+                        href: "/lifesaving/education",
+                    },
+                ],
+            },
+            {
+                label: "응급처치",
+                href: "/first-aid/history",
+                showChevron: true,
+                children: [
+                    {
+                        label: "유래",
+                        href: "/first-aid/history",
+                    },
+                    {
+                        label: "기술 및 훈련",
+                        href: "/first-aid/skills-and-training",
+                    },
+                    {
+                        label: "민간자격등록",
+                        href: "/first-aid/private-qualification",
+                    },
+                    {
+                        label: "교육 안내",
+                        href: "/first-aid/education",
+                    },
+                ],
+            },
         ],
     },
     {
