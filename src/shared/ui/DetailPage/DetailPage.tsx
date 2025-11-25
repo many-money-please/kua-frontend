@@ -138,7 +138,7 @@ export const DetailPage = ({
 
                 {/* 첨부파일 */}
                 {data.attachments && data.attachments.length > 0 && (
-                    <div className="bg-kua-sky100 text-kua-main flex w-full flex-col gap-2 px-6 py-4 text-xs">
+                    <div className="bg-kua-sky100 text-kua-main flex w-full flex-col gap-2 px-10 py-6 text-xs">
                         <div className="mb-1 font-semibold">첨부파일</div>
                         {data.attachments.map((file, index) => (
                             <div
