@@ -25,6 +25,14 @@ const getDummyData = (id: string): DetailPageData => ({
         
         <p>많은 선수들이 참가하여 열띤 경기를 펼쳤습니다.</p>
     `,
+    images: [
+        "/imgs/fin-swimming/fin-swimming01.jpg",
+        "/imgs/fin-swimming/fin-swimming02.jpg",
+        "/imgs/fin-swimming/fin-swimming10.jpg",
+        "/imgs/main/hero_1.png",
+        "/imgs/main/hero_2.jpg",
+        "/imgs/fin-swimming/fin-swimming01.jpg",
+    ],
     attachments: [
         { name: "대회결과.pdf", url: "#" },
         { name: "참가선수명단.xlsx", url: "#" },
