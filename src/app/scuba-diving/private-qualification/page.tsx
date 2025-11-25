@@ -24,7 +24,7 @@ const baseQualificationColumns: TableColumn[] = [
     { key: "name", label: "자격명" },
     { key: "level", label: "자격등급" },
     { key: "regNo", label: "등록번호" },
-    { key: "fee", label: "발급비용" },
+    { key: "fee", label: "검정비용" },
     { key: "department", label: "주무부처" },
 ];
 
@@ -99,7 +99,7 @@ const baseQualifications: TableRow[] = [
 const specialQualificationColumns: TableColumn[] = [
     { key: "name", label: "자격명" },
     { key: "regNo", label: "등록번호" },
-    { key: "fee", label: "발급비용" },
+    { key: "fee", label: "검정비용" },
     { key: "department", label: "주무부처" },
 ];
 
