@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/widgets/header";
 import { Footer } from "@/widgets/footer";
 import Script from "next/script";
+import { UserRoleProvider } from "@/shared/lib/UserRoleContext";
 
 const pretendard = localFont({
     src: "../../public/fonts/pretendard/PretendardVariable.woff2",
@@ -32,9 +33,11 @@ export default function RootLayout({
                     src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false`}
                     strategy="beforeInteractive"
                 />
-                <Header />
-                {children}
-                <Footer />
+                <UserRoleProvider>
+                    <Header />
+                    {children}
+                    <Footer />
+                </UserRoleProvider>
             </body>
         </html>
     );

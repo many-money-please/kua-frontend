@@ -15,7 +15,7 @@ export default function CompetitionApplicationPage() {
                         />
                     </div>
                     <div className="flex flex-col gap-1">
-                        <h3 className="text-kua-gray800 text-[40px] font-bold">
+                        <h3 className="text-kua-gray800 text-[32px] font-bold">
                             대회 참가 신청
                         </h3>
                         <p className="text-kua-gray600 text-lg">

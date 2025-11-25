@@ -11,6 +11,7 @@ export const NewsAndActivitiesCreate = () => {
         content,
         attachments,
         images,
+        isPinned,
     }: PostFormValues) => {
         try {
             setIsSubmitting(true);
@@ -19,6 +20,7 @@ export const NewsAndActivitiesCreate = () => {
                 content,
                 attachments,
                 images,
+                isPinned,
             });
             alert("임시로 콘솔에 데이터가 출력되었습니다.");
         } finally {
@@ -28,6 +30,7 @@ export const NewsAndActivitiesCreate = () => {
 
     return (
         <PostForm.Root onSubmit={handleSubmit} isSubmitting={isSubmitting}>
+            <PostForm.PinField />
             <PostForm.TitleField placeholder="제목을 입력하세요 (50자 이내)" />
             <PostForm.ContentField />
             <PostForm.ImageField />

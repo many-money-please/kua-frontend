@@ -7,6 +7,7 @@ import { Pagination } from "@/shared/ui/Pagination";
 import { SearchBar, AdminSearchBar } from "@/shared/ui/SearchBar";
 import { ImageFallback } from "@/shared/ui/ImageFallback";
 import { ConfirmModal } from "@/shared/ui/ConfirmModal";
+import { useUserRole } from "@/shared/lib/UserRoleContext";
 
 export type NewsAndActivityPost = {
     id: number;
@@ -33,12 +34,14 @@ export const NewsAndActivitiesSection = ({
     searchOptions,
     detailBasePath,
     pageSize = 16,
-    isAdmin = true,
+    isAdmin: isAdminProp,
     onEdit,
     onDelete,
     onRegister,
 }: NewsAndActivitiesSectionProps) => {
     const router = useRouter();
+    const { isAdmin: isAdminFromContext } = useUserRole();
+    const isAdmin = isAdminProp ?? isAdminFromContext;
     const [page, setPage] = useState(1);
     const [searchInput, setSearchInput] = useState("");
     const [searchQuery, setSearchQuery] = useState("");

@@ -23,7 +23,7 @@ const wearingOrderData = [
 export const WearingOrder = () => {
     return (
         <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-16">
-            <h2 className="mb-4 text-[40px] font-bold">착용 순서</h2>
+            <h2 className="mb-4 text-[32px] font-bold">착용 순서</h2>
             <div className="flex items-center justify-between">
                 {wearingOrderData.map((item, index) => (
                     <React.Fragment key={item.step}>

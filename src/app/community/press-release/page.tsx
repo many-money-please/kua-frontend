@@ -191,8 +191,6 @@ const PRESS_RELEASE: NewsAndActivityPost[] = [
 export default function PressReleasePage() {
     const router = useRouter();
 
-    const isAdmin = true;
-
     const handleEdit = (id: number) => {
         console.log("Edit:", id);
         router.push(`/community/press-release/edit/${id}`);
@@ -214,7 +212,6 @@ export default function PressReleasePage() {
             data={PRESS_RELEASE}
             detailBasePath="/community/press-release"
             searchOptions={["제목", "내용", "제목+내용"]}
-            isAdmin={isAdmin}
             onEdit={handleEdit}
             onDelete={handleDelete}
             onRegister={handleRegister}

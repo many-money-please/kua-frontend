@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { DataTable, type Column } from "@/shared/ui/DataTable";
 import { Pagination } from "@/shared/ui/Pagination";
-import { SearchBar } from "@/shared/ui/SearchBar";
+import { SearchBar, ManagerSearchBar } from "@/shared/ui/SearchBar";
+import { useUserRole } from "@/shared/lib/UserRoleContext";
 
 type Regulation = {
     id: number;
@@ -144,9 +146,12 @@ const regulationsData: Regulation[] = [
 ];
 
 export const RegulationsTab = () => {
+    const router = useRouter();
+    const { isAdmin } = useUserRole();
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchOption, setSearchOption] = useState("제목");
+    const [selectedRows, setSelectedRows] = useState<Regulation[]>([]);
 
     const pageSize = 15;
 
@@ -177,6 +182,14 @@ export const RegulationsTab = () => {
     const handleSearch = () => {
         setCurrentPage(1); // 검색 시 첫 페이지로 이동
     };
+
+    const handleSelectionChange = useCallback((rows: Regulation[]) => {
+        setSelectedRows(rows);
+    }, []);
+
+    const getRowId = useCallback((row: Regulation) => {
+        return row.id ?? "";
+    }, []);
 
     // 컬럼 정의
     const columns: Column<Regulation>[] = [
@@ -241,20 +254,50 @@ export const RegulationsTab = () => {
         <div className="w-full bg-white pb-[150px]">
             <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-10">
                 {/* 검색 UI */}
-                <SearchBar
-                    totalCount={filteredData.length}
-                    searchQuery={searchQuery}
-                    searchOption={searchOption}
-                    searchOptions={["제목"]}
-                    onSearchQueryChange={setSearchQuery}
-                    onSearchOptionChange={setSearchOption}
-                    onSearch={handleSearch}
-                    placeholder="검색어를 입력하세요"
-                />
+                {isAdmin ? (
+                    <ManagerSearchBar
+                        searchQuery={searchQuery}
+                        searchOption={searchOption}
+                        searchOptions={["제목"]}
+                        onSearchQueryChange={setSearchQuery}
+                        onSearchOptionChange={setSearchOption}
+                        onSearch={handleSearch}
+                        onAdd={() => {
+                            router.push("/about/regulations/create");
+                        }}
+                        onDelete={() => {
+                            if (selectedRows.length > 0) {
+                                const selectedIds = selectedRows.map((row) => row.id);
+                                console.log("선택된 행들의 ID:", selectedIds);
+                                // TODO: 실제 삭제 로직 구현
+                            } else {
+                                console.log("선택된 행이 없습니다.");
+                            }
+                        }}
+                        selectedCount={selectedRows.length}
+                    />
+                ) : (
+                    <SearchBar
+                        totalCount={filteredData.length}
+                        searchQuery={searchQuery}
+                        searchOption={searchOption}
+                        searchOptions={["제목"]}
+                        onSearchQueryChange={setSearchQuery}
+                        onSearchOptionChange={setSearchOption}
+                        onSearch={handleSearch}
+                        placeholder="검색어를 입력하세요"
+                    />
+                )}
 
                 {/* 규정 문서 테이블 */}
                 <div className="w-full">
-                    <DataTable columns={columns} data={currentData} />
+                    <DataTable
+                        columns={columns}
+                        data={currentData}
+                        canDelete={isAdmin}
+                        onSelectionChange={handleSelectionChange}
+                        getRowId={getRowId}
+                    />
                     {totalPages > 1 && (
                         <Pagination
                             currentPage={currentPage}

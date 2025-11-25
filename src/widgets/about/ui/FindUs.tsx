@@ -1,35 +1,29 @@
 "use client";
 
-import { Map, MapMarker } from "react-kakao-maps-sdk";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+
+const LeafletMap = dynamic(
+    () => import("@/shared/ui/LeafletMap").then((module) => module.LeafletMap),
+    { ssr: false },
+);
 
 export const FindUs = () => {
     return (
         <div className="bg-kua-sky50 w-full">
             <div className="mx-auto flex w-full max-w-[1200px] flex-col items-start justify-center gap-12 py-44">
-                <h2 className="text-kua-darkblue800 text-[40px] font-bold">
+                <h2 className="text-kua-darkblue800 text-[32px] font-bold">
                     찾아오시는 길
                 </h2>
                 <div className="h-[585px] w-full">
-                    <Map
+                    <LeafletMap
                         center={{
                             lat: 37.517347753646874,
                             lng: 127.12632769374328,
                         }}
-                        style={{ width: "100%", height: "100%" }}
-                        level={3} // 확대 레벨
-                    >
-                        <MapMarker
-                            position={{
-                                lat: 37.517347753646874,
-                                lng: 127.12632769374328,
-                            }}
-                        >
-                            <div style={{ color: "#000" }}>
-                                대한수중핀수영협회
-                            </div>
-                        </MapMarker>
-                    </Map>
+                        zoom={17}
+                        className="z-0"
+                    />
                 </div>
                 <div className="flex w-full flex-col gap-20">
                     {/* 주소 */}

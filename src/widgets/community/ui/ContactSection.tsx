@@ -56,7 +56,7 @@ const columns: Column<ContactPost>[] = [
         header: "답변상태",
         accessor: (value) => (
             <span
-                className={`rounded-full px-3 py-1 text-lg font-semibold ${
+                className={`min-w-fit rounded-full px-3 py-1 text-base font-semibold ${
                     value.status === "답변 완료"
                         ? "text-kua-main bg-kua-blue50"
                         : "text-kua-gray400 bg-kua-gray250"
@@ -153,7 +153,7 @@ export const ContactSection = ({
             {/* 신고/상담센터 안내 */}
             <div className="bg-kua-sky50 px-8 py-[130px]">
                 <div className="mx-auto flex w-full max-w-[1200px] flex-col">
-                    <h2 className="text-kua-black100 mb-2 text-center text-[40px] font-bold">
+                    <h2 className="text-kua-black100 mb-2 text-center text-[32px] font-bold">
                         신고/상담센터
                     </h2>
                     <p className="text-kua-gray400 mb-9 text-center text-base font-semibold">

@@ -49,7 +49,7 @@ export const KickingPracticeSteps = () => {
 
     return (
         <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-8">
-            <h2 className="text-[40px] font-bold">발차기 연습 단계</h2>
+            <h2 className="text-[32px] font-bold">발차기 연습 단계</h2>
             <div className="flex w-full items-stretch gap-4">
                 <div className="flex w-[60%] flex-col gap-4">
                     {kickingSteps.map((step, index) => (

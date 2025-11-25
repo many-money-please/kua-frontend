@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { DataTable, type Column } from "@/shared/ui/DataTable";
 import { Pagination } from "@/shared/ui/Pagination";
 import { SearchBar, ManagerSearchBar } from "@/shared/ui/SearchBar";
+import { useUserRole } from "@/shared/lib/UserRoleContext";
 
 export type NewRecordSummary = {
     id: number;
@@ -34,9 +35,11 @@ export const NewRecordsTableSection = ({
     searchOptions,
     detailBasePath,
     pageSize = 15,
-    isManager = false,
+    isManager: isManagerProp,
 }: NewRecordsTableSectionProps) => {
     const router = useRouter();
+    const { isAdmin } = useUserRole();
+    const isManager = isManagerProp ?? isAdmin; // prop이 있으면 prop 우선, 없으면 Context 사용
     const [page, setPage] = useState(1);
     const [searchInput, setSearchInput] = useState("");
     const [searchQuery, setSearchQuery] = useState("");

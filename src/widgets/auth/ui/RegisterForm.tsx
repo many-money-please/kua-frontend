@@ -50,12 +50,12 @@ export const RegisterForm = () => {
     };
 
     return (
-        <div className="flex flex-col gap-[52px]">
+        <div className="flex flex-col gap-[52px] px-5">
             {/* 진행 단계 표시 */}
             <div className="flex items-center justify-center gap-8">
                 <div className="flex flex-col items-center gap-2">
                     <div
-                        className={`flex h-12 w-12 items-center justify-center rounded-full ${
+                        className={`flex h-10 w-10 items-center justify-center rounded-full sm:h-12 sm:w-12 ${
                             step === "terms"
                                 ? "bg-kua-main text-white"
                                 : "bg-kua-gray300 text-white"
@@ -64,7 +64,7 @@ export const RegisterForm = () => {
                         1
                     </div>
                     <span
-                        className={`text-base font-medium ${
+                        className={`text-[11px] font-medium sm:text-base ${
                             step === "terms"
                                 ? "text-kua-main"
                                 : "text-kua-gray400"
@@ -73,10 +73,10 @@ export const RegisterForm = () => {
                         약관동의
                     </span>
                 </div>
-                <div className="border-kua-gray300 h-px w-24 border-t"></div>
+                <div className="border-kua-gray300 h-px w-20 border-t sm:w-24"></div>
                 <div className="flex flex-col items-center gap-2">
                     <div
-                        className={`flex h-12 w-12 items-center justify-center rounded-full ${
+                        className={`flex h-10 w-10 items-center justify-center rounded-full sm:h-12 sm:w-12 ${
                             step === "info"
                                 ? "bg-kua-main text-white"
                                 : "bg-kua-gray300 text-white"
@@ -85,7 +85,7 @@ export const RegisterForm = () => {
                         2
                     </div>
                     <span
-                        className={`text-base font-medium ${
+                        className={`text-[11px] font-medium sm:text-base ${
                             step === "info"
                                 ? "text-kua-main"
                                 : "text-kua-gray400"
@@ -94,10 +94,10 @@ export const RegisterForm = () => {
                         정보입력
                     </span>
                 </div>
-                <div className="border-kua-gray300 h-px w-24 border-t"></div>
+                <div className="border-kua-gray300 h-px w-20 border-t sm:w-24"></div>
                 <div className="flex flex-col items-center gap-2">
                     <div
-                        className={`flex h-12 w-12 items-center justify-center rounded-full ${
+                        className={`flex h-10 w-10 items-center justify-center rounded-full sm:h-12 sm:w-12 ${
                             step === "complete"
                                 ? "bg-kua-main text-white"
                                 : "bg-kua-gray300 text-white"
@@ -106,7 +106,7 @@ export const RegisterForm = () => {
                         3
                     </div>
                     <span
-                        className={`text-base font-medium ${
+                        className={`text-[11px] font-medium sm:text-base ${
                             step === "complete"
                                 ? "text-kua-main"
                                 : "text-kua-gray400"
@@ -123,17 +123,17 @@ export const RegisterForm = () => {
                     {/* 안내 문구 */}
                     <div className="bg-kua-blue50 flex flex-col gap-4 rounded-[10px] px-6 py-5">
                         <div className="flex flex-col">
-                            <p className="text-kua-gray800 text-base font-medium">
+                            <p className="text-kua-gray800 text-sm font-medium sm:text-base">
                                 대한수중핀수영협회 이용약관, 개인정보의 수집 및
                                 이용 항목에 대해 모두 동의합니다.
                             </p>
-                            <p className="text-kua-gray800 text-base font-medium">
+                            <p className="text-kua-gray800 text-sm font-medium sm:text-base">
                                 각 사항에 대한 동의 여부를 개별적으로 선택하실
                                 수 있으며, 선택 동의 사항에 대한 동의를
                                 거부하여도 서비스를 이용하실 수 있습니다.
                             </p>
                         </div>
-                        <label className="text-kua-main flex items-center gap-2 text-lg font-semibold">
+                        <label className="text-kua-main flex items-center gap-2 text-base font-semibold sm:text-lg">
                             <input
                                 type="checkbox"
                                 checked={allAgree}
@@ -142,7 +142,7 @@ export const RegisterForm = () => {
                                 }
                                 className="form-checkbox text-kua-main h-4 w-4"
                             />
-                            <span className="font-medium">
+                            <span className="text-sm font-medium sm:text-base">
                                 모두 동의합니다.
                             </span>
                         </label>
@@ -151,14 +151,14 @@ export const RegisterForm = () => {
                     {/* 개인정보 수집 약관 동의 */}
                     <div className="flex flex-col gap-3">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-kua-darkblue800 flex items-center gap-2 text-2xl font-bold">
+                            <h3 className="text-kua-darkblue800 flex items-center gap-2 text-xl font-bold sm:text-2xl">
                                 개인정보 수집 약관 동의{" "}
                                 <span className="text-kua-orange500 text-sm font-normal">
                                     (필수)
                                 </span>
                             </h3>
                         </div>
-                        <div className="border-kua-gray300 bg-kua-gray50 max-h-[150px] overflow-y-auto rounded-[10px] border px-5 py-3 text-sm">
+                        <div className="border-kua-gray300 bg-kua-gray50 max-h-[150px] overflow-y-auto rounded-[10px] border px-5 py-3 text-xs sm:text-sm">
                             <p className="text-kua-gray500 mb-2">
                                 [제1장 제8조, 이용자에게 대한 통지 방법 및 의무]
                             </p>
@@ -194,14 +194,14 @@ export const RegisterForm = () => {
                     {/* 마케팅 수신 약관 동의 */}
                     <div className="flex flex-col gap-3">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-kua-darkblue800 flex items-center gap-2 text-2xl font-bold">
+                            <h3 className="text-kua-darkblue800 flex items-center gap-2 text-xl font-bold sm:text-2xl">
                                 마케팅 수신 약관 동의{" "}
                                 <span className="text-kua-gray800 text-sm font-normal">
                                     (선택)
                                 </span>
                             </h3>
                         </div>
-                        <div className="border-kua-gray300 bg-kua-gray50 max-h-[150px] overflow-y-auto rounded-[10px] border px-5 py-3 text-sm">
+                        <div className="border-kua-gray300 bg-kua-gray50 max-h-[150px] overflow-y-auto rounded-[10px] border px-5 py-3 text-xs sm:text-sm">
                             <p className="text-kua-gray500 mb-2">
                                 [제1장 제8조, 이용자에게 대한 통지 방법 및 의무]
                             </p>
@@ -238,7 +238,7 @@ export const RegisterForm = () => {
                     <div className="mt-6 flex justify-center">
                         <button
                             onClick={handleTermsNext}
-                            className="bg-kua-main hover:bg-kua-blue500 w-[200px] cursor-pointer rounded-[10px] px-8 py-3 text-xl font-bold text-white transition-colors"
+                            className="bg-kua-main hover:bg-kua-blue500 w-[200px] cursor-pointer rounded-[10px] px-8 py-3 text-base font-bold text-white transition-colors sm:text-xl"
                         >
                             다음
                         </button>
@@ -249,7 +249,7 @@ export const RegisterForm = () => {
             {/* 정보 입력 단계 */}
             {step === "info" && (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                    <h3 className="text-kua-darkblue800 flex items-center gap-2 text-2xl font-bold">
+                    <h3 className="text-kua-darkblue800 flex items-center gap-2 text-xl font-bold sm:text-2xl">
                         개인정보 입력{" "}
                         <span className="text-kua-orange500 text-sm font-normal">
                             (필수)
@@ -258,13 +258,14 @@ export const RegisterForm = () => {
 
                     <div className="border-kua-main flex w-full flex-col border-t-2">
                         {/* 아이디 / 이름 */}
-                        <div className="border-kua-gray300 flex h-[72px] w-full border-b">
+                        <div className="2xl:border-kua-gray300 flex h-[120px] w-full flex-col 2xl:h-[72px] 2xl:flex-row 2xl:border-b">
                             {/* 아이디 */}
-                            <div className="flex h-full flex-1 items-center">
-                                <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[200px] items-center justify-center px-4 text-lg font-medium">
+                            <div className="border-kua-gray300 flex h-[60px] flex-1 items-center border-b 2xl:h-full 2xl:border-b-0">
+                                {/* 변경점: w-[100px] 2xl:w-[200px], px-2 2xl:px-4 적용 */}
+                                <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[100px] shrink-0 items-center justify-center px-2 text-sm font-medium 2xl:w-[200px] 2xl:px-4 2xl:text-lg">
                                     아이디
                                 </label>
-                                <div className="flex h-full flex-1 items-center gap-3 p-4">
+                                <div className="flex h-full min-w-0 flex-1 items-center gap-3 p-2 2xl:p-4">
                                     <input
                                         type="text"
                                         value={formData.username}
@@ -275,7 +276,7 @@ export const RegisterForm = () => {
                                             })
                                         }
                                         placeholder="영문,숫자 포함 6~12자"
-                                        className="border-kua-gray400 focus:border-kua-main h-full flex-1 rounded-[8px] border px-4 py-3 text-base outline-none"
+                                        className="border-kua-gray400 focus:border-kua-main h-full min-w-0 flex-1 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
                                     />
                                     <button
                                         type="button"
@@ -287,7 +288,7 @@ export const RegisterForm = () => {
                                                 "중복확인 기능은 추후 구현됩니다.",
                                             )
                                         }
-                                        className={`h-full w-[84px] rounded-[8px] text-[15px] font-medium whitespace-nowrap transition-colors ${
+                                        className={`h-full w-[84px] shrink-0 rounded-[8px] text-sm font-medium whitespace-nowrap transition-colors sm:text-[15px] ${
                                             formData.username.length === 0
                                                 ? "bg-kua-gray250 text-kua-gray400 cursor-not-allowed"
                                                 : "bg-kua-main hover:bg-kua-blue500 cursor-pointer text-white"
@@ -299,11 +300,12 @@ export const RegisterForm = () => {
                             </div>
 
                             {/* 이름 */}
-                            <div className="flex h-full flex-1 items-center">
-                                <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[200px] items-center justify-center px-4 text-lg font-medium">
+                            <div className="border-kua-gray300 flex h-[60px] flex-1 items-center border-b 2xl:h-full 2xl:border-b-0">
+                                {/* 변경점 적용 */}
+                                <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[100px] shrink-0 items-center justify-center px-2 text-sm font-medium 2xl:w-[200px] 2xl:px-4 2xl:text-lg">
                                     이름
                                 </label>
-                                <div className="flex h-full flex-1 items-center p-4">
+                                <div className="flex h-full min-w-0 flex-1 items-center p-2 2xl:p-4">
                                     <input
                                         type="text"
                                         value={formData.name}
@@ -314,20 +316,21 @@ export const RegisterForm = () => {
                                             })
                                         }
                                         placeholder="영문,숫자 포함 6~12자"
-                                        className="border-kua-gray400 focus:border-kua-main h-full w-full rounded-[8px] border px-4 py-3 text-base outline-none"
+                                        className="border-kua-gray400 focus:border-kua-main h-full w-full min-w-0 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* 비밀번호 / 비밀번호 확인 */}
-                        <div className="border-kua-gray300 flex h-[72px] w-full border-b">
+                        <div className="border-kua-gray300 flex h-[120px] w-full flex-col border-b 2xl:h-[72px] 2xl:flex-row">
                             {/* 비밀번호 */}
-                            <div className="flex h-full flex-1 items-center">
-                                <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[200px] items-center justify-center px-4 text-lg font-medium">
+                            <div className="border-kua-gray300 flex h-[60px] flex-1 items-center border-b 2xl:h-full 2xl:border-b-0">
+                                {/* 변경점 적용 */}
+                                <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[100px] shrink-0 items-center justify-center px-2 text-sm font-medium 2xl:w-[200px] 2xl:px-4 2xl:text-lg">
                                     비밀번호
                                 </label>
-                                <div className="flex h-full flex-1 items-center p-4">
+                                <div className="flex h-full min-w-0 flex-1 items-center p-2 2xl:p-4">
                                     <input
                                         type="password"
                                         value={formData.password}
@@ -338,17 +341,18 @@ export const RegisterForm = () => {
                                             })
                                         }
                                         placeholder="영문,숫자,특수문자 조합 8자 이상"
-                                        className="border-kua-gray400 focus:border-kua-main h-full w-full rounded-[8px] border px-4 py-3 text-base outline-none"
+                                        className="border-kua-gray400 focus:border-kua-main h-full w-full min-w-0 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
                                     />
                                 </div>
                             </div>
 
                             {/* 비밀번호 확인 */}
-                            <div className="flex h-full flex-1 items-center">
-                                <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[200px] items-center justify-center px-4 text-lg font-medium">
+                            <div className="border-kua-gray300 flex h-[60px] flex-1 items-center border-b 2xl:h-full 2xl:border-b-0">
+                                {/* 변경점 적용. '비밀번호 확인'은 글자가 길어서 100px에서 줄바꿈이 일어날 수 있으므로 text-center, leading-tight 등을 고려하면 좋습니다. */}
+                                <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[100px] shrink-0 items-center justify-center px-2 text-sm font-medium 2xl:w-[200px] 2xl:px-4 2xl:text-lg">
                                     비밀번호 확인
                                 </label>
-                                <div className="flex h-full flex-1 items-center p-4">
+                                <div className="flex h-full min-w-0 flex-1 items-center p-2 2xl:p-4">
                                     <input
                                         type="password"
                                         value={formData.passwordConfirm}
@@ -359,34 +363,36 @@ export const RegisterForm = () => {
                                             })
                                         }
                                         placeholder="영문,숫자,특수문자 조합 8자 이상"
-                                        className="border-kua-gray400 focus:border-kua-main h-full w-full rounded-[8px] border px-4 py-3 text-base outline-none"
+                                        className="border-kua-gray400 focus:border-kua-main h-full w-full min-w-0 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* 휴대폰 번호 / 생년월일 */}
-                        <div className="border-kua-gray300 flex h-[72px] w-full border-b">
+                        <div className="border-kua-gray300 flex h-[120px] w-full flex-col border-b 2xl:h-[72px] 2xl:flex-row">
                             {/* 휴대폰 번호 */}
-                            <div className="flex h-full flex-1 items-center">
-                                <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[200px] items-center justify-center px-4 text-lg font-medium">
+                            <div className="border-kua-gray300 flex h-[60px] flex-1 items-center border-b 2xl:h-full 2xl:border-b-0">
+                                {/* 변경점 적용 */}
+                                <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[100px] shrink-0 items-center justify-center px-2 text-sm font-medium 2xl:w-[200px] 2xl:px-4 2xl:text-lg">
                                     휴대폰 번호
                                 </label>
-                                <div className="flex h-full flex-1 items-center p-4">
+                                <div className="flex h-full min-w-0 flex-1 items-center p-2 2xl:p-4">
                                     <input
                                         type="text"
                                         placeholder="숫자만 입력해주세요."
-                                        className="border-kua-gray400 focus:border-kua-main h-full w-full rounded-[8px] border px-4 py-3 text-base outline-none"
+                                        className="border-kua-gray400 focus:border-kua-main h-full w-full min-w-0 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
                                     />
                                 </div>
                             </div>
 
                             {/* 생년월일 */}
-                            <div className="flex h-full flex-1 items-center">
-                                <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[200px] items-center justify-center px-4 text-lg font-medium">
+                            <div className="border-kua-gray300 flex h-[60px] flex-1 items-center border-b 2xl:h-full 2xl:border-b-0">
+                                {/* 변경점 적용 */}
+                                <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[100px] shrink-0 items-center justify-center px-2 text-sm font-medium 2xl:w-[200px] 2xl:px-4 2xl:text-lg">
                                     생년월일
                                 </label>
-                                <div className="flex h-full flex-1 items-center p-4">
+                                <div className="flex h-full min-w-0 flex-1 items-center p-2 2xl:p-4">
                                     <input
                                         type="text"
                                         value={formData.birthYear}
@@ -397,18 +403,19 @@ export const RegisterForm = () => {
                                             })
                                         }
                                         placeholder="숫자만 6자로 입력해주세요."
-                                        className="border-kua-gray400 focus:border-kua-main h-full flex-1 rounded-[8px] border px-4 py-3 text-base outline-none"
+                                        className="border-kua-gray400 focus:border-kua-main h-full min-w-0 flex-1 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
                                     />
                                 </div>
                             </div>
                         </div>
 
                         {/* 이메일 */}
-                        <div className="border-kua-gray300 flex h-[72px] w-full items-center border-b">
-                            <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[200px] items-center justify-center px-4 text-lg font-medium">
+                        <div className="border-kua-gray300 flex h-[60px] w-full items-center border-b 2xl:h-[72px]">
+                            {/* 변경점 적용 */}
+                            <label className="bg-kua-blue50 text-kua-gray800 border-kua-gray300 flex h-[60px] w-[100px] shrink-0 items-center justify-center border-b px-2 text-sm font-medium 2xl:h-full 2xl:w-[200px] 2xl:border-b-0 2xl:px-4 2xl:text-lg">
                                 이메일
                             </label>
-                            <div className="flex h-full flex-1 items-center gap-2 p-4">
+                            <div className="flex h-full min-w-0 flex-1 items-center gap-2 p-2 2xl:p-4">
                                 <input
                                     type="text"
                                     value={formData.email}
@@ -418,9 +425,11 @@ export const RegisterForm = () => {
                                             email: e.target.value,
                                         })
                                     }
-                                    className="border-kua-gray400 focus:border-kua-main h-full w-[200px] rounded-[8px] border px-4 py-3 text-base outline-none"
+                                    className="border-kua-gray400 focus:border-kua-main h-full w-full max-w-[200px] min-w-0 flex-1 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
                                 />
-                                <span className="text-kua-gray800">@</span>
+                                <span className="text-kua-gray800 shrink-0">
+                                    @
+                                </span>
                                 <input
                                     type="text"
                                     value={formData.emailDomain}
@@ -430,9 +439,9 @@ export const RegisterForm = () => {
                                             emailDomain: e.target.value,
                                         })
                                     }
-                                    className="border-kua-gray400 focus:border-kua-main h-full w-[200px] rounded-[8px] border px-4 py-3 text-base outline-none"
+                                    className="border-kua-gray400 focus:border-kua-main h-full w-full max-w-[200px] min-w-0 flex-1 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
                                 />
-                                <select className="focus:border-kua-main bg-kua-gray100 h-full rounded-[8px] px-4 text-base outline-none">
+                                <select className="focus:border-kua-main bg-kua-gray100 h-full w-[100px] shrink-0 rounded-[8px] px-2 text-sm outline-none sm:w-auto sm:px-4 sm:text-base">
                                     <option>직접입력</option>
                                     <option>naver.com</option>
                                     <option>gmail.com</option>
@@ -442,18 +451,18 @@ export const RegisterForm = () => {
                         </div>
                     </div>
 
-                    {/* 버튼 */}
+                    {/* 버튼 영역 */}
                     <div className="mt-6 flex justify-center gap-4">
                         <button
                             type="button"
                             onClick={() => setStep("terms")}
-                            className="border-kua-gray400 hover:bg-kua-gray100 w-[120px] cursor-pointer rounded-[10px] border bg-white px-8 py-3 text-xl font-medium transition-colors"
+                            className="border-kua-gray400 hover:bg-kua-gray100 w-[120px] cursor-pointer rounded-[10px] border bg-white px-8 py-3 text-base font-medium transition-colors sm:text-xl"
                         >
                             이전
                         </button>
                         <button
                             type="submit"
-                            className="bg-kua-main hover:bg-kua-blue500 w-[200px] cursor-pointer rounded-[10px] px-8 py-3 text-xl font-bold text-white transition-colors"
+                            className="bg-kua-main hover:bg-kua-blue500 w-[200px] cursor-pointer rounded-[10px] px-8 py-3 text-base font-bold text-white transition-colors sm:text-xl"
                         >
                             다음
                         </button>
@@ -463,10 +472,10 @@ export const RegisterForm = () => {
 
             {/* 가입 완료 단계 */}
             {step === "complete" && (
-                <div className="flex flex-col items-center gap-5 py-16">
+                <div className="flex flex-col items-center gap-5 px-5 py-10 sm:gap-5 sm:px-0 sm:py-16">
                     <div className="bg-kua-blue50 flex h-15 w-15 items-center justify-center rounded-full">
                         <svg
-                            className="text-kua-main h-10 w-10"
+                            className="text-kua-main h-8 w-8"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -480,15 +489,15 @@ export const RegisterForm = () => {
                         </svg>
                     </div>
                     <div className="flex flex-col items-center gap-2">
-                        <h2 className="text-kua-black100 text-[32px] font-bold">
+                        <h2 className="text-kua-black100 text-xl font-bold sm:text-[32px]">
                             회원가입 완료
                         </h2>
-                        <p className="text-kua-gray800 text-center text-base">
+                        <p className="text-kua-gray800 text-center text-sm sm:text-base">
                             로그인하고 보다 편리하게 서비스를 이용해보세요!
                         </p>
                         <button
                             onClick={() => router.push("/auth/login")}
-                            className="bg-kua-main hover:bg-kua-blue500 mt-2 cursor-pointer rounded-[10px] px-12 py-4 text-xl font-bold text-white transition-colors"
+                            className="bg-kua-main hover:bg-kua-blue500 mt-2 cursor-pointer rounded-[10px] px-12 py-4 text-base font-bold text-white transition-colors sm:text-xl"
                         >
                             로그인하러 가기
                         </button>

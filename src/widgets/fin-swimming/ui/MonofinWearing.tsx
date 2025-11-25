@@ -43,8 +43,8 @@ const monofinWearingData = [
 export const MonofinWearing = () => {
     return (
         <div className="mx-auto w-full max-w-[1200px]">
-            <h2 className="mb-4 text-[40px] font-bold">모노핀 착용</h2>
-            <div className="grid grid-cols-2 grid-rows-2 gap-4">
+            <h2 className="mb-4 text-[32px] font-bold">모노핀 착용</h2>
+            <div className="grid grid-cols-2 grid-rows-2 gap-8">
                 {monofinWearingData.map((item, index) => (
                     <div
                         key={index}
