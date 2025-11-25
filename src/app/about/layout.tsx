@@ -20,8 +20,8 @@ export default function AboutLayout({ children }: { children: ReactNode }) {
     const shouldShowTabs = tabPaths.includes(pathname);
 
     return (
-        <div className="bg-kua-white flex items-center justify-center">
-            <main className="flex w-full flex-col items-center justify-between">
+        <div className="bg-kua-white flex items-center justify-center overflow-x-hidden">
+            <main className="flex w-full max-w-full flex-col items-center justify-between overflow-x-hidden">
                 <AboutBanner />
                 {shouldShowTabs && <AboutTabs />}
                 {children}
