@@ -1,5 +1,16 @@
+import type { Metadata } from "next";
 import { PageBanner } from "@/shared/ui/PageBanner";
 import { AuthTabs, FindPasswordForm } from "@/widgets/auth";
+
+export const metadata: Metadata = {
+    title: "비밀번호 찾기 | 대한수중 핀수영협회",
+    description:
+        "아이디, 이름, 이메일을 입력하여 임시 비밀번호를 발급받을 수 있습니다.",
+    robots: {
+        index: false,
+        follow: false,
+    },
+};
 
 export default function FindPasswordPage() {
     return (
