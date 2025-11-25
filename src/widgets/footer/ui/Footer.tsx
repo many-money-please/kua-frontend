@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import { SiNaver, SiInstagram, SiYoutube } from "react-icons/si";
 
 export const Footer = () => {
     return (
@@ -7,19 +9,47 @@ export const Footer = () => {
                 {/* footer 상단 */}
                 <div className="flex h-60 w-full max-w-[1200px] py-[57px]">
                     {/* 로고 이미지 */}
-                    <div className="ml-[34px] flex flex-1 items-start justify-start gap-1.5">
-                        <Image
-                            src="/imgs/logos/Icon-Footer.svg"
-                            alt="logo"
-                            width={37.93}
-                            height={36.12}
-                        />
-                        <Image
-                            src="/imgs/logos/Icon-Footer-Text.svg"
-                            alt="logo"
-                            width={158.58}
-                            height={35.33}
-                        />
+                    <div className="flex flex-1 flex-col gap-2">
+                        <div className="ml-[34px] flex flex-1 items-start justify-start gap-1.5">
+                            <Image
+                                src="/imgs/logos/Icon-Footer.svg"
+                                alt="logo"
+                                width={37.93}
+                                height={36.12}
+                            />
+                            <Image
+                                src="/imgs/logos/Icon-Footer-Text.svg"
+                                alt="logo"
+                                width={158.58}
+                                height={35.33}
+                            />
+                        </div>
+                        <div className="ml-[34px] flex gap-3">
+                            {/* 협회 밴드 */}
+                            <Link
+                                href="https://www.band.us/band/93030417/post"
+                                aria-label="협회 공식 밴드"
+                                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20"
+                            >
+                                <SiNaver className="text-lg" />
+                            </Link>
+                            {/* 협회 인스타 */}
+                            <Link
+                                href="https://www.instagram.com/kua_insta/"
+                                aria-label="협회 인스타그램"
+                                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20"
+                            >
+                                <SiInstagram className="text-lg" />
+                            </Link>
+                            {/* 협회 유튜브 */}
+                            <Link
+                                href="https://www.youtube.com/@KoreaUnderwaterAssociation/featured"
+                                aria-label="협회 유튜브"
+                                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20"
+                            >
+                                <SiYoutube className="text-lg" />
+                            </Link>
+                        </div>
                     </div>
                     {/* 목록 */}
                     <div className="flex flex-1 flex-col items-start gap-4">

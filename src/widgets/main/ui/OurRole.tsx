@@ -13,7 +13,7 @@ const images = [
     { src: "/imgs/main/our_role_04.svg", name: "증명서 발급신청" },
     {
         src: "/imgs/main/our_role_05.svg",
-        name: "인명구조요원",
+        name: "수상구조사",
     },
     {
         src: "/imgs/main/our_role_06.svg",

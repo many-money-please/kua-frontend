@@ -6,11 +6,13 @@ import { usePathname } from "next/navigation";
 const COMMUNITY_TAB_PATHS = [
     "/community/notices",
     "/community/resources",
+    "/community/contact",
 ] as const;
 
 const tabs = [
     { label: "공지사항", path: "/community/notices" },
     { label: "자료실", path: "/community/resources" },
+    { label: "문의하기", path: "/community/contact" },
 ];
 
 export const CommunityTabs = () => {

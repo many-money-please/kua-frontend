@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Header } from "@/widgets/header";
 import { Footer } from "@/widgets/footer";
+import { ScrollToTopButton } from "@/widgets/common";
 import Script from "next/script";
 import { UserRoleProvider } from "@/shared/lib/UserRoleContext";
 
@@ -74,6 +75,7 @@ export default function RootLayout({
                 <UserRoleProvider>
                     <Header />
                     {children}
+                    <ScrollToTopButton />
                     <Footer />
                 </UserRoleProvider>
             </body>
