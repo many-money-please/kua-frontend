@@ -69,8 +69,8 @@ const competitionCards: CompetitionCard[] = [
 const CompetitionCard = ({ card }: { card: CompetitionCard }) => {
     return (
         <div className="flex h-full justify-between rounded-2xl bg-white p-8">
-            <div className="w-full">
-                <h3 className="text-kua-blue500 text-3xl font-bold">
+            <div className="flex w-full flex-col gap-3 sm:gap-8">
+                <h3 className="text-kua-blue500 text-lg font-bold sm:text-3xl">
                     {card.title}
                 </h3>
                 <div className="text-kua-gray600 flex flex-col gap-6 text-lg">
@@ -80,10 +80,10 @@ const CompetitionCard = ({ card }: { card: CompetitionCard }) => {
                                   key={index}
                                   className="flex flex-col items-start gap-2"
                               >
-                                  <span className="bg-kua-sky100 text-kua-blue300 rounded-full px-3 py-1 text-base font-semibold whitespace-nowrap">
+                                  <span className="bg-kua-sky100 text-kua-blue300 rounded-full px-3 py-1 text-sm font-semibold whitespace-nowrap sm:text-base">
                                       {item.label}
                                   </span>
-                                  <span className="text-kua-gray600 pl-2">
+                                  <span className="text-kua-gray600 pl-2 text-sm sm:text-base">
                                       {item.value}
                                   </span>
                               </div>
@@ -92,7 +92,7 @@ const CompetitionCard = ({ card }: { card: CompetitionCard }) => {
                 </div>
             </div>
             <div className="flex h-full items-end">
-                <div className="relative h-32 w-32">
+                <div className="relative h-[70px] w-[70px] sm:h-32 sm:w-32">
                     <Image
                         src={card.imageSrc}
                         alt={card.imageAlt}
@@ -107,19 +107,21 @@ const CompetitionCard = ({ card }: { card: CompetitionCard }) => {
 
 export const CompetitionStructure = () => {
     return (
-        <div className="bg-kua-blue50 mx-auto w-full py-16">
+        <div className="bg-kua-blue50 mx-auto w-full px-5 py-16">
             <div className="mx-auto flex w-full max-w-[1200px] flex-col justify-between gap-16">
                 <div>
-                    <h2 className="mb-8 text-[32px] font-bold">경기 구성</h2>
+                    <h2 className="text-kua-gray800 mb-4 text-xl font-bold sm:mb-8 sm:text-[32px]">
+                        경기 구성
+                    </h2>
                     <div className="flex flex-col justify-center">
-                        <p className="text-kua-gray600 text-xl leading-relaxed">
+                        <p className="text-kua-gray400 text-sm leading-relaxed sm:text-xl">
                             핀수영은 1950년대 유럽에서 시작되어 1986년 IOC가
                             정식 종목으로 승인하면서
                             <br /> 세계적인 수중 스포츠로 자리잡았습니다.
                         </p>
                     </div>
                 </div>
-                <div className="grid grid-cols-2 grid-rows-2 gap-8">
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:grid-rows-2 sm:gap-8">
                     {competitionCards.map((card) => (
                         <CompetitionCard key={card.title} card={card} />
                     ))}

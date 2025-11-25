@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function HistoryPage() {
     return (
         <div className="mx-auto w-full">
-            <div className="mx-auto flex w-full flex-col gap-32">
+            <div className="mx-auto flex w-full flex-col gap-18 sm:gap-32">
                 <Origin />
                 <HistoricalOrigin />
                 <CompetitionStructure />

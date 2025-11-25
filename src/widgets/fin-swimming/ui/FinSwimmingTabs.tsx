@@ -10,6 +10,9 @@ const tabs = [
 
 export const FinSwimmingTabs = () => {
     return (
-        <BaseTabs tabs={tabs} className="mx-auto w-full max-w-[1200px] py-20" />
+        <BaseTabs
+            tabs={tabs}
+            className="mx-auto w-full max-w-[1200px] px-5 py-10 sm:px-0 sm:py-20"
+        />
     );
 };
