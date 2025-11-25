@@ -20,6 +20,11 @@ type CommunityTableSectionProps = {
     searchOptions?: string[];
     detailBasePath: string;
     pageSize?: number;
+    // 서버 사이드 페이지네이션을 위한 props
+    initialPage?: number;
+    totalPages?: number;
+    totalCount?: number; // 전체 항목 수 (서버에서 받은 값)
+    onPageChange?: (page: number) => void; // 페이지 변경 시 URL 업데이트용
 };
 
 const columns: Column<CommunityPostSummary>[] = [
@@ -34,16 +39,27 @@ export const CommunityTableSection = ({
     searchOptions,
     detailBasePath,
     pageSize = 15,
+    initialPage = 1,
+    totalPages: serverTotalPages,
+    totalCount: serverTotalCount,
+    onPageChange,
 }: CommunityTableSectionProps) => {
     const router = useRouter();
     const { isAdmin } = useUserRole();
-    const [page, setPage] = useState(1);
+
+    // 클라이언트 사이드 페이지네이션용 state
+    const [clientPage, setClientPage] = useState(initialPage);
+
+    // 서버 사이드 페이지네이션인 경우 initialPage 사용, 아니면 state 사용
+    const page = serverTotalPages !== undefined ? initialPage : clientPage;
     const [searchInput, setSearchInput] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const [searchOption, setSearchOption] = useState(
         searchOptions?.[0] ?? "제목",
     );
-    const [selectedRows, setSelectedRows] = useState<CommunityPostSummary[]>([]);
+    const [selectedRows, setSelectedRows] = useState<CommunityPostSummary[]>(
+        [],
+    );
 
     const filteredData = useMemo(() => {
         if (!searchQuery.trim()) {
@@ -56,6 +72,17 @@ export const CommunityTableSection = ({
     }, [data, searchQuery]);
 
     const paginationInfo = useMemo(() => {
+        // 서버 사이드 페이지네이션인 경우
+        if (serverTotalPages !== undefined) {
+            return {
+                totalItems: serverTotalCount ?? data.length * serverTotalPages,
+                totalPages: serverTotalPages,
+                currentPage: page,
+                visibleData: data, // 서버에서 이미 페이지네이션된 데이터
+            };
+        }
+
+        // 클라이언트 사이드 페이지네이션 (기존 로직)
         const totalItems = filteredData.length;
         const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
         const currentPage = Math.min(page, totalPages);
@@ -65,11 +92,34 @@ export const CommunityTableSection = ({
             startIndex + pageSize,
         );
         return { totalItems, totalPages, currentPage, visibleData };
-    }, [filteredData, page, pageSize]);
+    }, [
+        filteredData,
+        page,
+        pageSize,
+        serverTotalPages,
+        serverTotalCount,
+        data,
+    ]);
 
     const handleSearch = () => {
         setSearchQuery(searchInput.trim());
-        setPage(1);
+        // 검색 시 첫 페이지로 이동
+        if (serverTotalPages !== undefined) {
+            // 서버 사이드인 경우 URL 업데이트는 Pagination 컴포넌트에서 처리
+            // 여기서는 직접 처리하지 않음
+        } else {
+            setClientPage(1);
+        }
+    };
+
+    const handlePageChange = (newPage: number) => {
+        // 클라이언트 사이드 페이지네이션인 경우에만 사용
+        if (serverTotalPages === undefined) {
+            setClientPage(newPage);
+            if (onPageChange) {
+                onPageChange(newPage);
+            }
+        }
     };
 
     return (
@@ -131,7 +181,17 @@ export const CommunityTableSection = ({
                 <Pagination
                     currentPage={paginationInfo.currentPage}
                     totalPages={paginationInfo.totalPages}
-                    onPageChange={setPage}
+                    onPageChange={
+                        serverTotalPages === undefined
+                            ? handlePageChange
+                            : undefined
+                    }
+                    serverSide={serverTotalPages !== undefined}
+                    basePath={
+                        serverTotalPages !== undefined
+                            ? detailBasePath
+                            : undefined
+                    }
                 />
             )}
         </section>

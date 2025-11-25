@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { register } from "@/app/actions/auth";
 
 type Step = "terms" | "info" | "complete";
 
@@ -23,10 +24,14 @@ export const RegisterForm = () => {
         birthYear: "",
         birthMonth: "",
         birthDay: "",
+        phoneNumber: "",
         email: "",
         emailDomain: "",
         gender: "",
     });
+
+    const [isPending, startTransition] = useTransition();
+    const [error, setError] = useState<string | null>(null);
 
     const handleAllAgree = (checked: boolean) => {
         setAllAgree(checked);
@@ -42,11 +47,65 @@ export const RegisterForm = () => {
         setStep("info");
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("회원가입:", formData);
-        // TODO: API 연동
-        setStep("complete");
+        setError(null);
+
+        // 필수 필드 검증
+        if (
+            !formData.username ||
+            !formData.name ||
+            !formData.password ||
+            !formData.passwordConfirm
+        ) {
+            setError("필수 항목을 모두 입력해주세요.");
+            return;
+        }
+
+        if (!formData.phoneNumber) {
+            setError("휴대폰 번호를 입력해주세요.");
+            return;
+        }
+
+        if (!formData.birthYear || !formData.birthMonth || !formData.birthDay) {
+            setError("생년월일을 모두 입력해주세요.");
+            return;
+        }
+
+        if (!formData.email || !formData.emailDomain) {
+            setError("이메일을 모두 입력해주세요.");
+            return;
+        }
+
+        // 비밀번호 확인
+        if (formData.password !== formData.passwordConfirm) {
+            setError("비밀번호가 일치하지 않습니다.");
+            return;
+        }
+
+        // 생년월일 형식 변환 (YYYY-MM-DD)
+        const birthDate = `${formData.birthYear}-${formData.birthMonth.padStart(2, "0")}-${formData.birthDay.padStart(2, "0")}`;
+
+        // 이메일 합치기
+        const fullEmail = `${formData.email}@${formData.emailDomain}`;
+
+        startTransition(async () => {
+            const formDataToSend = new FormData();
+            formDataToSend.append("loginId", formData.username);
+            formDataToSend.append("name", formData.name);
+            formDataToSend.append("password", formData.password);
+            formDataToSend.append("phoneNumber", formData.phoneNumber);
+            formDataToSend.append("birthDate", birthDate);
+            formDataToSend.append("email", fullEmail);
+
+            const result = await register(formDataToSend);
+
+            if (result.success) {
+                setStep("complete");
+            } else {
+                setError(result.error || "회원가입에 실패했습니다.");
+            }
+        });
     };
 
     return (
@@ -256,6 +315,13 @@ export const RegisterForm = () => {
                         </span>
                     </h3>
 
+                    {/* 에러 메시지 */}
+                    {error && (
+                        <div className="rounded border border-red-200 bg-red-50 px-4 py-3 text-red-700">
+                            {error}
+                        </div>
+                    )}
+
                     <div className="border-kua-main flex w-full flex-col border-t-2">
                         {/* 아이디 / 이름 */}
                         <div className="2xl:border-kua-gray300 flex h-[120px] w-full flex-col 2xl:h-[72px] 2xl:flex-row 2xl:border-b">
@@ -380,6 +446,17 @@ export const RegisterForm = () => {
                                 <div className="flex h-full min-w-0 flex-1 items-center p-2 2xl:p-4">
                                     <input
                                         type="text"
+                                        value={formData.phoneNumber}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                phoneNumber:
+                                                    e.target.value.replace(
+                                                        /[^0-9]/g,
+                                                        "",
+                                                    ),
+                                            })
+                                        }
                                         placeholder="숫자만 입력해주세요."
                                         className="border-kua-gray400 focus:border-kua-main h-full w-full min-w-0 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
                                     />
@@ -392,17 +469,53 @@ export const RegisterForm = () => {
                                 <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[100px] shrink-0 items-center justify-center px-2 text-sm font-medium 2xl:w-[200px] 2xl:px-4 2xl:text-lg">
                                     생년월일
                                 </label>
-                                <div className="flex h-full min-w-0 flex-1 items-center p-2 2xl:p-4">
+                                <div className="flex h-full min-w-0 flex-1 items-center gap-2 p-2 2xl:p-4">
                                     <input
                                         type="text"
                                         value={formData.birthYear}
                                         onChange={(e) =>
                                             setFormData({
                                                 ...formData,
-                                                birthYear: e.target.value,
+                                                birthYear: e.target.value
+                                                    .replace(/[^0-9]/g, "")
+                                                    .slice(0, 4),
                                             })
                                         }
-                                        placeholder="숫자만 6자로 입력해주세요."
+                                        placeholder="년(4자)"
+                                        className="border-kua-gray400 focus:border-kua-main h-full min-w-0 flex-1 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
+                                    />
+                                    <span className="text-kua-gray800 shrink-0">
+                                        -
+                                    </span>
+                                    <input
+                                        type="text"
+                                        value={formData.birthMonth}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                birthMonth: e.target.value
+                                                    .replace(/[^0-9]/g, "")
+                                                    .slice(0, 2),
+                                            })
+                                        }
+                                        placeholder="월(2자)"
+                                        className="border-kua-gray400 focus:border-kua-main h-full min-w-0 flex-1 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
+                                    />
+                                    <span className="text-kua-gray800 shrink-0">
+                                        -
+                                    </span>
+                                    <input
+                                        type="text"
+                                        value={formData.birthDay}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                birthDay: e.target.value
+                                                    .replace(/[^0-9]/g, "")
+                                                    .slice(0, 2),
+                                            })
+                                        }
+                                        placeholder="일(2자)"
                                         className="border-kua-gray400 focus:border-kua-main h-full min-w-0 flex-1 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
                                     />
                                 </div>
@@ -441,11 +554,20 @@ export const RegisterForm = () => {
                                     }
                                     className="border-kua-gray400 focus:border-kua-main h-full w-full max-w-[200px] min-w-0 flex-1 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
                                 />
-                                <select className="focus:border-kua-main bg-kua-gray100 h-full w-[100px] shrink-0 rounded-[8px] px-2 text-sm outline-none sm:w-auto sm:px-4 sm:text-base">
-                                    <option>직접입력</option>
-                                    <option>naver.com</option>
-                                    <option>gmail.com</option>
-                                    <option>daum.net</option>
+                                <select
+                                    value={formData.emailDomain}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            emailDomain: e.target.value,
+                                        })
+                                    }
+                                    className="focus:border-kua-main bg-kua-gray100 h-full w-[100px] shrink-0 rounded-[8px] px-2 text-sm outline-none sm:w-auto sm:px-4 sm:text-base"
+                                >
+                                    <option value="">직접입력</option>
+                                    <option value="naver.com">naver.com</option>
+                                    <option value="gmail.com">gmail.com</option>
+                                    <option value="daum.net">daum.net</option>
                                 </select>
                             </div>
                         </div>
@@ -462,9 +584,10 @@ export const RegisterForm = () => {
                         </button>
                         <button
                             type="submit"
-                            className="bg-kua-main hover:bg-kua-blue500 w-[200px] cursor-pointer rounded-[10px] px-8 py-3 text-base font-bold text-white transition-colors sm:text-xl"
+                            disabled={isPending}
+                            className="bg-kua-main hover:bg-kua-blue500 w-[200px] cursor-pointer rounded-[10px] px-8 py-3 text-base font-bold text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50 sm:text-xl"
                         >
-                            다음
+                            {isPending ? "처리 중..." : "다음"}
                         </button>
                     </div>
                 </form>
