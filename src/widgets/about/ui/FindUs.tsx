@@ -10,7 +10,7 @@ const LeafletMap = dynamic(
 
 export const FindUs = () => {
     return (
-        <div className="bg-kua-sky50 w-full">
+        <div id="find-us" className="bg-kua-sky50 w-full">
             <div className="mx-auto flex w-full max-w-[1200px] flex-col items-start justify-center gap-12 py-44">
                 <h2 className="text-kua-darkblue800 text-[32px] font-bold">
                     찾아오시는 길
@@ -94,7 +94,7 @@ export const FindUs = () => {
                             <h3 className="text-kua-black100 text-2xl font-semibold">
                                 지하철 이용 시
                             </h3>
-                            <div className="flex items-center">
+                            <div className="flex items-center gap-2">
                                 <div className="flex items-center justify-center rounded-md bg-[#8936E0] px-3 py-1 text-base font-bold text-white">
                                     5호선
                                 </div>

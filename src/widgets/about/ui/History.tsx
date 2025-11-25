@@ -170,7 +170,7 @@ export const History = () => {
     const [activePeriod, setActivePeriod] = useState("2021 ~ 현재");
 
     return (
-        <div className="bg-kua-sky50 w-full">
+        <div id="history" className="bg-kua-sky50 w-full">
             <div className="mx-auto flex w-full max-w-[1200px] items-start justify-center gap-25 py-44">
                 {/* 왼쪽 기간 선택 버튼 */}
                 <div className="flex w-[300px] flex-col gap-3">
