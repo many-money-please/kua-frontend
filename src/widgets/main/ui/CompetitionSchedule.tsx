@@ -252,7 +252,7 @@ export const CompetitionSchedule = () => {
                             <Link
                                 key={competition.id}
                                 href={`/competition-info/schedule/${competition.id}`}
-                                className="bg-kua-white hover:shadow-md flex h-full w-full flex-col justify-between rounded-3xl p-10 shadow-sm transition-all duration-300 cursor-pointer"
+                                className="bg-kua-white flex h-full w-full cursor-pointer flex-col justify-between rounded-3xl p-10 shadow-sm transition-all duration-300 ease-in-out hover:shadow-md"
                             >
                                 <div className="mb-6 flex w-full flex-col gap-4">
                                     <div className="bg-kua-main text-kua-white w-fit rounded-full px-4 py-2 text-sm font-semibold">
@@ -320,7 +320,7 @@ export const CompetitionSchedule = () => {
                                 <Link
                                     key={competition.id}
                                     href={`/competition-info/schedule/${competition.id}`}
-                                    className={`absolute w-[calc(100%-6rem)] transition-all duration-500 ${
+                                    className={`absolute w-[calc(100%-6rem)] transition-all duration-500 ease-in-out ${
                                         isActive
                                             ? "z-20 scale-100 opacity-100"
                                             : "z-10 translate-x-full scale-90 opacity-60"
@@ -329,7 +329,7 @@ export const CompetitionSchedule = () => {
                                         height: isActive ? "100%" : "90%",
                                     }}
                                 >
-                                    <div className="bg-kua-white hover:shadow-xl flex h-full w-full flex-col justify-between rounded-3xl p-6 shadow-lg transition-all duration-300 cursor-pointer">
+                                    <div className="bg-kua-white flex h-full w-full cursor-pointer flex-col justify-between rounded-3xl p-6 shadow-lg transition-all duration-300 ease-in-out hover:shadow-xl">
                                         <div className="mb-4 flex w-full flex-col gap-3">
                                             <div className="bg-kua-main text-kua-white w-fit rounded-full px-3 py-1.5 text-xs font-semibold">
                                                 {competition.status}
