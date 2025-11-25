@@ -24,6 +24,9 @@ type NavItem = {
     }[];
 };
 
+const stripHash = (href?: string) =>
+    href ? (href.split("#")[0] ?? href) : href;
+
 const navItems: NavItem[] = [
     {
         label: "협회소개",
@@ -36,10 +39,10 @@ const navItems: NavItem[] = [
                 href: "/about",
                 showChevron: true,
                 children: [
-                    { label: "협회장 인사말" },
-                    { label: "협회 연혁" },
-                    { label: "C.I 소개" },
-                    { label: "찾아오시는길" },
+                    { label: "협회장 인사말", href: "/about#president" },
+                    { label: "협회 연혁", href: "/about#history" },
+                    { label: "C.I 소개", href: "/about#ci" },
+                    { label: "찾아오시는길", href: "/about#find-us" },
                 ],
             },
             {
@@ -82,6 +85,90 @@ const navItems: NavItem[] = [
                     },
                 ],
             },
+            // {
+            //     label: "스쿠버다이빙",
+            //     href: "/scuba-diving/history",
+            //     showChevron: true,
+            //     children: [
+            //         {
+            //             label: "유래",
+            //             href: "/scuba-diving/history",
+            //         },
+            //         {
+            //             label: "기술 및 훈련",
+            //             href: "/scuba-diving/skills-and-training",
+            //         },
+            //         {
+            //             label: "민간자격등록",
+            //             href: "/scuba-diving/private-qualification",
+            //         },
+            //     ],
+            // },
+            {
+                label: "프리다이빙",
+                href: "/free-diving/history",
+                showChevron: true,
+                children: [
+                    {
+                        label: "유래",
+                        href: "/free-diving/history",
+                    },
+                    {
+                        label: "기술 및 훈련",
+                        href: "/free-diving/skills-and-training",
+                    },
+                    {
+                        label: "민간자격등록",
+                        href: "/free-diving/private-qualification",
+                    },
+                ],
+            },
+            // {
+            //     label: "인명구조",
+            //     href: "/lifesaving/history",
+            //     showChevron: true,
+            //     children: [
+            //         {
+            //             label: "유래",
+            //             href: "/lifesaving/history",
+            //         },
+            //         {
+            //             label: "기술 및 훈련",
+            //             href: "/lifesaving/skills-and-training",
+            //         },
+            //         {
+            //             label: "민간자격등록",
+            //             href: "/lifesaving/private-qualification",
+            //         },
+            //         {
+            //             label: "교육 안내",
+            //             href: "/lifesaving/education",
+            //         },
+            //     ],
+            // },
+            // {
+            //     label: "응급처치",
+            //     href: "/first-aid/history",
+            //     showChevron: true,
+            //     children: [
+            //         {
+            //             label: "유래",
+            //             href: "/first-aid/history",
+            //         },
+            //         {
+            //             label: "기술 및 훈련",
+            //             href: "/first-aid/skills-and-training",
+            //         },
+            //         {
+            //             label: "민간자격등록",
+            //             href: "/first-aid/private-qualification",
+            //         },
+            //         {
+            //             label: "교육 안내",
+            //             href: "/first-aid/education",
+            //         },
+            //     ],
+            // },
         ],
     },
     {
@@ -97,6 +184,10 @@ const navItems: NavItem[] = [
                 children: [
                     { label: "대회일정", href: "/competition-info/schedule" },
                     { label: "대회결과", href: "/competition-info/results" },
+                    {
+                        label: "e-상장",
+                        href: "http://scubakorea.or.kr/game/mypage.php",
+                    },
                 ],
             },
             {
@@ -157,6 +248,7 @@ const navItems: NavItem[] = [
                 children: [
                     { label: "공지사항", href: "/community/notices" },
                     { label: "자료실", href: "/community/resources" },
+                    { label: "문의하기", href: "/community/contact" },
                 ],
             },
             {
@@ -177,11 +269,6 @@ const navItems: NavItem[] = [
                         href: "/community/fin-swimming-tv",
                     },
                 ],
-            },
-            {
-                label: "문의하기",
-                href: "/community/contact",
-                showChevron: true,
             },
         ],
     },
@@ -227,13 +314,37 @@ export const Header = () => {
     const gnbRef = useRef<HTMLDivElement>(null);
     const navRef = useRef<HTMLElement>(null);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
+    const [currentHash, setCurrentHash] = useState<string>("");
+
+    useEffect(() => {
+        const updateHash = () => {
+            setCurrentHash(window.location.hash ?? "");
+        };
+
+        updateHash();
+        window.addEventListener("hashchange", updateHash);
+        return () => {
+            window.removeEventListener("hashchange", updateHash);
+        };
+    }, []);
 
     const isPathActive = (href?: string) => {
-        if (!href) return false;
-        if (href === "/") {
+        const baseHref = stripHash(href);
+        if (!baseHref) return false;
+        if (baseHref === "/") {
             return pathname === "/";
         }
-        return pathname === href || pathname.startsWith(`${href}/`);
+        const baseMatched =
+            pathname === baseHref || pathname.startsWith(`${baseHref}/`);
+        if (!baseMatched) return false;
+
+        const hashIndex = href?.indexOf("#") ?? -1;
+        if (hashIndex >= 0) {
+            const targetHash = href?.slice(hashIndex) ?? "";
+            return currentHash === targetHash;
+        }
+
+        return true;
     };
 
     // GNB 외부 클릭 시 닫기 (nav 영역은 제외)
@@ -423,8 +534,9 @@ export const Header = () => {
                                             // 다른 subMenu의 children과 겹치지 않도록 정확한 매칭만 사용
                                             const isSubMenuActive =
                                                 (subMenu.href &&
-                                                    pathname ===
-                                                        subMenu.href) ||
+                                                    isPathActive(
+                                                        subMenu.href,
+                                                    )) ||
                                                 Boolean(hasChildActive);
                                             const subMenuBaseClasses =
                                                 "flex w-[200px] items-center rounded-lg p-2 text-base font-medium transition-colors";
@@ -442,6 +554,8 @@ export const Header = () => {
                                             }) => {
                                                 const isChildActive =
                                                     isPathActive(child.href);
+                                                const childHasHash =
+                                                    child.href?.includes("#");
 
                                                 if (child.href) {
                                                     return (
@@ -449,8 +563,11 @@ export const Header = () => {
                                                             key={child.label}
                                                             href={child.href}
                                                             scroll={
+                                                                childHasHash ||
                                                                 pathname !==
-                                                                child.href
+                                                                    stripHash(
+                                                                        child.href,
+                                                                    )
                                                             }
                                                             onClick={() =>
                                                                 setHoveredNav(
@@ -499,8 +616,13 @@ export const Header = () => {
                                                         <Link
                                                             href={subMenu.href}
                                                             scroll={
+                                                                subMenu.href?.includes(
+                                                                    "#",
+                                                                ) ||
                                                                 pathname !==
-                                                                subMenu.href
+                                                                    stripHash(
+                                                                        subMenu.href,
+                                                                    )
                                                             }
                                                             onClick={() =>
                                                                 setHoveredNav(
