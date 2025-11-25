@@ -13,6 +13,7 @@ export type DetailPageData = {
     views: number;
     isSecret?: boolean;
     content: string;
+    images?: string[];
     attachments?: { name: string; url: string }[];
 };
 
@@ -115,6 +116,25 @@ export const DetailPage = ({
                     className="[&_a]:text-kua-blue300 min-h-[200px] text-xl [&_a]:underline [&_br]:mb-2 [&_div]:mb-4 [&_p]:mb-4 [&_p]:leading-relaxed [&_strong]:font-semibold"
                     dangerouslySetInnerHTML={{ __html: data.content }}
                 />
+
+                {/* 이미지 그리드 (포토갤러리용) */}
+                {data.images && data.images.length > 0 && (
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        {data.images.map((image, index) => (
+                            <div
+                                key={index}
+                                className="relative aspect-[390/312] w-full overflow-hidden rounded-lg"
+                            >
+                                <Image
+                                    src={image}
+                                    alt={`갤러리 이미지 ${index + 1}`}
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 {/* 첨부파일 */}
                 {data.attachments && data.attachments.length > 0 && (

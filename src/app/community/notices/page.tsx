@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import { CommunityTableSection } from "@/widgets/community";
 import type { CommunityPostSummary } from "@/widgets/community";
+
+export const metadata: Metadata = {
+    title: "공지사항 | 커뮤니티 | 대한수중 핀수영협회",
+    description:
+        "대한수중핀수영협회의 공지사항을 확인하실 수 있습니다. 협회 소식, 대회 안내, 주요 공지사항 등을 제공합니다.",
+};
 
 const NOTICE_POSTS: CommunityPostSummary[] = [
     {

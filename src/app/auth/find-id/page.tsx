@@ -1,5 +1,15 @@
+import type { Metadata } from "next";
 import { PageBanner } from "@/shared/ui/PageBanner";
 import { AuthTabs, FindIdForm } from "@/widgets/auth";
+
+export const metadata: Metadata = {
+    title: "아이디 찾기 | 대한수중 핀수영협회",
+    description: "등록된 이름과 이메일로 회원 아이디를 찾으실 수 있습니다.",
+    robots: {
+        index: false,
+        follow: false,
+    },
+};
 
 export default function FindIdPage() {
     return (
