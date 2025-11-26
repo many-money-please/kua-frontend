@@ -36,9 +36,7 @@ const steps: StepData[] = [
         description: (
             <>
                 · 증명서 발급 및 전송 (이메일, 메신저 등)
-                <p className="text-kua-sky300">
-                    ※ 발급소요시간의 경우 접수 후 2~3일 소요
-                </p>
+                <br />※ 발급소요시간의 경우 접수 후 2~3일 소요
             </>
         ),
     },
@@ -60,33 +58,37 @@ function StepCard({ stepNumber, title, description, isLast }: StepCardProps) {
                     <span className="text-[32px]">{stepNumber}</span>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <h3 className="text-kua-white text-3xl font-bold">
+                    <h3 className="text-kua-main text-3xl font-bold">
                         {title}
                     </h3>
-                    <div className="text-kua-white">{description}</div>
+                    <div className="text-kua-darkblue800 text-lg">
+                        {description}
+                    </div>
                 </div>
             </div>
-            {!isLast && <div className="bg-kua-blue300/50 h-px w-full" />}
         </>
     );
 }
 
 export function CertificateIssuanceGuide() {
     return (
-        <div className="bg-kua-main w-full">
+        <div className="bg-kua-sky50 relative w-full">
+            <div className="pointer-events-none absolute top-1/4 right-16 z-0 h-[536px] -translate-y-1/4 sm:block">
+                <Image
+                    src="/imgs/logos/Icon-Blue.svg"
+                    alt="logo"
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    className="h-full w-auto object-contain"
+                    style={{ width: "auto", height: "100%" }}
+                />
+            </div>
             <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-12 py-24">
-                <h2 className="text-kua-white text-[32px] font-bold">
+                <h2 className="text-kua-black100 text-[32px] font-bold">
                     대한수중·핀수영협회 증명서 발급 안내
                 </h2>
                 <div className="flex w-full items-stretch gap-8">
-                    <div className="relative w-full flex-1 overflow-hidden rounded-[10px]">
-                        <Image
-                            src="/imgs/competition-info/competition-info02.png"
-                            alt="competition-info02"
-                            fill
-                            className="object-cover"
-                        />
-                    </div>
                     <div className="flex w-full flex-3 flex-col gap-12">
                         {steps.map((step, index) => (
                             <StepCard

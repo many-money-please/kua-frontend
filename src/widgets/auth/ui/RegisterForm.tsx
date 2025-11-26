@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { register } from "@/app/actions/auth";
+import { register } from "@/app/(site)/actions/auth";
 
 type Step = "terms" | "info" | "complete";
 

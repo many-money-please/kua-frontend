@@ -29,7 +29,7 @@ function CertificateSectionCard({ section }: CertificateSectionCardProps) {
         <div className="flex w-full max-w-[1200px] flex-col gap-8">
             <h2 className="text-[32px] font-bold">{section.title}</h2>
 
-            <div className="bg-kua-sky50 flex flex-col gap-4 p-6">
+            <div className="bg-kua-sky50 flex flex-col gap-4 rounded-[10px] p-6">
                 {/* 서브타이틀 바 */}
                 <div className="flex items-center gap-8 rounded-[10px]">
                     <div
@@ -67,7 +67,7 @@ function CertificateSectionCard({ section }: CertificateSectionCardProps) {
                     {section.cards.map((card, index) => (
                         <div
                             key={index}
-                            className="bg-kua-white flex flex-col items-center justify-between gap-6 rounded-[10px] px-12 py-6 shadow-sm"
+                            className="bg-kua-white flex flex-col items-center justify-between gap-6 rounded-[10px] px-5 py-10 shadow-sm"
                         >
                             <div className="flex h-20 w-20 items-center justify-center">
                                 {card.icon}
