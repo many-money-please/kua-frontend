@@ -321,9 +321,10 @@ export const Header = () => {
     const { role, toggleRole } = useUserRole();
     const [hoveredNav, setHoveredNav] = useState<string | null>(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(
-        null,
-    );
+    const [activeMobileNav, setActiveMobileNav] = useState(navItems[0].label);
+    const [expandedMobileSubMenus, setExpandedMobileSubMenus] = useState<
+        Record<string, boolean>
+    >({});
     const gnbRef = useRef<HTMLDivElement>(null);
     const navRef = useRef<HTMLElement>(null);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -404,15 +405,31 @@ export const Header = () => {
 
     // 모바일 메뉴 열릴 때 스크롤 방지
     useEffect(() => {
-        if (isMobileMenuOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "unset";
-        }
+        document.body.style.overflow = isMobileMenuOpen ? "hidden" : "unset";
         return () => {
             document.body.style.overflow = "unset";
         };
     }, [isMobileMenuOpen]);
+
+    const getDefaultMobileNavLabel = () => {
+        const active =
+            navItems.find((item) => {
+                if (item.href && isPathActive(item.href)) {
+                    return true;
+                }
+                return (
+                    item.subMenus?.some((sub) => {
+                        if (sub.href && isPathActive(sub.href)) {
+                            return true;
+                        }
+                        return sub.children?.some((child) =>
+                            child.href ? isPathActive(child.href) : false,
+                        );
+                    }) ?? false
+                );
+            }) ?? navItems[0];
+        return active.label;
+    };
 
     const currentNav = hoveredNav
         ? navItems.find((nav) => nav.label === hoveredNav)
@@ -449,7 +466,13 @@ export const Header = () => {
                 {/* 모바일 햄버거 메뉴 버튼 */}
                 <button
                     type="button"
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    onClick={() => {
+                        if (!isMobileMenuOpen) {
+                            setActiveMobileNav(getDefaultMobileNavLabel());
+                            setExpandedMobileSubMenus({});
+                        }
+                        setIsMobileMenuOpen(!isMobileMenuOpen);
+                    }}
                     className="text-kua-gray800 flex h-10 w-10 cursor-pointer items-center justify-center sm:hidden"
                     aria-label="메뉴"
                 >
@@ -779,140 +802,206 @@ export const Header = () => {
                                     : "👤 일반 사용자 모드"}
                             </button>
                         </div>
-                        {navItems.map((item) => {
-                            const isExpanded =
-                                expandedMobileMenu === item.label;
-                            const hasSubMenus =
-                                item.subMenus && item.subMenus.length > 0;
-
-                            return (
-                                <div
-                                    key={item.label}
-                                    className="border-kua-gray200 border-b"
-                                >
-                                    {/* 메인 메뉴 아이템 */}
-                                    <div
-                                        className="text-kua-gray800 flex cursor-pointer items-center justify-between px-6 py-4 font-semibold"
-                                        onClick={() => {
-                                            if (hasSubMenus) {
-                                                setExpandedMobileMenu(
-                                                    isExpanded
-                                                        ? null
-                                                        : item.label,
-                                                );
-                                            } else if (item.href) {
-                                                setIsMobileMenuOpen(false);
-                                                window.location.href =
-                                                    item.href;
-                                            }
-                                        }}
-                                    >
-                                        <span>{item.label}</span>
-                                        {hasSubMenus && (
-                                            <FaChevronDown
-                                                className={`text-kua-gray600 text-sm transition-transform ${
-                                                    isExpanded
-                                                        ? "rotate-180"
-                                                        : ""
+                        <div className="flex flex-col gap-6 px-5 py-6">
+                            <div className="flex flex-col gap-4 min-[380px]:flex-row">
+                                <div className="flex flex-col gap-2 min-[380px]:w-[130px]">
+                                    {navItems.map((item) => {
+                                        const isActiveMobile =
+                                            activeMobileNav === item.label;
+                                        return (
+                                            <button
+                                                key={item.label}
+                                                type="button"
+                                                onClick={() => {
+                                                    if (
+                                                        item.subMenus &&
+                                                        item.subMenus.length > 0
+                                                    ) {
+                                                        setActiveMobileNav(
+                                                            item.label,
+                                                        );
+                                                        setExpandedMobileSubMenus(
+                                                            {},
+                                                        );
+                                                    } else if (item.href) {
+                                                        setIsMobileMenuOpen(
+                                                            false,
+                                                        );
+                                                        router.push(item.href);
+                                                    }
+                                                }}
+                                                className={`rounded-[10px] px-4 py-3 text-left text-sm font-semibold transition-colors ${
+                                                    isActiveMobile
+                                                        ? "bg-kua-main text-white"
+                                                        : "bg-kua-gray100 text-kua-gray700 hover:bg-kua-main hover:text-white"
                                                 }`}
-                                            />
-                                        )}
-                                    </div>
-
-                                    {/* 서브메뉴 */}
-                                    {hasSubMenus && isExpanded && (
-                                        <div className="bg-kua-gray50 px-6 py-2">
-                                            {item.subMenus!.map((subMenu) => (
-                                                <div
-                                                    key={subMenu.label}
-                                                    className="py-2"
-                                                >
-                                                    {/* 서브메뉴 헤더 */}
-                                                    {subMenu.href ? (
-                                                        <Link
-                                                            href={subMenu.href}
-                                                            onClick={() =>
-                                                                setIsMobileMenuOpen(
-                                                                    false,
-                                                                )
-                                                            }
-                                                            className="text-kua-gray800 hover:text-kua-blue300 block py-2 font-medium"
-                                                        >
-                                                            {subMenu.label}
-                                                        </Link>
-                                                    ) : item.href ? (
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => {
-                                                                setIsMobileMenuOpen(
-                                                                    false,
-                                                                );
-                                                                router.push(
-                                                                    item.href!,
-                                                                );
-                                                            }}
-                                                            className="text-kua-gray800 hover:text-kua-blue300 block py-2 text-left font-medium"
-                                                        >
-                                                            {subMenu.label}
-                                                        </button>
-                                                    ) : (
-                                                        <div className="text-kua-gray800 py-2 font-medium">
-                                                            {subMenu.label}
-                                                        </div>
-                                                    )}
-
-                                                    {/* 서브메뉴 children */}
-                                                    {subMenu.children && (
-                                                        <div className="ml-4 flex flex-col gap-1">
-                                                            {subMenu.children.map(
-                                                                (child) =>
-                                                                    child.href ? (
-                                                                        <Link
-                                                                            key={
-                                                                                child.label
-                                                                            }
-                                                                            href={
-                                                                                child.href
-                                                                            }
-                                                                            onClick={() =>
-                                                                                setIsMobileMenuOpen(
-                                                                                    false,
-                                                                                )
-                                                                            }
-                                                                            className="text-kua-gray600 hover:text-kua-blue300 flex items-center gap-2 py-2 text-sm"
-                                                                        >
-                                                                            <span>
-                                                                                •
-                                                                            </span>
-                                                                            {
-                                                                                child.label
-                                                                            }
-                                                                        </Link>
-                                                                    ) : (
-                                                                        <span
-                                                                            key={
-                                                                                child.label
-                                                                            }
-                                                                            className="text-kua-gray600 flex items-center gap-2 py-2 text-sm"
-                                                                        >
-                                                                            <span>
-                                                                                •
-                                                                            </span>
-                                                                            {
-                                                                                child.label
-                                                                            }
-                                                                        </span>
-                                                                    ),
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
+                                            >
+                                                {item.label}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
-                            );
-                        })}
+                                <div className="border-kua-gray100 flex flex-1 flex-col gap-4 border-l pl-0 min-[380px]:pl-4">
+                                    {(() => {
+                                        const currentMobileNav =
+                                            navItems.find(
+                                                (item) =>
+                                                    item.label ===
+                                                    activeMobileNav,
+                                            ) ?? navItems[0];
+
+                                        if (
+                                            !currentMobileNav.subMenus ||
+                                            currentMobileNav.subMenus.length ===
+                                                0
+                                        ) {
+                                            if (currentMobileNav.href) {
+                                                return (
+                                                    <Link
+                                                        href={
+                                                            currentMobileNav.href
+                                                        }
+                                                        onClick={() =>
+                                                            setIsMobileMenuOpen(
+                                                                false,
+                                                            )
+                                                        }
+                                                        className="text-kua-blue300 border-kua-main flex items-center gap-2 rounded-[10px] border px-4 py-3 text-sm font-semibold"
+                                                    >
+                                                        {currentMobileNav.label}{" "}
+                                                        바로가기
+                                                        <FaChevronRight className="text-xs" />
+                                                    </Link>
+                                                );
+                                            }
+                                            return (
+                                                <p className="text-kua-gray500 rounded-[10px] border border-dashed px-4 py-3 text-sm">
+                                                    표시할 메뉴가 없습니다.
+                                                </p>
+                                            );
+                                        }
+
+                                        return currentMobileNav.subMenus.map(
+                                            (subMenu) => {
+                                                const subKey = `${currentMobileNav.label}-${subMenu.label}`;
+                                                const children =
+                                                    subMenu.children ?? [];
+                                                const hasChildren =
+                                                    children.length > 0;
+                                                const isExpanded =
+                                                    expandedMobileSubMenus[
+                                                        subKey
+                                                    ] ?? false;
+                                                return (
+                                                    <div
+                                                        key={subMenu.label}
+                                                        className="border-kua-gray200 bg-kua-gray50 flex flex-col rounded-[14px] border px-4 py-3"
+                                                    >
+                                                        <div className="text-kua-gray900 flex items-center justify-between text-base font-semibold">
+                                                            <span>
+                                                                {subMenu.label}
+                                                            </span>
+                                                            {hasChildren &&
+                                                                subMenu.showChevron !==
+                                                                    false && (
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            setExpandedMobileSubMenus(
+                                                                                (
+                                                                                    prev,
+                                                                                ) => ({
+                                                                                    ...prev,
+                                                                                    [subKey]:
+                                                                                        !prev[
+                                                                                            subKey
+                                                                                        ],
+                                                                                }),
+                                                                            )
+                                                                        }
+                                                                        className="text-kua-gray500 text-xs transition-transform"
+                                                                    >
+                                                                        <FaChevronDown
+                                                                            className={`transition-transform ${
+                                                                                isExpanded
+                                                                                    ? "rotate-180"
+                                                                                    : ""
+                                                                            }`}
+                                                                        />
+                                                                    </button>
+                                                                )}
+                                                        </div>
+                                                        {hasChildren &&
+                                                            isExpanded && (
+                                                                <div className="mt-2 flex flex-col gap-2 pl-2">
+                                                                    {children.map(
+                                                                        (
+                                                                            child,
+                                                                        ) =>
+                                                                            child.href ? (
+                                                                                <Link
+                                                                                    key={
+                                                                                        child.label
+                                                                                    }
+                                                                                    href={
+                                                                                        child.href
+                                                                                    }
+                                                                                    onClick={() =>
+                                                                                        setIsMobileMenuOpen(
+                                                                                            false,
+                                                                                        )
+                                                                                    }
+                                                                                    className="text-kua-gray800 flex items-center gap-2 text-sm font-medium"
+                                                                                >
+                                                                                    <span className="text-kua-blue300">
+                                                                                        ·
+                                                                                    </span>
+                                                                                    {
+                                                                                        child.label
+                                                                                    }
+                                                                                </Link>
+                                                                            ) : (
+                                                                                <span
+                                                                                    key={
+                                                                                        child.label
+                                                                                    }
+                                                                                    className="text-kua-gray500 flex items-center gap-2 text-sm"
+                                                                                >
+                                                                                    <span>
+                                                                                        ·
+                                                                                    </span>
+                                                                                    {
+                                                                                        child.label
+                                                                                    }
+                                                                                </span>
+                                                                            ),
+                                                                    )}
+                                                                </div>
+                                                            )}
+                                                        {subMenu.href && (
+                                                            <Link
+                                                                href={
+                                                                    subMenu.href
+                                                                }
+                                                                onClick={() =>
+                                                                    setIsMobileMenuOpen(
+                                                                        false,
+                                                                    )
+                                                                }
+                                                                className="text-kua-blue300 mt-3 inline-flex items-center gap-1 text-sm font-semibold"
+                                                            >
+                                                                바로가기
+                                                                <FaChevronRight className="text-xs" />
+                                                            </Link>
+                                                        )}
+                                                    </div>
+                                                );
+                                            },
+                                        );
+                                    })()}
+                                </div>
+                            </div>
+                        </div>
                     </nav>
                 </div>
             )}
