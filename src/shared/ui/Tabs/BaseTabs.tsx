@@ -24,7 +24,7 @@ export const BaseTabs = ({ tabs, className = "" }: BaseTabsProps) => {
 
     return (
         <div
-            className={`flex gap-2 px-5 py-10 sm:gap-3 sm:px-0 sm:py-20 ${className}`}
+            className={`tabs-scrollable flex gap-2 px-5 py-10 sm:gap-3 sm:px-0 sm:py-20 ${className}`}
         >
             {tabs.map((tab) => {
                 const isActive = pathname === tab.path;

@@ -123,7 +123,7 @@ export const CommunityTableSection = ({
     };
 
     return (
-        <section className="mb-12 flex w-full max-w-[1200px] flex-col gap-6">
+        <section className="mb-12 flex w-full max-w-[1200px] flex-col gap-6 px-5 sm:px-0">
             <div className="flex flex-col gap-2">
                 <span className="text-lg font-bold">{title}</span>
                 {isAdmin ? (

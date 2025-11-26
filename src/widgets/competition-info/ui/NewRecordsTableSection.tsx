@@ -86,7 +86,7 @@ export const NewRecordsTableSection = ({
     };
 
     return (
-        <section className="flex w-full max-w-[1200px] flex-col gap-6 py-12">
+        <section className="flex w-full max-w-[1200px] flex-col gap-6 px-5 py-6 sm:px-0 sm:py-12">
             <div className="flex flex-col gap-2">
                 <span className="text-lg font-bold">{title}</span>
                 {isManager ? (
