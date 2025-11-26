@@ -166,10 +166,10 @@ export const ExecutivesTab = () => {
     };
 
     return (
-        <div className="w-full bg-white pb-[150px]">
+        <div className="w-full bg-white px-5 pb-16 sm:px-0 sm:pb-[150px]">
             <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-10">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-kua-black100 text-[32px] font-bold">
+                    <h2 className="text-kua-black100 text-2xl font-bold sm:text-[32px]">
                         임원현황
                     </h2>
                     {isAdmin && (
@@ -183,20 +183,20 @@ export const ExecutivesTab = () => {
                 </div>
 
                 {/* 임원 카드 그리드 */}
-                <div className="grid grid-cols-4 gap-5">
+                <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
                     {executivesData.map((executive) => (
                         <div key={executive.id} className="flex flex-col gap-4">
                             <div className="bg-kua-sky50 flex flex-col items-center rounded-[10px]">
                                 {/* 위원회명 */}
                                 <div className="border-kua-gray250 flex w-full flex-col items-center gap-2 border-b py-6">
-                                    <p className="text-kua-black100 text-center text-lg font-bold">
+                                    <p className="text-kua-black100 text-center text-base font-bold sm:text-lg">
                                         {executive.position}
                                     </p>
                                 </div>
 
                                 {/* 이미지 */}
                                 <div className="flex items-center justify-center p-5">
-                                    <div className="bg-kua-gray300 flex h-[120px] w-[120px] items-center justify-center rounded-full">
+                                    <div className="bg-kua-gray300 flex h-[80px] w-[80px] items-center justify-center rounded-full sm:h-[120px] sm:w-[120px]">
                                         <svg
                                             width="60"
                                             height="60"
@@ -217,21 +217,21 @@ export const ExecutivesTab = () => {
                                 </div>
 
                                 {/* 이름 */}
-                                <h3 className="text-kua-black100 text-2xl font-bold">
+                                <h3 className="text-kua-black100 text-xl font-bold sm:text-2xl">
                                     {executive.name}
                                 </h3>
 
                                 {/* 설명 */}
-                                <p className="text-kua-black100 px-10 pt-3 pb-6 text-center text-base leading-relaxed">
+                                <p className="text-kua-black100 px-10 pt-3 pb-6 text-center text-sm leading-relaxed sm:text-base">
                                     {executive.description}
                                 </p>
                             </div>
                             {/* 관리자 버튼 */}
                             {isAdmin && (
-                                <div className="flex w-full justify-center gap-3 px-4 pt-2 pb-4">
+                                <div className="flex w-full justify-center gap-3 px-4 pt-2 pb-4 sm:pt-4">
                                     <button
                                         onClick={() => handleEdit(executive.id)}
-                                        className="hover:bg-kua-sky300 hover:text-kua-white text-kua-sky300 border-kua-sky300 w-16 cursor-pointer rounded-md border py-2 text-[15px] font-medium transition-colors"
+                                        className="hover:bg-kua-sky300 hover:text-kua-white text-kua-sky300 border-kua-sky300 w-16 cursor-pointer rounded-md border py-2 text-sm font-medium transition-colors sm:text-[15px]"
                                     >
                                         수정
                                     </button>
@@ -239,7 +239,7 @@ export const ExecutivesTab = () => {
                                         onClick={() =>
                                             handleDelete(executive.id)
                                         }
-                                        className="hover:bg-kua-orange500 hover:text-kua-white text-kua-orange500 border-kua-orange500 w-16 cursor-pointer rounded-md border py-2 text-[15px] font-medium transition-colors"
+                                        className="hover:bg-kua-orange500 hover:text-kua-white text-kua-orange500 border-kua-orange500 w-16 cursor-pointer rounded-md border py-2 text-sm font-medium transition-colors sm:text-[15px]"
                                     >
                                         삭제
                                     </button>
