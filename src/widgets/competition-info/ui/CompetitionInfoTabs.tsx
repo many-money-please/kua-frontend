@@ -22,6 +22,9 @@ export const CompetitionInfoTabs = () => {
     }
 
     return (
-        <BaseTabs tabs={tabs} className="mx-auto w-full max-w-[1200px] py-20" />
+        <BaseTabs
+            tabs={tabs}
+            className="tabs-scrollable mx-auto w-full max-w-[1200px]"
+        />
     );
 };
