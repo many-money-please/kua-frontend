@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { DataTable, type Column } from "@/shared/ui/DataTable";
 import { Pagination } from "@/shared/ui/Pagination";
@@ -234,11 +234,74 @@ const branchColumns: Column<Branch>[] = [
 ];
 
 export const OrganizationTab = () => {
-    const [activeTab, setActiveTab] = useState<"committee" | "branch">(
-        "committee",
-    );
     const [currentPage, setCurrentPage] = useState(1);
+    const [currentHash, setCurrentHash] = useState<string>("");
     const pageSize = 100;
+
+    // URL hash 추적
+    useEffect(() => {
+        const updateHash = () => {
+            setCurrentHash(window.location.hash.slice(1)); // '#' 제거
+        };
+
+        // 초기 hash 설정
+        updateHash();
+
+        // hash 변경 감지
+        window.addEventListener("hashchange", updateHash);
+
+        // 같은 페이지 내에서도 hash 변경을 감지하기 위한 polling
+        const interval = setInterval(updateHash, 100);
+
+        return () => {
+            window.removeEventListener("hashchange", updateHash);
+            clearInterval(interval);
+        };
+    }, []);
+
+    // hash에 따라 탭 결정
+    const activeTab = useMemo<"committee" | "branch">(() => {
+        if (currentHash === "branches") {
+            return "branch";
+        }
+        // 기본값 또는 "committees"일 때는 "committee"
+        return "committee";
+    }, [currentHash]);
+
+    // hash에 따라 스크롤 처리
+    useEffect(() => {
+        if (currentHash === "committees") {
+            // 탭 변경 후 스크롤 (약간의 지연으로 탭 전환 후 스크롤)
+            setTimeout(() => {
+                const element = document.getElementById("committees");
+                if (element) {
+                    element.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                    });
+                }
+            }, 150);
+        } else if (currentHash === "branches") {
+            // 탭 변경 후 스크롤
+            setTimeout(() => {
+                const element = document.getElementById("branches");
+                if (element) {
+                    element.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                    });
+                }
+            }, 150);
+        } else if (currentHash === "organization") {
+            const element = document.getElementById("organization");
+            if (element) {
+                element.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }
+        }
+    }, [currentHash]);
 
     // 페이지네이션 계산 (각종 위원회만)
     const totalPages =
@@ -252,7 +315,9 @@ export const OrganizationTab = () => {
             : committeeData;
 
     const handleTabChange = (tab: "committee" | "branch") => {
-        setActiveTab(tab);
+        // hash를 변경하여 탭 전환 (hash 변경이 activeTab을 자동으로 업데이트함)
+        const hash = tab === "committee" ? "#committees" : "#branches";
+        window.location.hash = hash;
         setCurrentPage(1);
     };
 
@@ -260,7 +325,7 @@ export const OrganizationTab = () => {
         <div className="w-full bg-white pb-[150px]">
             <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-50">
                 {/* 협회 조직도 섹션 */}
-                <div className="flex w-full flex-col">
+                <div id="organization" className="flex w-full flex-col">
                     <h2 className="text-kua-darkblue800 text-[32px] font-bold">
                         협회 조직도
                     </h2>
@@ -279,7 +344,7 @@ export const OrganizationTab = () => {
                     <div className="flex w-full gap-0">
                         <button
                             onClick={() => handleTabChange("committee")}
-                            className={`flex h-[60px] w-[350px] items-center justify-center rounded-t-[10px] text-lg font-semibold transition-colors ${
+                            className={`flex h-[60px] w-[350px] cursor-pointer items-center justify-center rounded-t-[10px] text-lg font-semibold transition-colors ${
                                 activeTab === "committee"
                                     ? "bg-kua-main text-white"
                                     : "bg-kua-sky50 text-kua-gray600 border-kua-gray400 border"
@@ -289,7 +354,7 @@ export const OrganizationTab = () => {
                         </button>
                         <button
                             onClick={() => handleTabChange("branch")}
-                            className={`flex h-[60px] w-[350px] items-center justify-center rounded-t-[10px] text-lg font-semibold transition-colors ${
+                            className={`flex h-[60px] w-[350px] cursor-pointer items-center justify-center rounded-t-[10px] text-lg font-semibold transition-colors ${
                                 activeTab === "branch"
                                     ? "bg-kua-main text-white"
                                     : "bg-kua-sky50 text-kua-gray600 border-kua-gray400 border"
@@ -302,7 +367,7 @@ export const OrganizationTab = () => {
                     {/* 테이블 */}
                     <div className="w-full">
                         {activeTab === "committee" ? (
-                            <>
+                            <div id="committees">
                                 <DataTable
                                     columns={committeeColumns}
                                     data={paginatedCommitteeData}
@@ -314,12 +379,14 @@ export const OrganizationTab = () => {
                                         onPageChange={setCurrentPage}
                                     />
                                 )}
-                            </>
+                            </div>
                         ) : (
-                            <DataTable
-                                columns={branchColumns}
-                                data={branchData}
-                            />
+                            <div id="branches">
+                                <DataTable
+                                    columns={branchColumns}
+                                    data={branchData}
+                                />
+                            </div>
                         )}
                     </div>
                 </div>
