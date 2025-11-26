@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Pagination } from "@/shared/ui/Pagination";
 import { ConfirmModal } from "@/shared/ui/ConfirmModal";
 import { useUserRole } from "@/shared/lib/UserRoleContext";
 
@@ -142,18 +141,8 @@ const executivesData: Executive[] = [
 export const ExecutivesTab = () => {
     const router = useRouter();
     const { isAdmin } = useUserRole();
-    const [currentPage, setCurrentPage] = useState(1);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
-
-    const itemsPerPage = 16;
-    const totalPages = Math.ceil(executivesData.length / itemsPerPage);
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentExecutives = executivesData.slice(
-        startIndex,
-        startIndex + itemsPerPage,
-    );
 
     const handleDelete = (id: number) => {
         setDeleteTargetId(id);
@@ -195,7 +184,7 @@ export const ExecutivesTab = () => {
 
                 {/* 임원 카드 그리드 */}
                 <div className="grid grid-cols-4 gap-5">
-                    {currentExecutives.map((executive) => (
+                    {executivesData.map((executive) => (
                         <div key={executive.id} className="flex flex-col gap-4">
                             <div className="bg-kua-sky50 flex flex-col items-center rounded-[10px]">
                                 {/* 위원회명 */}
@@ -259,15 +248,6 @@ export const ExecutivesTab = () => {
                         </div>
                     ))}
                 </div>
-
-                {/* 페이지네이션 */}
-                {totalPages > 1 && (
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={setCurrentPage}
-                    />
-                )}
             </div>
 
             {/* 삭제 확인 모달 */}
