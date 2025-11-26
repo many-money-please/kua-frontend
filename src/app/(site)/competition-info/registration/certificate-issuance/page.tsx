@@ -1,4 +1,4 @@
-import { FaMedal, FaChartLine, FaBullseye, FaUser } from "react-icons/fa6";
+import Image from "next/image";
 import {
     CertificateSections,
     CertificateIssuanceGuide,
@@ -17,7 +17,15 @@ const certificateSectionsData: CertificateSection[] = [
         subtitle: "스포츠지원포털 증명서 발급",
         cards: [
             {
-                icon: <FaMedal className="text-kua-blue300 text-4xl" />,
+                icon: (
+                    <Image
+                        src="/imgs/competition-info/certificate_1.svg"
+                        alt="경기실적 증명서"
+                        width={55}
+                        height={82}
+                        className="object-contain"
+                    />
+                ),
                 title: (
                     <>
                         경기실적
@@ -27,7 +35,15 @@ const certificateSectionsData: CertificateSection[] = [
                 ),
             },
             {
-                icon: <FaChartLine className="text-kua-blue300 text-4xl" />,
+                icon: (
+                    <Image
+                        src="/imgs/competition-info/certificate_2.svg"
+                        alt="지도자경력 증명서"
+                        width={86}
+                        height={83}
+                        className="object-contain"
+                    />
+                ),
                 title: (
                     <>
                         지도자경력
@@ -37,7 +53,15 @@ const certificateSectionsData: CertificateSection[] = [
                 ),
             },
             {
-                icon: <FaBullseye className="text-kua-blue300 text-4xl" />,
+                icon: (
+                    <Image
+                        src="/imgs/competition-info/certificate_3.svg"
+                        alt="대회참가 확인서"
+                        width={68}
+                        height={68}
+                        className="object-contain"
+                    />
+                ),
                 title: (
                     <>
                         대회참가
@@ -47,7 +71,15 @@ const certificateSectionsData: CertificateSection[] = [
                 ),
             },
             {
-                icon: <FaUser className="text-kua-blue300 text-4xl" />,
+                icon: (
+                    <Image
+                        src="/imgs/competition-info/certificate_4.svg"
+                        alt="선수(지도자)등록 확인서"
+                        width={66}
+                        height={66}
+                        className="object-contain"
+                    />
+                ),
                 title: (
                     <>
                         선수(지도자)등록
@@ -59,7 +91,7 @@ const certificateSectionsData: CertificateSection[] = [
         ],
         notice: (
             <>
-                회원가입(본인인증)이 불가한 경우 : 본인명의의 휴대폰이 없는
+                * 회원가입(본인인증)이 불가한 경우 : 본인명의의 휴대폰이 없는
                 경우, 법정대리인이 없는 경우, 아이핀을 발급받지 못하는 경우,
                 기타 사유로 본인확인이 불가한 경우
             </>
@@ -76,39 +108,68 @@ const certificateSectionsData: CertificateSection[] = [
         subtitle: "대한수중·핀수영협회 증명서 발급",
         cards: [
             {
-                icon: <FaMedal className="text-kua-blue300 text-4xl" />,
+                icon: (
+                    <Image
+                        src="/imgs/competition-info/certificate_5.svg"
+                        alt="국가대표 선수 확인서"
+                        width={86}
+                        height={44}
+                        className="object-contain"
+                    />
+                ),
                 title: (
                     <>
-                        경기실적
+                        · 국가대표 선수(지도자) 확인서
                         <br />
-                        증명서
+                        <span className="text-kua-black100 text-base font-normal">
+                            (세계핀수영선수권, 아시아핀수영선수권)
+                        </span>
+                        <br />
+                        · 청소년대표 선수 확인서
+                        <br />· 대학생대표 선수 확인서
                     </>
                 ),
             },
             {
-                icon: <FaChartLine className="text-kua-blue300 text-4xl" />,
-                title: (
-                    <>
-                        지도자경력
-                        <br />
-                        증명서
-                    </>
+                icon: (
+                    <Image
+                        src="/imgs/competition-info/certificate_6.svg"
+                        alt="후보선수 확인서"
+                        width={86}
+                        height={83}
+                        className="object-contain"
+                    />
                 ),
-            },
-            {
-                icon: <FaBullseye className="text-kua-blue300 text-4xl" />,
                 title: (
                     <>
-                        대회참가
+                        후보선수(상비군)
                         <br />
                         확인서
+                    </>
+                ),
+            },
+            {
+                icon: (
+                    <Image
+                        src="/imgs/competition-info/certificate_7.svg"
+                        alt="국제대회 참가확인서"
+                        width={67}
+                        height={67}
+                        className="object-contain"
+                    />
+                ),
+                title: (
+                    <>
+                        국제대회
+                        <br />
+                        참가확인서
                     </>
                 ),
             },
         ],
         notice: (
             <>
-                회원가입(본인인증)이 불가한 경우 : 본인명의의 휴대폰이 없는
+                * 회원가입(본인인증)이 불가한 경우 : 본인명의의 휴대폰이 없는
                 경우, 법정대리인이 없는 경우, 아이핀을 발급받지 못하는 경우,
                 기타 사유로 본인확인이 불가한 경우
             </>
