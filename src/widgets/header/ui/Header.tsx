@@ -328,15 +328,21 @@ export const Header = () => {
         };
     }, []);
 
-    const isPathActive = (href?: string) => {
+    const isPathActive = (href?: string, exactMatch = false) => {
         const baseHref = stripHash(href);
         if (!baseHref) return false;
         if (baseHref === "/") {
             return pathname === "/";
         }
-        const baseMatched =
-            pathname === baseHref || pathname.startsWith(`${baseHref}/`);
-        if (!baseMatched) return false;
+
+        // exactMatch가 true이면 정확히 일치할 때만 활성화
+        if (exactMatch) {
+            if (pathname !== baseHref) return false;
+        } else {
+            const baseMatched =
+                pathname === baseHref || pathname.startsWith(`${baseHref}/`);
+            if (!baseMatched) return false;
+        }
 
         const hashIndex = href?.indexOf("#") ?? -1;
         if (hashIndex >= 0) {
@@ -442,6 +448,17 @@ export const Header = () => {
                         const hasSubMenus =
                             item.subMenus && item.subMenus.length > 0;
 
+                        // 메인 네비게이션 항목 활성화 확인
+                        // /about 경로의 경우 정확히 일치할 때만 활성화
+                        const shouldExactMatchForMainNav =
+                            item.href === "/about";
+                        const isMainNavActive = item.href
+                            ? isPathActive(
+                                  item.href,
+                                  shouldExactMatchForMainNav,
+                              )
+                            : false;
+
                         const handleNavClick = () => {
                             if (hasSubMenus) {
                                 setHoveredNav(item.label);
@@ -453,7 +470,11 @@ export const Header = () => {
                         return (
                             <div
                                 key={item.label}
-                                className="hover:text-kua-blue300 text-kua-gray800 relative flex h-full cursor-pointer items-center transition-colors"
+                                className={`relative flex h-full cursor-pointer items-center transition-colors ${
+                                    isMainNavActive
+                                        ? "text-kua-blue300"
+                                        : "text-kua-gray800 hover:text-kua-blue300"
+                                }`}
                                 onMouseEnter={() => {
                                     if (hasSubMenus) {
                                         setHoveredNav(item.label);
@@ -529,15 +550,18 @@ export const Header = () => {
                                                         ),
                                                 );
                                             // subMenu가 활성화되려면:
-                                            // 1. 정확히 경로가 일치하거나 (하위 경로 제외)
-                                            // 2. 자신의 children 중 하나가 활성화되어야 함
-                                            // 다른 subMenu의 children과 겹치지 않도록 정확한 매칭만 사용
+                                            // 1. 자신의 children 중 하나가 활성화되어야 함
+                                            // 2. 또는 정확히 경로가 일치 (특히 /about은 정확히 일치할 때만)
+                                            // /about 경로의 경우 정확히 일치해야 하므로 exactMatch 사용
+                                            const shouldExactMatch =
+                                                subMenu.href === "/about";
                                             const isSubMenuActive =
+                                                Boolean(hasChildActive) ||
                                                 (subMenu.href &&
                                                     isPathActive(
                                                         subMenu.href,
-                                                    )) ||
-                                                Boolean(hasChildActive);
+                                                        shouldExactMatch,
+                                                    ));
                                             const subMenuBaseClasses =
                                                 "flex w-[200px] items-center rounded-lg p-2 text-base font-medium transition-colors";
                                             const subMenuStateClasses =
