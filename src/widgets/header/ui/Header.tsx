@@ -279,6 +279,10 @@ const navItems: NavItem[] = [
                     },
                 ],
             },
+            {
+                label: "스포츠윤리센터 신고/상담",
+                href: "https://www.k-sec.or.kr/front/main/main.do",
+            },
         ],
     },
     {
