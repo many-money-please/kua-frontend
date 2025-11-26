@@ -21,7 +21,7 @@ export const ScrollToTopButton = () => {
     };
 
     return (
-        <div className="pointer-events-none fixed bottom-20 left-1/2 z-40 w-full max-w-[1200px] -translate-x-1/2">
+        <div className="pointer-events-none fixed bottom-40 left-1/2 z-40 w-full max-w-[1200px] -translate-x-1/2">
             <div className="pointer-events-auto flex justify-end px-5 sm:px-0">
                 <button
                     type="button"
