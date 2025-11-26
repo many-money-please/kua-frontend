@@ -4,11 +4,11 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import Image from "next/image";
-import { useUserRole } from "@/shared/lib/UserRoleContext";
+import { useUser } from "@/shared/lib/UserRoleContext";
 
 export const LoginForm = () => {
     const router = useRouter();
-    const { setRole } = useUserRole();
+    const { setUser, refreshUser } = useUser();
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
@@ -40,19 +40,17 @@ export const LoginForm = () => {
                     return;
                 }
 
-                // 로그인 응답에 사용자 정보가 포함되어 있음
+                // 로그인 응답에 사용자 정보가 포함되어 있으면 바로 설정
                 if (loginResult.success && loginResult.data?.user) {
                     const user = loginResult.data.user;
-                    const userRole =
-                        user.role === "ADMIN" || user.role === "USER"
-                            ? user.role.toLowerCase()
-                            : "user";
-                    setRole(userRole as "user" | "admin");
+                    setUser(user);
                     router.push("/");
                     router.refresh();
                 } else {
-                    // 사용자 정보가 없으면 에러 (일반적으로는 발생하지 않음)
-                    setError("사용자 정보를 가져오지 못했습니다.");
+                    // 사용자 정보가 없으면 /api/auth/me로 다시 가져오기
+                    await refreshUser();
+                    router.push("/");
+                    router.refresh();
                 }
             } catch (error) {
                 setError(
