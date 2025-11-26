@@ -51,7 +51,7 @@ export async function getNotices(
         const response = await fetch(url, {
             method: "GET",
             headers,
-            next: { revalidate: 60 }, // 60초마다 재검증 (ISR)
+            next: { revalidate: 30 }, // 30초마다 재검증 (ISR)
         });
 
         if (!response.ok) {
@@ -59,10 +59,13 @@ export async function getNotices(
             const errorArrayBuffer = await response.arrayBuffer();
             const errorText = decodeResponseText(errorArrayBuffer);
 
-            console.error("공지사항 목록 조회 실패:", {
+            console.error("[getNotices] 공지사항 목록 조회 실패:", {
                 status: response.status,
                 statusText: response.statusText,
+                url,
                 error: errorText,
+                errorTextLength: errorText.length,
+                errorTextPreview: errorText.substring(0, 500),
             });
 
             return {
@@ -79,11 +82,37 @@ export async function getNotices(
         // 응답 본문 읽기 (한글 인코딩 처리)
         const arrayBuffer = await response.arrayBuffer();
         const text = decodeResponseText(arrayBuffer);
-        const data = JSON.parse(text) as NoticeListResponse;
+
+        console.log("[getNotices] 응답 본문 길이:", text.length);
+        console.log(
+            "[getNotices] 응답 본문 (처음 500자):",
+            text.substring(0, 500),
+        );
+
+        let data: NoticeListResponse;
+        try {
+            data = JSON.parse(text) as NoticeListResponse;
+            console.log(
+                "[getNotices] 성공 - 데이터 파싱 완료, 공지사항 개수:",
+                data.notices?.length || 0,
+            );
+        } catch (parseError) {
+            console.error("[getNotices] JSON 파싱 실패:", {
+                error: parseError,
+                text: text.substring(0, 1000),
+            });
+            throw new Error(
+                `JSON 파싱 실패: ${parseError instanceof Error ? parseError.message : "알 수 없는 오류"}`,
+            );
+        }
 
         return data;
     } catch (error) {
-        console.error("공지사항 목록 조회 중 오류:", error);
+        console.error("[getNotices] 공지사항 목록 조회 중 오류:", {
+            error,
+            message: error instanceof Error ? error.message : "알 수 없는 오류",
+            stack: error instanceof Error ? error.stack : undefined,
+        });
         return {
             notices: [],
             totalCount: 0,

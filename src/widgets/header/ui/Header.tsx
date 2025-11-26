@@ -4,334 +4,31 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import {
-    FaChevronRight,
-    FaBars,
-    FaXmark,
-    FaChevronDown,
-} from "react-icons/fa6";
-import { useUserRole } from "@/shared/lib/UserRoleContext";
-
-type NavItem = {
-    label: string;
-    href?: string;
-    description?: string;
-    subMenus?: {
-        label: string;
-        href?: string;
-        showChevron?: boolean;
-        children?: { label: string; href?: string }[];
-    }[];
-};
+import { FaBars, FaXmark } from "react-icons/fa6";
+import { useUserRole, useUser } from "@/shared/lib/UserRoleContext";
+import { navItems } from "../config/navItems";
+import { DesktopNav } from "./DesktopNav";
+import { DesktopGNB } from "./DesktopGNB";
+import { MobileMenu } from "./MobileMenu";
 
 const stripHash = (href?: string) =>
     href ? (href.split("#")[0] ?? href) : href;
-
-const navItems: NavItem[] = [
-    {
-        label: "협회소개",
-        href: "/about",
-        description: `대한수중핀수영협회의 설립 배경, 조직 구조 등
-협회의 전반적인 체계와 정체성을 소개합니다.`,
-        subMenus: [
-            {
-                label: "협회소개",
-                href: "/about",
-                showChevron: true,
-                children: [
-                    { label: "협회장 인사말", href: "/about#president" },
-                    { label: "협회 연혁", href: "/about#history" },
-                    { label: "C.I 소개", href: "/about#ci" },
-                    { label: "찾아오시는길", href: "/about#find-us" },
-                ],
-            },
-            {
-                label: "협회구조",
-                href: "/about/organization",
-                showChevron: true,
-                children: [
-                    {
-                        label: "협회 조직도",
-                        href: "/about/organization#organization",
-                    },
-                    {
-                        label: "각종 위원회",
-                        href: "/about/organization#committees",
-                    },
-                    {
-                        label: "시/도 지부 소개",
-                        href: "/about/organization#branches",
-                    },
-                ],
-            },
-            { label: "임원현황", href: "/about/executives", showChevron: true },
-            { label: "규정", href: "/about/regulations", showChevron: true },
-            { label: "경영공시", href: "/about/disclosure", showChevron: true },
-        ],
-    },
-    {
-        label: "종목 소개",
-        href: "/fin-swimming",
-        description:
-            "협회에서 운영하는 수중·안전 분야의 주요 종목들의 특징, 목적, 기본 기술과 교육 체계를 체계적으로 안내합니다.",
-        subMenus: [
-            {
-                label: "핀수영",
-                href: "/fin-swimming/history",
-                showChevron: true,
-                children: [
-                    {
-                        label: "유래",
-                        href: "/fin-swimming/history",
-                    },
-                    {
-                        label: "기술 및 훈련",
-                        href: "/fin-swimming/skills-and-training",
-                    },
-                    {
-                        label: "민간자격등록",
-                        href: "/fin-swimming/private-qualification",
-                    },
-                ],
-            },
-            // {
-            //     label: "스쿠버다이빙",
-            //     href: "/scuba-diving/history",
-            //     showChevron: true,
-            //     children: [
-            //         {
-            //             label: "유래",
-            //             href: "/scuba-diving/history",
-            //         },
-            //         {
-            //             label: "기술 및 훈련",
-            //             href: "/scuba-diving/skills-and-training",
-            //         },
-            //         {
-            //             label: "민간자격등록",
-            //             href: "/scuba-diving/private-qualification",
-            //         },
-            //     ],
-            // },
-            {
-                label: "프리다이빙",
-                href: "/free-diving/history",
-                showChevron: true,
-                children: [
-                    {
-                        label: "유래",
-                        href: "/free-diving/history",
-                    },
-                    {
-                        label: "기술 및 훈련",
-                        href: "/free-diving/skills-and-training",
-                    },
-                    {
-                        label: "민간자격등록",
-                        href: "/free-diving/private-qualification",
-                    },
-                ],
-            },
-            // {
-            //     label: "인명구조",
-            //     href: "/lifesaving/history",
-            //     showChevron: true,
-            //     children: [
-            //         {
-            //             label: "유래",
-            //             href: "/lifesaving/history",
-            //         },
-            //         {
-            //             label: "기술 및 훈련",
-            //             href: "/lifesaving/skills-and-training",
-            //         },
-            //         {
-            //             label: "민간자격등록",
-            //             href: "/lifesaving/private-qualification",
-            //         },
-            //         {
-            //             label: "교육 안내",
-            //             href: "/lifesaving/education",
-            //         },
-            //     ],
-            // },
-            // {
-            //     label: "응급처치",
-            //     href: "/first-aid/history",
-            //     showChevron: true,
-            //     children: [
-            //         {
-            //             label: "유래",
-            //             href: "/first-aid/history",
-            //         },
-            //         {
-            //             label: "기술 및 훈련",
-            //             href: "/first-aid/skills-and-training",
-            //         },
-            //         {
-            //             label: "민간자격등록",
-            //             href: "/first-aid/private-qualification",
-            //         },
-            //         {
-            //             label: "교육 안내",
-            //             href: "/first-aid/education",
-            //         },
-            //     ],
-            // },
-        ],
-    },
-    {
-        label: "대회정보",
-        href: "/competition-info",
-        description: `대회 일정, 선수/국가대표 정보, 증명서 발급 등
-대회 운영 및 참여 관련 정보를 제공합니다.`,
-        subMenus: [
-            {
-                label: "대회정보",
-                href: "/competition-info",
-                showChevron: false,
-                children: [
-                    { label: "대회일정", href: "/competition-info/schedule" },
-                    { label: "대회결과", href: "/competition-info/results" },
-                    {
-                        label: "e-상장",
-                        href: "http://scubakorea.or.kr/game/mypage.php",
-                    },
-                ],
-            },
-            {
-                label: "선수정보",
-                href: "/competition-info/player-info",
-                showChevron: false,
-                children: [
-                    {
-                        label: "국가대표",
-                        href: "/competition-info/player-info/national",
-                    },
-                    {
-                        label: "청소년대표",
-                        href: "/competition-info/player-info/youth",
-                    },
-                    {
-                        label: "상비군선수",
-                        href: "/competition-info/player-info/reserve",
-                    },
-                ],
-            },
-            {
-                label: "신기록 현황",
-                href: "/competition-info/new-records",
-                showChevron: true,
-            },
-            {
-                label: "신청/발급",
-                href: "/competition-info/registration",
-                showChevron: false,
-                children: [
-                    {
-                        label: "대회 참가 신청",
-                        href: "/competition-info/registration/competition-application",
-                    },
-                    {
-                        label: "경기인 등록",
-                        href: "/competition-info/registration/athlete-registration",
-                    },
-                    {
-                        label: "증명서 발급",
-                        href: "/competition-info/registration/certificate-issuance",
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        label: "커뮤니티",
-        href: "/community",
-        description:
-            "협회 소식, 공지사항 등 유익한 자료를 전달하고 다양한 정보를 공유하는 열린 공간입니다.",
-        subMenus: [
-            {
-                label: "커뮤니티",
-                href: "/community",
-                showChevron: false,
-                children: [
-                    { label: "공지사항", href: "/community/notices" },
-                    { label: "자료실", href: "/community/resources" },
-                    { label: "문의하기", href: "/community/contact" },
-                ],
-            },
-            {
-                label: "협회소식",
-                href: "/community/news-and-activities",
-                showChevron: false,
-                children: [
-                    {
-                        label: "소식 및 활동",
-                        href: "/community/news-and-activities",
-                    },
-                    {
-                        label: "포토갤러리",
-                        href: "/community/photo-gallery",
-                    },
-                    {
-                        label: "보도자료",
-                        href: "/community/press-release",
-                    },
-                    {
-                        label: "핀수영 TV",
-                        href: "/community/fin-swimming-tv",
-                    },
-                ],
-            },
-            {
-                label: "스포츠윤리센터 신고/상담",
-                href: "https://www.k-sec.or.kr/front/main/main.do",
-            },
-        ],
-    },
-    {
-        label: "교육사업",
-        href: "/education-business",
-        description:
-            "KUA·CMAS 교육 철학과 과정을 소개하고 체계적인 국제 인증 교육장을 안내합니다.",
-        subMenus: [
-            {
-                label: "KUA & CMAS",
-                href: "/education-business/kua-cmas",
-                showChevron: true,
-                children: [
-                    {
-                        label: "교육 철학 및 국제 인증 안내",
-                    },
-                    {
-                        label: "교육장 안내",
-                    },
-                    {
-                        label: "교육 참여 안내",
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        label: "로그인",
-        href: "/auth/login",
-    },
-];
-
 export const Header = () => {
     const router = useRouter();
     const pathname = usePathname();
     const { role, toggleRole } = useUserRole();
+    const { user, logout } = useUser();
     const [hoveredNav, setHoveredNav] = useState<string | null>(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeMobileNav, setActiveMobileNav] = useState(navItems[0].label);
     const [expandedMobileSubMenus, setExpandedMobileSubMenus] = useState<
         Record<string, boolean>
     >({});
-    const gnbRef = useRef<HTMLDivElement>(null);
-    const navRef = useRef<HTMLElement>(null);
-    const mobileMenuRef = useRef<HTMLDivElement>(null);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const gnbRef = useRef<HTMLDivElement | null>(null);
+    const navRef = useRef<HTMLElement | null>(null);
+    const mobileMenuRef = useRef<HTMLDivElement | null>(null);
+    const userMenuRef = useRef<HTMLDivElement | null>(null);
     const [currentHash, setCurrentHash] = useState<string>("");
 
     useEffect(() => {
@@ -399,6 +96,10 @@ export const Header = () => {
             ) {
                 setHoveredNav(null);
             }
+            // 사용자 메뉴 외부 클릭 시 닫기
+            if (userMenuRef.current && !userMenuRef.current.contains(target)) {
+                setIsUserMenuOpen(false);
+            }
         };
 
         document.addEventListener("mousedown", handleClickOutside);
@@ -406,6 +107,18 @@ export const Header = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            setIsUserMenuOpen(false);
+            router.push("/");
+            router.refresh();
+        } catch (error) {
+            console.error("로그아웃 실패:", error);
+            alert("로그아웃에 실패했습니다.");
+        }
+    };
 
     // 모바일 메뉴 열릴 때 스크롤 방지
     useEffect(() => {
@@ -487,542 +200,52 @@ export const Header = () => {
                     )}
                 </button>
 
-                {/* 데스크탑 네비게이션 */}
-                <nav
-                    ref={navRef}
-                    className="text-kua-gray800 relative hidden h-full items-center gap-[42px] text-[15px] font-semibold sm:flex"
-                >
-                    {/* 역할 토글 버튼 (개발용) */}
-                    <button
-                        onClick={toggleRole}
-                        className="text-kua-gray800 hover:text-kua-main text-xs font-medium transition-colors"
-                    >
-                        {role === "admin" ? "👤 관리자" : "👤 일반"}
-                    </button>
-                    {role === "admin" && (
-                        <Link
-                            href="/admin"
-                            className="text-kua-gray800 hover:text-kua-main text-xs font-medium transition-colors"
-                        >
-                            관리자 페이지
-                        </Link>
-                    )}
-                    {navItems.map((item) => {
-                        const isHovered = hoveredNav === item.label;
-                        const hasSubMenus =
-                            item.subMenus && item.subMenus.length > 0;
-
-                        // 메인 네비게이션 항목 활성화 확인
-                        // subMenus가 있는 경우: subMenus 중 하나라도 활성화되면 메인 항목도 활성화
-                        // subMenus가 없는 경우: 메인 href와 경로 매칭
-                        let isMainNavActive = false;
-                        if (hasSubMenus && item.subMenus) {
-                            // subMenus 또는 그 children 중 하나라도 활성화되면 메인 항목도 활성화
-                            isMainNavActive = item.subMenus.some((subMenu) => {
-                                // subMenu 자체가 활성화되거나
-                                const subMenuActive = subMenu.href
-                                    ? isPathActive(subMenu.href)
-                                    : false;
-
-                                // subMenu의 children 중 하나가 활성화되면
-                                const hasChildActive =
-                                    subMenu.children?.some(
-                                        (child) =>
-                                            child.href &&
-                                            isPathActive(child.href),
-                                    ) ?? false;
-
-                                return subMenuActive || hasChildActive;
-                            });
-                        } else if (item.href) {
-                            // subMenus가 없는 경우: /about은 정확히 일치할 때만, 나머지는 하위 경로 포함
-                            const shouldExactMatchForMainNav =
-                                item.href === "/about";
-                            isMainNavActive = isPathActive(
-                                item.href,
-                                shouldExactMatchForMainNav,
-                            );
-                        }
-
-                        const handleNavClick = () => {
-                            if (hasSubMenus) {
-                                setHoveredNav(item.label);
-                            } else if (item.href) {
-                                router.push(item.href);
-                            }
-                        };
-
-                        return (
-                            <div
-                                key={item.label}
-                                className={`relative flex h-full cursor-pointer items-center transition-colors ${
-                                    isMainNavActive
-                                        ? "text-kua-blue300"
-                                        : "text-kua-gray800 hover:text-kua-blue300"
-                                }`}
-                                onMouseEnter={() => {
-                                    if (hasSubMenus) {
-                                        setHoveredNav(item.label);
-                                    }
-                                }}
-                                onMouseLeave={() => {
-                                    // GNB가 열려있을 때는 닫지 않음
-                                    if (!gnbRef.current) {
-                                        setHoveredNav(null);
-                                    }
-                                }}
-                                onClick={handleNavClick}
-                            >
-                                {item.label}
-                                {/* 헤더와 GNB 사이에 걸치는 동그란 요소 */}
-                                {hasSubMenus && (
-                                    <div
-                                        className={`bg-kua-blue300 absolute top-[82px] left-1/2 z-40 min-h-1 min-w-1 -translate-x-1/2 scale-150 rounded-full transition-opacity duration-200 ${
-                                            isHovered
-                                                ? "opacity-100"
-                                                : "opacity-0"
-                                        }`}
-                                    />
-                                )}
-                            </div>
-                        );
-                    })}
+                <nav ref={navRef} className="relative hidden h-full sm:flex">
+                    <DesktopNav
+                        navItems={navItems}
+                        hoveredNav={hoveredNav}
+                        setHoveredNav={setHoveredNav}
+                        isPathActive={isPathActive}
+                        user={user}
+                        isUserMenuOpen={isUserMenuOpen}
+                        setIsUserMenuOpen={setIsUserMenuOpen}
+                        onLogout={handleLogout}
+                        role={role}
+                        toggleRole={toggleRole}
+                        gnbRef={gnbRef}
+                        userMenuRef={userMenuRef}
+                    />
                 </nav>
             </div>
 
-            {/* 데스크탑 GNB */}
             {currentNav &&
                 currentNav.subMenus &&
                 currentNav.subMenus.length > 0 && (
-                    <div
-                        ref={gnbRef}
-                        className="border-kua-gray200 absolute right-0 left-0 hidden border-t border-b bg-white shadow-lg sm:block"
-                        onMouseEnter={() => setHoveredNav(currentNav.label)}
-                        onMouseLeave={() => setHoveredNav(null)}
-                        style={{
-                            top: "84px",
-                            animation: "revealFromTop 0.3s ease-out forwards",
-                        }}
-                    >
-                        <div className="mx-auto w-full max-w-[1200px] px-[32px] py-8">
-                            <div className="flex gap-8">
-                                {/* 좌측: Nav 이름 및 설명 */}
-                                <div className="flex w-[30%] flex-col gap-6 pr-8">
-                                    <h2 className="text-kua-gray900 text-3xl font-bold">
-                                        {currentNav.label}
-                                    </h2>
-                                    {currentNav.description && (
-                                        <p className="text-kua-gray600 text-sm">
-                                            {currentNav.description}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* 경계선 */}
-                                <div className="border-kua-gray200 border-l" />
-
-                                {/* 우측: 세부 메뉴 */}
-                                <div className="w-[70%]">
-                                    <div className="flex flex-wrap gap-12">
-                                        {currentNav.subMenus.map((subMenu) => {
-                                            // 자신의 children 중 활성화된 것이 있는지 확인
-                                            const hasChildActive =
-                                                subMenu.children?.some(
-                                                    (child) =>
-                                                        child.href &&
-                                                        isPathActive(
-                                                            child.href,
-                                                        ),
-                                                );
-                                            // subMenu가 활성화되려면:
-                                            // 1. 자신의 children 중 하나가 활성화되어야 함
-                                            // 2. 또는 정확히 경로가 일치 (특히 /about은 정확히 일치할 때만)
-                                            // /about 경로의 경우 정확히 일치해야 하므로 exactMatch 사용
-                                            // 근데 이거 competition-info랑 about,community 추가로 추가해야함
-                                            const shouldExactMatch =
-                                                subMenu.href ===
-                                                    "/competition-info" ||
-                                                subMenu.href === "/about" ||
-                                                subMenu.href === "/community";
-                                            const isSubMenuActive =
-                                                Boolean(hasChildActive) ||
-                                                (subMenu.href &&
-                                                    isPathActive(
-                                                        subMenu.href,
-                                                        shouldExactMatch,
-                                                    ));
-                                            const subMenuBaseClasses =
-                                                "flex w-[200px] items-center rounded-lg p-2 text-base font-medium transition-colors";
-                                            const subMenuStateClasses =
-                                                isSubMenuActive
-                                                    ? "bg-kua-sky100 text-kua-main font-semibold"
-                                                    : "bg-kua-gray100 text-kua-gray800";
-                                            const subMenuHoverClasses =
-                                                "hover:bg-kua-sky100 hover:text-kua-main";
-                                            const fallbackHref =
-                                                subMenu.href ?? currentNav.href;
-                                            const renderChild = (child: {
-                                                label: string;
-                                                href?: string;
-                                            }) => {
-                                                const isChildActive =
-                                                    isPathActive(child.href);
-                                                const childHasHash =
-                                                    child.href?.includes("#");
-
-                                                if (child.href) {
-                                                    return (
-                                                        <Link
-                                                            key={child.label}
-                                                            href={child.href}
-                                                            scroll={
-                                                                childHasHash ||
-                                                                pathname !==
-                                                                    stripHash(
-                                                                        child.href,
-                                                                    )
-                                                            }
-                                                            onClick={() =>
-                                                                setHoveredNav(
-                                                                    null,
-                                                                )
-                                                            }
-                                                            className={`flex w-full items-center gap-2 rounded-lg px-2 py-1 text-sm transition-colors hover:underline ${
-                                                                isChildActive
-                                                                    ? "text-kua-blue300 font-semibold underline"
-                                                                    : "text-kua-gray800 hover:text-kua-blue300"
-                                                            }`}
-                                                        >
-                                                            {child.label}
-                                                            <svg
-                                                                width="10"
-                                                                height="10"
-                                                                viewBox="0 0 10 10"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                className="hover:text-kua-blue300"
-                                                            >
-                                                                <path
-                                                                    d="M2.91666 8.87091L7.08333 5.00186L2.91666 1.13281"
-                                                                    stroke="currentColor"
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                />
-                                                            </svg>
-                                                        </Link>
-                                                    );
-                                                }
-
-                                                return (
-                                                    <span
-                                                        key={child.label}
-                                                        className="text-kua-gray600 px-2 py-1 text-sm"
-                                                    >
-                                                        {child.label}
-                                                    </span>
-                                                );
-                                            };
-
-                                            return (
-                                                <div key={subMenu.label}>
-                                                    {subMenu.href ? (
-                                                        <Link
-                                                            href={subMenu.href}
-                                                            scroll={
-                                                                subMenu.href?.includes(
-                                                                    "#",
-                                                                ) ||
-                                                                pathname !==
-                                                                    stripHash(
-                                                                        subMenu.href,
-                                                                    )
-                                                            }
-                                                            onClick={() =>
-                                                                setHoveredNav(
-                                                                    null,
-                                                                )
-                                                            }
-                                                            className={`${subMenuBaseClasses} ${subMenuHoverClasses} ${subMenuStateClasses} ${
-                                                                subMenu.showChevron !==
-                                                                false
-                                                                    ? "justify-between"
-                                                                    : "justify-start"
-                                                            }`}
-                                                        >
-                                                            <span>
-                                                                {subMenu.label}
-                                                            </span>
-                                                            {subMenu.showChevron !==
-                                                                false && (
-                                                                <FaChevronRight className="text-sm" />
-                                                            )}
-                                                        </Link>
-                                                    ) : fallbackHref ? (
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => {
-                                                                router.push(
-                                                                    fallbackHref,
-                                                                );
-                                                                setHoveredNav(
-                                                                    null,
-                                                                );
-                                                            }}
-                                                            className={`${subMenuBaseClasses} ${subMenuHoverClasses} ${subMenuStateClasses} justify-start text-left`}
-                                                        >
-                                                            {subMenu.label}
-                                                        </button>
-                                                    ) : (
-                                                        <div
-                                                            className={`${subMenuBaseClasses} ${subMenuStateClasses} justify-start`}
-                                                        >
-                                                            {subMenu.label}
-                                                        </div>
-                                                    )}
-                                                    {subMenu.children && (
-                                                        <div className="mt-2 flex flex-col gap-2">
-                                                            {subMenu.children.map(
-                                                                renderChild,
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div ref={gnbRef}>
+                        <DesktopGNB
+                            currentNav={currentNav}
+                            hoveredNav={hoveredNav}
+                            setHoveredNav={setHoveredNav}
+                            isPathActive={isPathActive}
+                            stripHash={stripHash}
+                        />
                     </div>
                 )}
 
-            {/* 모바일 메뉴 */}
             {isMobileMenuOpen && (
-                <div
-                    ref={mobileMenuRef}
-                    className="absolute top-[64px] right-0 left-0 max-h-[calc(100vh-64px)] overflow-y-auto bg-white shadow-lg sm:hidden"
-                >
-                    <nav className="flex flex-col">
-                        {/* 역할 토글 버튼 (모바일) */}
-                        <div className="border-kua-gray200 bg-kua-gray50 flex items-center gap-2 border-b px-6 py-3">
-                            <button
-                                onClick={toggleRole}
-                                className="text-kua-gray800 hover:text-kua-main text-sm font-medium transition-colors"
-                            >
-                                {role === "admin"
-                                    ? "👤 관리자 모드"
-                                    : "👤 일반 사용자 모드"}
-                            </button>
-                            {role === "admin" && (
-                                <Link
-                                    href="/admin"
-                                    className="text-kua-gray800 hover:text-kua-main text-xs font-medium transition-colors"
-                                >
-                                    관리자 페이지
-                                </Link>
-                            )}
-                        </div>
-                        <div className="flex flex-col gap-6 px-5 py-6">
-                            <div className="flex flex-col gap-4 min-[380px]:flex-row">
-                                <div className="flex flex-col gap-2 min-[380px]:w-[130px]">
-                                    {navItems.map((item) => {
-                                        const isActiveMobile =
-                                            activeMobileNav === item.label;
-                                        return (
-                                            <button
-                                                key={item.label}
-                                                type="button"
-                                                onClick={() => {
-                                                    if (
-                                                        item.subMenus &&
-                                                        item.subMenus.length > 0
-                                                    ) {
-                                                        setActiveMobileNav(
-                                                            item.label,
-                                                        );
-                                                        setExpandedMobileSubMenus(
-                                                            {},
-                                                        );
-                                                    } else if (item.href) {
-                                                        setIsMobileMenuOpen(
-                                                            false,
-                                                        );
-                                                        router.push(item.href);
-                                                    }
-                                                }}
-                                                className={`rounded-[10px] px-4 py-3 text-left text-sm font-semibold transition-colors ${
-                                                    isActiveMobile
-                                                        ? "bg-kua-main text-white"
-                                                        : "bg-kua-gray100 text-kua-gray700 hover:bg-kua-main hover:text-white"
-                                                }`}
-                                            >
-                                                {item.label}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                                <div className="border-kua-gray100 flex flex-1 flex-col gap-4 border-l pl-0 min-[380px]:pl-4">
-                                    {(() => {
-                                        const currentMobileNav =
-                                            navItems.find(
-                                                (item) =>
-                                                    item.label ===
-                                                    activeMobileNav,
-                                            ) ?? navItems[0];
-
-                                        if (
-                                            !currentMobileNav.subMenus ||
-                                            currentMobileNav.subMenus.length ===
-                                                0
-                                        ) {
-                                            if (currentMobileNav.href) {
-                                                return (
-                                                    <Link
-                                                        href={
-                                                            currentMobileNav.href
-                                                        }
-                                                        onClick={() =>
-                                                            setIsMobileMenuOpen(
-                                                                false,
-                                                            )
-                                                        }
-                                                        className="text-kua-blue300 border-kua-main flex items-center gap-2 rounded-[10px] border px-4 py-3 text-sm font-semibold"
-                                                    >
-                                                        {currentMobileNav.label}{" "}
-                                                        바로가기
-                                                        <FaChevronRight className="text-xs" />
-                                                    </Link>
-                                                );
-                                            }
-                                            return (
-                                                <p className="text-kua-gray500 rounded-[10px] border border-dashed px-4 py-3 text-sm">
-                                                    표시할 메뉴가 없습니다.
-                                                </p>
-                                            );
-                                        }
-
-                                        return currentMobileNav.subMenus.map(
-                                            (subMenu) => {
-                                                const subKey = `${currentMobileNav.label}-${subMenu.label}`;
-                                                const children =
-                                                    subMenu.children ?? [];
-                                                const hasChildren =
-                                                    children.length > 0;
-                                                const isExpanded =
-                                                    expandedMobileSubMenus[
-                                                        subKey
-                                                    ] ?? false;
-                                                return (
-                                                    <div
-                                                        key={subMenu.label}
-                                                        className="border-kua-gray200 bg-kua-gray50 flex flex-col rounded-[14px] border px-4 py-3"
-                                                    >
-                                                        <div className="text-kua-gray900 flex items-center justify-between text-base font-semibold">
-                                                            <span>
-                                                                {subMenu.label}
-                                                            </span>
-                                                            {hasChildren &&
-                                                                subMenu.showChevron !==
-                                                                    false && (
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() =>
-                                                                            setExpandedMobileSubMenus(
-                                                                                (
-                                                                                    prev,
-                                                                                ) => ({
-                                                                                    ...prev,
-                                                                                    [subKey]:
-                                                                                        !prev[
-                                                                                            subKey
-                                                                                        ],
-                                                                                }),
-                                                                            )
-                                                                        }
-                                                                        className="text-kua-gray500 text-xs transition-transform"
-                                                                    >
-                                                                        <FaChevronDown
-                                                                            className={`transition-transform ${
-                                                                                isExpanded
-                                                                                    ? "rotate-180"
-                                                                                    : ""
-                                                                            }`}
-                                                                        />
-                                                                    </button>
-                                                                )}
-                                                        </div>
-                                                        {hasChildren &&
-                                                            isExpanded && (
-                                                                <div className="mt-2 flex flex-col gap-2 pl-2">
-                                                                    {children.map(
-                                                                        (
-                                                                            child,
-                                                                        ) =>
-                                                                            child.href ? (
-                                                                                <Link
-                                                                                    key={
-                                                                                        child.label
-                                                                                    }
-                                                                                    href={
-                                                                                        child.href
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        setIsMobileMenuOpen(
-                                                                                            false,
-                                                                                        )
-                                                                                    }
-                                                                                    className="text-kua-gray800 flex items-center gap-2 text-sm font-medium"
-                                                                                >
-                                                                                    <span className="text-kua-blue300">
-                                                                                        ·
-                                                                                    </span>
-                                                                                    {
-                                                                                        child.label
-                                                                                    }
-                                                                                </Link>
-                                                                            ) : (
-                                                                                <span
-                                                                                    key={
-                                                                                        child.label
-                                                                                    }
-                                                                                    className="text-kua-gray500 flex items-center gap-2 text-sm"
-                                                                                >
-                                                                                    <span>
-                                                                                        ·
-                                                                                    </span>
-                                                                                    {
-                                                                                        child.label
-                                                                                    }
-                                                                                </span>
-                                                                            ),
-                                                                    )}
-                                                                </div>
-                                                            )}
-                                                        {subMenu.href && (
-                                                            <Link
-                                                                href={
-                                                                    subMenu.href
-                                                                }
-                                                                onClick={() =>
-                                                                    setIsMobileMenuOpen(
-                                                                        false,
-                                                                    )
-                                                                }
-                                                                className="text-kua-blue300 mt-3 inline-flex items-center gap-1 text-sm font-semibold"
-                                                            >
-                                                                바로가기
-                                                                <FaChevronRight className="text-xs" />
-                                                            </Link>
-                                                        )}
-                                                    </div>
-                                                );
-                                            },
-                                        );
-                                    })()}
-                                </div>
-                            </div>
-                        </div>
-                    </nav>
+                <div ref={mobileMenuRef}>
+                    <MobileMenu
+                        navItems={navItems}
+                        activeMobileNav={activeMobileNav}
+                        setActiveMobileNav={setActiveMobileNav}
+                        expandedMobileSubMenus={expandedMobileSubMenus}
+                        setExpandedMobileSubMenus={setExpandedMobileSubMenus}
+                        setIsMobileMenuOpen={setIsMobileMenuOpen}
+                        user={user}
+                        onLogout={handleLogout}
+                        role={role}
+                        toggleRole={toggleRole}
+                    />
                 </div>
             )}
         </header>

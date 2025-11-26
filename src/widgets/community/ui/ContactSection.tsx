@@ -6,6 +6,7 @@ import { DataTable, type Column } from "@/shared/ui/DataTable";
 import { Pagination } from "@/shared/ui/Pagination";
 import { AdminSearchBar } from "@/shared/ui/SearchBar";
 import Image from "next/image";
+import { useUserRole, useUser } from "@/shared/lib/UserRoleContext";
 
 export type ContactPost = {
     id: number;
@@ -14,6 +15,7 @@ export type ContactPost = {
     createdAt: string;
     status: "답변 완료" | "답변 대기";
     isSecret: boolean;
+    loginId: string;
 };
 
 type ContactSectionProps = {
@@ -24,7 +26,7 @@ type ContactSectionProps = {
     pageSize?: number;
 };
 
-const columns: Column<ContactPost>[] = [
+const createColumns = (isAdmin: boolean): Column<ContactPost>[] => [
     {
         key: "title",
         header: "제목",
@@ -50,6 +52,7 @@ const columns: Column<ContactPost>[] = [
         ),
     },
     { key: "author", header: "작성자" },
+    ...(isAdmin ? [{ key: "loginId", header: "로그인ID" }] : []),
     { key: "createdAt", header: "작성일" },
     {
         key: "status",
@@ -76,6 +79,8 @@ export const ContactSection = ({
     pageSize = 15,
 }: ContactSectionProps) => {
     const router = useRouter();
+    const { isAdmin } = useUserRole();
+    const { user } = useUser();
     const [page, setPage] = useState(1);
     const [searchInput, setSearchInput] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
@@ -83,6 +88,7 @@ export const ContactSection = ({
         searchOptions?.[0] ?? "제목",
     );
 
+    // 목록에서는 모든 글을 표시 (클릭 시 권한 체크)
     const filteredData = useMemo(() => {
         if (!searchQuery.trim()) {
             return data;
@@ -92,6 +98,29 @@ export const ContactSection = ({
             item.title.toLowerCase().includes(lowerQuery),
         );
     }, [data, searchQuery]);
+
+    const columns = useMemo(() => createColumns(isAdmin), [isAdmin]);
+
+    // 행 클릭 핸들러 - 권한 체크
+    const handleRowClick = (row: ContactPost) => {
+        // 로그인하지 않은 경우 클릭 불가
+        if (!user) {
+            return;
+        }
+
+        // 관리자는 모든 글 접근 가능
+        if (isAdmin) {
+            router.push(`${detailBasePath}/${row.id}`);
+            return;
+        }
+
+        // 일반 사용자는 본인 글만 접근 가능
+        if (row.loginId === user.loginId) {
+            router.push(`${detailBasePath}/${row.id}`);
+        } else {
+            alert("본인이 작성한 문의글만 확인할 수 있습니다.");
+        }
+    };
 
     const paginationInfo = useMemo(() => {
         const totalItems = filteredData.length;
@@ -135,9 +164,7 @@ export const ContactSection = ({
                 <DataTable
                     columns={columns}
                     data={paginationInfo.visibleData}
-                    onRowClick={(row) =>
-                        router.push(`${detailBasePath}/${row.id}`)
-                    }
+                    onRowClick={handleRowClick}
                     rowClassName="hover:bg-kua-sky50"
                 />
 
