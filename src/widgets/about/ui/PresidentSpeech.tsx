@@ -4,19 +4,19 @@ export const PresidentSpeech = () => {
     return (
         <div
             id="president"
-            className="mx-auto flex w-full max-w-[1200px] flex-col items-start justify-center gap-10 pb-40"
+            className="mx-auto flex w-full max-w-[1200px] flex-col items-start justify-center gap-10 px-5 pb-20 sm:px-0 sm:pb-40"
         >
-            <p className="text-kua-darkblue800 text-[32px] font-bold">
+            <p className="text-kua-darkblue800 text-2xl font-bold sm:text-[32px]">
                 협회장 인사말
             </p>
-            <div className="flex items-center justify-center gap-20">
-                <div className="bg-kua-blue50 h-[636px] w-[536px] rounded-[40px] px-[36px] pt-12">
+            <div className="flex flex-col items-center justify-center gap-10 sm:flex-row sm:gap-20">
+                <div className="bg-kua-blue50 h-[380px] w-full rounded-2xl px-5 pt-8 sm:h-[636px] sm:w-[536px] sm:rounded-[40px] sm:px-[36px] sm:pt-12">
                     <div className="relative h-full w-full">
                         <div className="absolute top-0 left-0 flex flex-col">
-                            <p className="text-kua-main font-medium">
+                            <p className="text-kua-main text-sm font-medium sm:text-base">
                                 제15대 대한수중핀수영협회 회장
                             </p>
-                            <p className="text-kua-main text-[32px] font-bold">
+                            <p className="text-kua-main text-xl font-bold sm:text-[32px]">
                                 강철식
                             </p>
                         </div>
@@ -29,7 +29,7 @@ export const PresidentSpeech = () => {
                     </div>
                 </div>
                 <div className="flex flex-col items-start gap-9 py-[44px]">
-                    <p className="text-kua-darkblue800 text-xl font-bold">
+                    <p className="text-kua-darkblue800 text-lg font-bold sm:text-xl">
                         안녕하십니까.
                         <br />
                         대한수중핀수영협회 제15대 회장 강철식입니다.
@@ -79,7 +79,7 @@ export const PresidentSpeech = () => {
                             발전시키는 원동력이 됩니다.
                         </p>
                         <p className="text-kua-gray800 text-sm">감사합니다.</p>
-                        <div className="flex items-center justify-center gap-10">
+                        <div className="flex flex-col items-start gap-10 sm:flex-row sm:items-center">
                             <p className="text-kua-darkblue800 font-bold">
                                 사단법인 대한수중핀수영협회장 강철식
                             </p>

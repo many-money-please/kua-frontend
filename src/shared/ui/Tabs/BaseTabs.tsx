@@ -23,14 +23,14 @@ export const BaseTabs = ({ tabs, className = "" }: BaseTabsProps) => {
     const pathname = usePathname();
 
     return (
-        <div className={`flex gap-2 sm:gap-3 ${className}`}>
+        <div className={`tabs-scrollable flex gap-2 sm:gap-3 ${className}`}>
             {tabs.map((tab) => {
                 const isActive = pathname === tab.path;
                 return (
                     <Link
                         key={tab.path}
                         href={tab.path}
-                        className={`flex flex-1 items-center justify-center rounded-[10px] border px-3 py-5 text-sm font-medium transition-colors sm:px-6 sm:py-3 sm:text-lg ${
+                        className={`flex items-center justify-center rounded-[10px] border px-3 py-5 text-sm font-medium transition-colors sm:px-6 sm:py-3 sm:text-lg ${
                             isActive
                                 ? "border-kua-main text-kua-main hover:bg-kua-main bg-white font-bold hover:text-white"
                                 : "border-kua-gray200 bg-kua-gray100 text-kua-gray400 hover:border-kua-main hover:text-kua-main hover:bg-white"

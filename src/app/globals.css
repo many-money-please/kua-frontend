@@ -92,3 +92,27 @@ body {
     animation-play-state: paused;
   } 
   */
+
+/* 475px 이하에서만 탭 스크롤 활성화 */
+@media (max-width: 475px) {
+    .tabs-scrollable {
+        overflow-x: auto;
+    }
+
+    .tabs-scrollable > * {
+        flex-shrink: 0;
+        width: 80px; /* 각 탭의 일정한 너비 */
+        min-width: 80px;
+        max-width: 80px;
+    }
+}
+
+@media (min-width: 476px) {
+    .tabs-scrollable {
+        overflow-x: visible;
+    }
+
+    .tabs-scrollable > * {
+        flex: 1 1 0%;
+    }
+}

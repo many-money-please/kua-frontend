@@ -12,6 +12,9 @@ const tabs = [
 
 export const AboutTabs = () => {
     return (
-        <BaseTabs tabs={tabs} className="mx-auto w-full max-w-[1200px] py-20" />
+        <BaseTabs
+            tabs={tabs}
+            className="mx-auto w-full px-5 py-10 sm:max-w-[1200px] sm:px-0 sm:py-20"
+        />
     );
 };
