@@ -14,11 +14,13 @@ export default function DisclosureCreatePage() {
     };
 
     return (
-        <div className="bg-kua-gray100 h-full w-full px-8 py-16">
-            <div className="mx-auto flex max-w-[1200px] flex-col gap-10 pb-8">
-                <h1 className="text-3xl font-bold">경영공시 등록</h1>
+        <div className="bg-kua-gray100 h-full w-full px-5 py-8 sm:px-0 sm:py-16">
+            <div className="mx-auto flex max-w-[1200px] flex-col gap-6 pb-4 sm:gap-10 sm:pb-8">
+                <h1 className="text-2xl font-bold sm:text-3xl">
+                    경영공시 등록
+                </h1>
             </div>
-            <div className="bg-kua-white mx-auto flex max-w-[1200px] flex-col gap-10 px-8 py-8">
+            <div className="bg-kua-white mx-auto flex max-w-[1200px] flex-col gap-6 px-5 py-4 sm:gap-10 sm:px-8 sm:py-8">
                 <BasicPostCreate
                     onSubmit={handleSubmit}
                     titlePlaceholder="경영공시 제목을 입력하세요"

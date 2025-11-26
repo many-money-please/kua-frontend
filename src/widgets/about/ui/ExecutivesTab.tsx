@@ -183,7 +183,7 @@ export const ExecutivesTab = () => {
                 </div>
 
                 {/* 임원 카드 그리드 */}
-                <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-4">
                     {executivesData.map((executive) => (
                         <div key={executive.id} className="flex flex-col gap-4">
                             <div className="bg-kua-sky50 flex flex-col items-center rounded-[10px]">
