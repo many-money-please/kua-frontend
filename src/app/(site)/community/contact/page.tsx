@@ -9,6 +9,7 @@ const CONTACT_POSTS: ContactPost[] = [
         createdAt: "2025-12-20",
         status: "답변 완료",
         isSecret: true,
+        loginId: "user1",
     },
     {
         id: 2,
@@ -16,7 +17,8 @@ const CONTACT_POSTS: ContactPost[] = [
         author: "김**",
         createdAt: "2025-12-20",
         status: "답변 대기",
-        isSecret: false,
+        isSecret: true,
+        loginId: "user2",
     },
     {
         id: 3,
@@ -24,7 +26,8 @@ const CONTACT_POSTS: ContactPost[] = [
         author: "김**",
         createdAt: "2025-12-20",
         status: "답변 완료",
-        isSecret: false,
+        isSecret: true,
+        loginId: "user3",
     },
     {
         id: 4,
@@ -33,6 +36,7 @@ const CONTACT_POSTS: ContactPost[] = [
         createdAt: "2025-12-20",
         status: "답변 완료",
         isSecret: true,
+        loginId: "user1",
     },
     {
         id: 5,
@@ -41,6 +45,7 @@ const CONTACT_POSTS: ContactPost[] = [
         createdAt: "2025-12-20",
         status: "답변 대기",
         isSecret: true,
+        loginId: "user2",
     },
     {
         id: 6,
@@ -48,7 +53,8 @@ const CONTACT_POSTS: ContactPost[] = [
         author: "김**",
         createdAt: "2025-12-20",
         status: "답변 대기",
-        isSecret: false,
+        isSecret: true,
+        loginId: "user3",
     },
 
     {
@@ -58,6 +64,7 @@ const CONTACT_POSTS: ContactPost[] = [
         createdAt: "2025-12-20",
         status: "답변 완료",
         isSecret: true,
+        loginId: "user1",
     },
     {
         id: 9,
@@ -65,7 +72,8 @@ const CONTACT_POSTS: ContactPost[] = [
         author: "김**",
         createdAt: "2025-12-20",
         status: "답변 완료",
-        isSecret: false,
+        isSecret: true,
+        loginId: "user2",
     },
     {
         id: 10,
@@ -73,7 +81,8 @@ const CONTACT_POSTS: ContactPost[] = [
         author: "김**",
         createdAt: "2025-12-20",
         status: "답변 완료",
-        isSecret: false,
+        isSecret: true,
+        loginId: "user3",
     },
     {
         id: 11,
@@ -82,6 +91,7 @@ const CONTACT_POSTS: ContactPost[] = [
         createdAt: "2025-12-20",
         status: "답변 완료",
         isSecret: true,
+        loginId: "user1",
     },
     {
         id: 12,
@@ -89,7 +99,8 @@ const CONTACT_POSTS: ContactPost[] = [
         author: "김**",
         createdAt: "2025-12-20",
         status: "답변 완료",
-        isSecret: false,
+        isSecret: true,
+        loginId: "user2",
     },
     {
         id: 13,
@@ -97,7 +108,8 @@ const CONTACT_POSTS: ContactPost[] = [
         author: "김**",
         createdAt: "2025-12-20",
         status: "답변 완료",
-        isSecret: false,
+        isSecret: true,
+        loginId: "user3",
     },
     {
         id: 14,
@@ -105,7 +117,8 @@ const CONTACT_POSTS: ContactPost[] = [
         author: "김**",
         createdAt: "2025-12-20",
         status: "답변 완료",
-        isSecret: false,
+        isSecret: true,
+        loginId: "user1",
     },
     {
         id: 15,
@@ -113,7 +126,8 @@ const CONTACT_POSTS: ContactPost[] = [
         author: "김**",
         createdAt: "2025-12-20",
         status: "답변 완료",
-        isSecret: false,
+        isSecret: true,
+        loginId: "user2",
     },
     {
         id: 16,
@@ -121,7 +135,8 @@ const CONTACT_POSTS: ContactPost[] = [
         author: "김**",
         createdAt: "2025-12-20",
         status: "답변 완료",
-        isSecret: false,
+        isSecret: true,
+        loginId: "user3",
     },
     {
         id: 17,
@@ -129,7 +144,8 @@ const CONTACT_POSTS: ContactPost[] = [
         author: "김**",
         createdAt: "2025-12-20",
         status: "답변 완료",
-        isSecret: false,
+        isSecret: true,
+        loginId: "user1",
     },
     {
         id: 18,
@@ -137,7 +153,8 @@ const CONTACT_POSTS: ContactPost[] = [
         author: "김**",
         createdAt: "2025-12-20",
         status: "답변 완료",
-        isSecret: false,
+        isSecret: true,
+        loginId: "user2",
     },
     {
         id: 19,
@@ -145,7 +162,8 @@ const CONTACT_POSTS: ContactPost[] = [
         author: "김**",
         createdAt: "2025-12-20",
         status: "답변 완료",
-        isSecret: false,
+        isSecret: true,
+        loginId: "user3",
     },
     {
         id: 20,
@@ -153,7 +171,8 @@ const CONTACT_POSTS: ContactPost[] = [
         author: "김**",
         createdAt: "2025-12-20",
         status: "답변 완료",
-        isSecret: false,
+        isSecret: true,
+        loginId: "user1",
     },
 ];
 
