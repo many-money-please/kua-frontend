@@ -322,42 +322,49 @@ export const OrganizationTab = () => {
     };
 
     return (
-        <div className="w-full bg-white pb-[150px]">
-            <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-50">
+        <div className="w-full bg-white px-5 pb-16 sm:px-0 sm:pb-[150px]">
+            <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-20 sm:gap-50">
                 {/* 협회 조직도 섹션 */}
                 <div id="organization" className="flex w-full flex-col">
-                    <h2 className="text-kua-darkblue800 text-[32px] font-bold">
+                    <h2 className="text-kua-darkblue800 text-2xl font-bold sm:text-[32px]">
                         협회 조직도
                     </h2>
+                    <Image
+                        src="/imgs/organization/organization-2.png"
+                        alt="organization"
+                        width={900}
+                        height={1000}
+                        className="block w-full sm:hidden"
+                    />
                     <Image
                         src="/imgs/organization/organization.png"
                         alt="organization"
                         width={1200}
                         height={982}
-                        className="w-full"
+                        className="hidden w-full sm:block"
                     />
                 </div>
 
                 {/* 탭 테이블 섹션 */}
-                <div className="flex w-full flex-col">
+                <div className="flex w-full flex-col gap-5 sm:gap-0">
                     {/* 커스텀 탭 */}
-                    <div className="flex w-full gap-0">
+                    <div className="flex w-full gap-2 sm:gap-0">
                         <button
                             onClick={() => handleTabChange("committee")}
-                            className={`flex h-[60px] w-[350px] cursor-pointer items-center justify-center rounded-t-[10px] text-lg font-semibold transition-colors ${
+                            className={`flex h-[42px] w-[350px] cursor-pointer items-center justify-center rounded-t-[10px] rounded-b-[10px] text-lg font-semibold transition-colors sm:h-[60px] sm:rounded-b-none ${
                                 activeTab === "committee"
                                     ? "bg-kua-main text-white"
-                                    : "bg-kua-sky50 text-kua-gray600 border-kua-gray400 border"
+                                    : "bg-kua-sky50 text-kua-gray600 border-kua-gray400 hover:bg-kua-main text-kua-main border hover:text-white"
                             }`}
                         >
                             각종 위원회 소개
                         </button>
                         <button
                             onClick={() => handleTabChange("branch")}
-                            className={`flex h-[60px] w-[350px] cursor-pointer items-center justify-center rounded-t-[10px] text-lg font-semibold transition-colors ${
+                            className={`flex h-[42px] w-[350px] cursor-pointer items-center justify-center rounded-t-[10px] rounded-b-[10px] text-lg font-semibold transition-colors sm:h-[60px] sm:rounded-b-none ${
                                 activeTab === "branch"
                                     ? "bg-kua-main text-white"
-                                    : "bg-kua-sky50 text-kua-gray600 border-kua-gray400 border"
+                                    : "bg-kua-sky50 text-kua-gray600 border-kua-gray400 hover:bg-kua-main text-kua-main border hover:text-white"
                             }`}
                         >
                             시/도 지부 소개

@@ -117,11 +117,98 @@ export const DataTable = <T,>({
         return selectedCount > 0 && selectedCount < getCurrentPageRowIds.length;
     }, [getCurrentPageRowIds, selectedRowIds]);
 
+    // 행 데이터 값 가져오기
+    const getRowValue = (row: T, key: string): ReactNode => {
+        const column = columns.find((col) => col.key === key);
+        if (column?.accessor) {
+            return column.accessor(row);
+        }
+        return String((row as Record<string, unknown>)[key] ?? "") as ReactNode;
+    };
+
     return (
         <div
             className={`border-kua-main mb-4 w-full overflow-x-auto border-t-2 ${className}`}
         >
-            <table className="border-kua-gray200 w-full border-collapse border-x-0">
+            {/* 모바일 카드 뷰 */}
+            <div className="flex flex-col gap-5 sm:hidden">
+                {data.length === 0 ? (
+                    <div className="text-kua-gray400 border-kua-gray200 rounded-lg border px-4 py-8 text-center">
+                        {emptyMessage}
+                    </div>
+                ) : (
+                    data.map((row, rowIndex) => {
+                        const rowId = getRowUniqueId(row, rowIndex);
+                        const isSelected = selectedRowIds.has(rowId);
+                        return (
+                            <div
+                                key={rowId}
+                                onClick={(e) => {
+                                    if (
+                                        (e.target as HTMLElement).tagName !==
+                                        "INPUT"
+                                    ) {
+                                        onRowClick?.(row);
+                                    }
+                                }}
+                                className={`bg-white transition-colors ${
+                                    isSelected ? "bg-kua-sky50" : ""
+                                } ${
+                                    onRowClick
+                                        ? "hover:bg-kua-sky50 cursor-pointer"
+                                        : ""
+                                } ${rowClassName}`}
+                            >
+                                {canDelete && (
+                                    <div
+                                        className="mb-3 flex justify-start"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={isSelected}
+                                            onChange={(e) => {
+                                                e.stopPropagation();
+                                                handleSelectRow(
+                                                    rowId,
+                                                    e.target.checked,
+                                                );
+                                            }}
+                                            className="accent-kua-orange500 h-4.5 w-4.5 cursor-pointer"
+                                        />
+                                    </div>
+                                )}
+                                <div className="border-kua-main flex flex-col border-t-2">
+                                    {columns.map((column) => {
+                                        const value = getRowValue(
+                                            row,
+                                            column.key,
+                                        );
+                                        return (
+                                            <div
+                                                key={column.key}
+                                                className="border-kua-gray300 flex border-b"
+                                            >
+                                                <div className="bg-kua-blue50 text-kua-gray800 h-min-[58px] flex w-30 items-center justify-center rounded px-3 py-2 text-sm font-semibold">
+                                                    {column.header}
+                                                </div>
+                                                <div
+                                                    className={`flex flex-1 items-center justify-center px-3 py-1 text-base ${cellClassName} ${column.className || ""}`}
+                                                >
+                                                    {value}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    })
+                )}
+            </div>
+
+            {/* 데스크톱 테이블 뷰 */}
+            <table className="border-kua-gray200 hidden w-full border-collapse border-x-0 sm:table">
                 <thead>
                     <tr
                         className={`bg-kua-blue50 border-kua-gray200 border-b ${headerClassName}`}
