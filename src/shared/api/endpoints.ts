@@ -1,6 +1,5 @@
 /**
  * API 엔드포인트 상수
- * 로그인과 회원가입만 사용
  */
 
 export const API_ENDPOINTS = {
@@ -8,8 +7,12 @@ export const API_ENDPOINTS = {
         login: "/api/v1/auth/login",
         register: "/api/v1/auth/register",
         me: "/api/v1/auth/me",
+        logout: "/api/v1/auth/logout",
     },
     notice: {
         list: "/api/notices",
+        detail: (id: number) => `/api/notices/${id}`,
+        create: "/api/notices",
+        delete: (id: number) => `/api/notices/${id}`,
     },
 } as const;

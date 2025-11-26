@@ -49,6 +49,8 @@ export const CommunityTableSection = ({
 
     // 클라이언트 사이드 페이지네이션용 state
     const [clientPage, setClientPage] = useState(initialPage);
+    // 삭제된 항목 ID를 추적하여 테이블에서 즉시 제거
+    const [deletedIds, setDeletedIds] = useState<Set<number>>(new Set());
 
     // 서버 사이드 페이지네이션인 경우 initialPage 사용, 아니면 state 사용
     const page = serverTotalPages !== undefined ? initialPage : clientPage;
@@ -62,23 +64,35 @@ export const CommunityTableSection = ({
     );
 
     const filteredData = useMemo(() => {
+        // 삭제된 항목 제외
+        const filtered = data.filter((item) => !deletedIds.has(item.id));
+
         if (!searchQuery.trim()) {
-            return data;
+            return filtered;
         }
         const lowerQuery = searchQuery.toLowerCase();
-        return data.filter((item) =>
+        return filtered.filter((item) =>
             item.title.toLowerCase().includes(lowerQuery),
         );
-    }, [data, searchQuery]);
+    }, [data, searchQuery, deletedIds]);
 
     const paginationInfo = useMemo(() => {
         // 서버 사이드 페이지네이션인 경우
         if (serverTotalPages !== undefined) {
+            // 삭제된 항목을 제외한 데이터 사용
+            const visibleData = filteredData;
+            // 삭제된 항목 수만큼 totalCount 조정
+            const adjustedTotalCount =
+                (serverTotalCount ?? 0) - deletedIds.size;
+            const adjustedTotalPages = Math.max(
+                1,
+                Math.ceil(adjustedTotalCount / pageSize),
+            );
             return {
-                totalItems: serverTotalCount ?? data.length * serverTotalPages,
-                totalPages: serverTotalPages,
+                totalItems: adjustedTotalCount,
+                totalPages: adjustedTotalPages,
                 currentPage: page,
-                visibleData: data, // 서버에서 이미 페이지네이션된 데이터
+                visibleData,
             };
         }
 
@@ -98,7 +112,7 @@ export const CommunityTableSection = ({
         pageSize,
         serverTotalPages,
         serverTotalCount,
-        data,
+        deletedIds.size,
     ]);
 
     const handleSearch = () => {
@@ -137,15 +151,83 @@ export const CommunityTableSection = ({
                         onAdd={() => {
                             router.push(`${detailBasePath}/create`);
                         }}
-                        onDelete={() => {
-                            if (selectedRows.length > 0) {
+                        onDelete={async () => {
+                            if (selectedRows.length === 0) {
+                                alert("삭제할 항목을 선택해주세요.");
+                                return;
+                            }
+
+                            if (
+                                !confirm(
+                                    `선택한 ${selectedRows.length}개의 공지사항을 삭제하시겠습니까?`,
+                                )
+                            ) {
+                                return;
+                            }
+
+                            try {
                                 const selectedIds = selectedRows.map(
                                     (row) => row.id,
                                 );
-                                console.log("선택된 행들의 ID:", selectedIds);
-                                // TODO: 실제 삭제 로직 구현
-                            } else {
-                                console.log("선택된 행이 없습니다.");
+                                console.log(
+                                    "[공지사항 삭제] 선택된 ID들:",
+                                    selectedIds,
+                                );
+
+                                // 각 공지사항 삭제 API 호출
+                                const deletePromises = selectedIds.map(
+                                    async (id) => {
+                                        const response = await fetch(
+                                            `/api/community/notices/${id}`,
+                                            {
+                                                method: "DELETE",
+                                                credentials: "include",
+                                            },
+                                        );
+
+                                        if (!response.ok) {
+                                            const result =
+                                                await response.json();
+                                            throw new Error(
+                                                result.error ||
+                                                    `공지사항 ${id} 삭제 실패`,
+                                            );
+                                        }
+
+                                        return id;
+                                    },
+                                );
+
+                                await Promise.all(deletePromises);
+                                console.log(
+                                    "[공지사항 삭제] 성공:",
+                                    selectedIds.length,
+                                    "개 삭제됨",
+                                );
+
+                                // 삭제된 항목 ID를 추가하여 테이블에서 즉시 제거
+                                setDeletedIds((prev) => {
+                                    const newSet = new Set(prev);
+                                    selectedIds.forEach((id) => newSet.add(id));
+                                    return newSet;
+                                });
+
+                                // 삭제 성공 시 선택 초기화
+                                setSelectedRows([]);
+
+                                alert(
+                                    `${selectedIds.length}개의 공지사항이 삭제되었습니다.`,
+                                );
+
+                                // 페이지 새로고침하여 서버 컴포넌트 데이터 갱신
+                                router.refresh();
+                            } catch (error) {
+                                console.error("[공지사항 삭제] 에러:", error);
+                                alert(
+                                    error instanceof Error
+                                        ? error.message
+                                        : "공지사항 삭제에 실패했습니다.",
+                                );
                             }
                         }}
                         selectedCount={selectedRows.length}

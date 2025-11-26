@@ -1,97 +1,113 @@
 "use client";
 
-import { notFound, useParams } from "next/navigation";
+import { notFound, useParams, useRouter } from "next/navigation";
+import { useEffect, useState, useRef } from "react";
 import {
     DetailPage,
     type DetailPageData,
     type NavigationPost,
 } from "@/shared/ui/DetailPage";
 
-const NOTICE_DETAIL_DATA: Record<number, DetailPageData> = {
-    1: {
-        id: 1,
-        title: "2025년 정기 총회 안내",
-        registrationDate: "2025-01-15",
-        views: 312,
-        content: `
-            <p>대한수중핀수영협회 2025년 정기 총회 일정을 안내드립니다.</p>
-            <ul>
-                <li>일시: 2025년 2월 10일(월) 14:00</li>
-                <li>장소: 협회 대회의실</li>
-                <li>안건: 2024년 결산 및 2025년 사업 계획</li>
-            </ul>
-            <p>회원 여러분의 많은 관심과 참석 부탁드립니다.</p>
-        `,
-    },
-    2: {
-        id: 2,
-        title: "2025년 상반기 대회 일정 공지",
-        registrationDate: "2025-01-10",
-        views: 545,
-        content: `
-            <p>2025년 상반기 협회 주최 대회 일정을 공지드립니다.</p>
-            <p>세부 일정은 첨부 파일을 참고해주세요.</p>
-        `,
-        attachments: [{ name: "2025_상반기_대회일정.pdf", url: "#" }],
-    },
-    3: {
-        id: 3,
-        title: "협회 사무국 이전 안내",
-        registrationDate: "2025-01-05",
-        views: 198,
-        content: `
-            <p>협회 사무국이 2025년 1월 20일부터 새로운 주소에서 업무를 시작합니다.</p>
-            <p>새 주소: 서울특별시 송파구 올림픽로 424, 5층</p>
-        `,
-    },
-};
-
-const NOTICE_IDS = Object.keys(NOTICE_DETAIL_DATA)
-    .map((key) => Number(key))
-    .sort((a, b) => a - b);
-
-const getDummyNavigation = (
-    id: number,
-): {
-    prev: NavigationPost | null;
-    next: NavigationPost | null;
-} => {
-    const currentIndex = NOTICE_IDS.indexOf(id);
-
-    return {
-        prev:
-            currentIndex > 0
-                ? {
-                      id: NOTICE_IDS[currentIndex - 1],
-                      title: NOTICE_DETAIL_DATA[NOTICE_IDS[currentIndex - 1]]
-                          .title,
-                      date: NOTICE_DETAIL_DATA[NOTICE_IDS[currentIndex - 1]]
-                          .registrationDate,
-                  }
-                : null,
-        next:
-            currentIndex < NOTICE_IDS.length - 1
-                ? {
-                      id: NOTICE_IDS[currentIndex + 1],
-                      title: NOTICE_DETAIL_DATA[NOTICE_IDS[currentIndex + 1]]
-                          .title,
-                      date: NOTICE_DETAIL_DATA[NOTICE_IDS[currentIndex + 1]]
-                          .registrationDate,
-                  }
-                : null,
-    };
-};
-
 export default function CommunityNoticeDetailPage() {
     const params = useParams<{ id: string }>();
-    const numericId = Number(params.id);
-    const data = NOTICE_DETAIL_DATA[numericId];
+    const router = useRouter();
+    const id = params.id as string;
+    const [data, setData] = useState<DetailPageData | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [navigation, setNavigation] = useState<{
+        prev: NavigationPost | null;
+        next: NavigationPost | null;
+    }>({ prev: null, next: null });
+    const hasFetchedRef = useRef<string | null>(null); // 중복 호출 방지 (id별로)
+
+    useEffect(() => {
+        // 이미 같은 id로 호출했으면 다시 호출하지 않음 (Strict Mode 대응)
+        if (hasFetchedRef.current === id) {
+            return;
+        }
+
+        const fetchNoticeDetail = async () => {
+            try {
+                hasFetchedRef.current = id; // 호출 시작 표시
+                setLoading(true);
+                console.log("[공지사항 상세페이지] API 호출 시작, ID:", id);
+
+                const response = await fetch(`/api/community/notices/${id}`, {
+                    credentials: "include",
+                });
+
+                console.log(
+                    "[공지사항 상세페이지] 응답 상태:",
+                    response.status,
+                );
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        // 삭제된 게시글인 경우 메시지 표시 후 목록으로 이동
+                        alert("해당 게시글은 삭제되었습니다.");
+                        router.push("/community/notices");
+                        router.refresh();
+                        return;
+                    }
+                    throw new Error(
+                        `공지사항을 가져오는데 실패했습니다: ${response.status}`,
+                    );
+                }
+
+                const result = await response.json();
+                console.log("[공지사항 상세페이지] 응답 데이터:", result);
+
+                // 백엔드 응답을 DetailPageData 형식으로 변환
+                // TODO: 백엔드 응답 구조에 맞게 수정 필요
+                const detailData: DetailPageData = {
+                    id: result.id || Number(id),
+                    title: result.title || "",
+                    registrationDate:
+                        result.createdAt || result.registrationDate || "",
+                    views: result.hit || result.views || 0,
+                    isSecret: result.isSecret || false,
+                    content: result.content || "",
+                    attachments: result.attachments || [],
+                    images: result.images || [],
+                };
+
+                setData(detailData);
+
+                // 네비게이션은 목록에서 가져와야 하므로 일단 null로 설정
+                // TODO: 목록 API에서 이전/다음 글 정보를 가져오도록 구현
+                setNavigation({ prev: null, next: null });
+            } catch (error) {
+                console.error("[공지사항 상세페이지] 에러:", error);
+                hasFetchedRef.current = null; // 에러 시 다시 시도 가능하도록
+                notFound();
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (id) {
+            fetchNoticeDetail();
+        }
+
+        // cleanup: id가 변경되면 ref 리셋
+        return () => {
+            if (hasFetchedRef.current === id) {
+                hasFetchedRef.current = null;
+            }
+        };
+    }, [id]);
+
+    if (loading) {
+        return (
+            <div className="mx-auto flex w-full max-w-[1200px] items-center justify-center px-5 py-16">
+                <div className="text-center">로딩 중...</div>
+            </div>
+        );
+    }
 
     if (!data) {
         notFound();
     }
-
-    const navigation = getDummyNavigation(numericId);
 
     return (
         <DetailPage
@@ -100,6 +116,7 @@ export default function CommunityNoticeDetailPage() {
             navigation={navigation}
             listUrl="/community/notices"
             detailUrlPattern={(id) => `/community/notices/${id}`}
+            editUrl={`/community/notices/edit/${id}`}
         />
     );
 }
