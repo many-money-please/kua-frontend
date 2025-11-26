@@ -21,9 +21,7 @@ export const RegisterForm = () => {
         name: "",
         password: "",
         passwordConfirm: "",
-        birthYear: "",
-        birthMonth: "",
-        birthDay: "",
+        birthDate: "",
         phoneNumber: "",
         email: "",
         emailDomain: "",
@@ -67,8 +65,14 @@ export const RegisterForm = () => {
             return;
         }
 
-        if (!formData.birthYear || !formData.birthMonth || !formData.birthDay) {
-            setError("생년월일을 모두 입력해주세요.");
+        if (!formData.birthDate) {
+            setError("생년월일을 입력해주세요.");
+            return;
+        }
+
+        // 생년월일 형식 검증 (8자리 숫자)
+        if (!/^\d{8}$/.test(formData.birthDate)) {
+            setError("생년월일을 8자리 숫자로 입력해주세요. (YYYYMMDD)");
             return;
         }
 
@@ -83,8 +87,11 @@ export const RegisterForm = () => {
             return;
         }
 
-        // 생년월일 형식 변환 (YYYY-MM-DD)
-        const birthDate = `${formData.birthYear}-${formData.birthMonth.padStart(2, "0")}-${formData.birthDay.padStart(2, "0")}`;
+        // 생년월일 파싱 (YYYYMMDD -> YYYY-MM-DD)
+        const birthYear = formData.birthDate.slice(0, 4);
+        const birthMonth = formData.birthDate.slice(4, 6);
+        const birthDay = formData.birthDate.slice(6, 8);
+        const formattedBirthDate = `${birthYear}-${birthMonth}-${birthDay}`;
 
         // 이메일 합치기
         const fullEmail = `${formData.email}@${formData.emailDomain}`;
@@ -95,7 +102,7 @@ export const RegisterForm = () => {
             formDataToSend.append("name", formData.name);
             formDataToSend.append("password", formData.password);
             formDataToSend.append("phoneNumber", formData.phoneNumber);
-            formDataToSend.append("birthDate", birthDate);
+            formDataToSend.append("birthDate", formattedBirthDate);
             formDataToSend.append("email", fullEmail);
 
             const result = await register(formDataToSend);
@@ -465,58 +472,23 @@ export const RegisterForm = () => {
 
                             {/* 생년월일 */}
                             <div className="border-kua-gray300 flex h-[60px] flex-1 items-center border-b 2xl:h-full 2xl:border-b-0">
-                                {/* 변경점 적용 */}
                                 <label className="bg-kua-blue50 text-kua-gray800 flex h-full w-[100px] shrink-0 items-center justify-center px-2 text-sm font-medium 2xl:w-[200px] 2xl:px-4 2xl:text-lg">
                                     생년월일
                                 </label>
-                                <div className="flex h-full min-w-0 flex-1 items-center gap-2 p-2 2xl:p-4">
+                                <div className="flex h-full min-w-0 flex-1 items-center p-2 2xl:p-4">
                                     <input
                                         type="text"
-                                        value={formData.birthYear}
+                                        value={formData.birthDate}
                                         onChange={(e) =>
                                             setFormData({
                                                 ...formData,
-                                                birthYear: e.target.value
+                                                birthDate: e.target.value
                                                     .replace(/[^0-9]/g, "")
-                                                    .slice(0, 4),
+                                                    .slice(0, 8),
                                             })
                                         }
-                                        placeholder="년(4자)"
-                                        className="border-kua-gray400 focus:border-kua-main h-full min-w-0 flex-1 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
-                                    />
-                                    <span className="text-kua-gray800 shrink-0">
-                                        -
-                                    </span>
-                                    <input
-                                        type="text"
-                                        value={formData.birthMonth}
-                                        onChange={(e) =>
-                                            setFormData({
-                                                ...formData,
-                                                birthMonth: e.target.value
-                                                    .replace(/[^0-9]/g, "")
-                                                    .slice(0, 2),
-                                            })
-                                        }
-                                        placeholder="월(2자)"
-                                        className="border-kua-gray400 focus:border-kua-main h-full min-w-0 flex-1 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
-                                    />
-                                    <span className="text-kua-gray800 shrink-0">
-                                        -
-                                    </span>
-                                    <input
-                                        type="text"
-                                        value={formData.birthDay}
-                                        onChange={(e) =>
-                                            setFormData({
-                                                ...formData,
-                                                birthDay: e.target.value
-                                                    .replace(/[^0-9]/g, "")
-                                                    .slice(0, 2),
-                                            })
-                                        }
-                                        placeholder="일(2자)"
-                                        className="border-kua-gray400 focus:border-kua-main h-full min-w-0 flex-1 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
+                                        placeholder="YYYYMMDD (8자리)"
+                                        className="border-kua-gray400 focus:border-kua-main h-full w-full min-w-0 rounded-[8px] border px-4 py-3 text-sm outline-none sm:text-base"
                                     />
                                 </div>
                             </div>
