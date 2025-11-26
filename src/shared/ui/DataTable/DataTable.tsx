@@ -128,7 +128,7 @@ export const DataTable = <T,>({
 
     return (
         <div
-            className={`border-kua-main mb-4 w-full overflow-x-auto border-t-2 ${className}`}
+            className={`border-kua-main mb-4 w-full overflow-x-auto border-t-0 sm:border-t-2 ${className}`}
         >
             {/* 모바일 카드 뷰 */}
             <div className="flex flex-col gap-5 sm:hidden">
