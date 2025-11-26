@@ -11,10 +11,5 @@ const tabs = [
 ];
 
 export const AboutTabs = () => {
-    return (
-        <BaseTabs
-            tabs={tabs}
-            className="tabs-scrollable mx-auto w-full max-w-[1200px]"
-        />
-    );
+    return <BaseTabs tabs={tabs} className="mx-auto w-full max-w-[1200px]" />;
 };

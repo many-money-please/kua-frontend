@@ -115,7 +115,7 @@ export const ContactSection = ({
     };
 
     return (
-        <section className="flex w-full flex-col">
+        <section className="flex w-full flex-col px-5 sm:px-0">
             <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 pb-[150px]">
                 <div className="flex flex-col gap-2">
                     <span className="text-lg font-bold">{title}</span>
