@@ -270,6 +270,10 @@ const navItems: NavItem[] = [
                         href: "/community/news-and-activities",
                     },
                     {
+                        label: "포토갤러리",
+                        href: "/community/photo-gallery",
+                    },
+                    {
                         label: "보도자료",
                         href: "/community/press-release",
                     },
@@ -495,6 +499,14 @@ export const Header = () => {
                     >
                         {role === "admin" ? "👤 관리자" : "👤 일반"}
                     </button>
+                    {role === "admin" && (
+                        <Link
+                            href="/admin"
+                            className="text-kua-gray800 hover:text-kua-main text-xs font-medium transition-colors"
+                        >
+                            관리자 페이지
+                        </Link>
+                    )}
                     {navItems.map((item) => {
                         const isHovered = hoveredNav === item.label;
                         const hasSubMenus =
@@ -792,7 +804,7 @@ export const Header = () => {
                 >
                     <nav className="flex flex-col">
                         {/* 역할 토글 버튼 (모바일) */}
-                        <div className="border-kua-gray200 bg-kua-gray50 border-b px-6 py-3">
+                        <div className="border-kua-gray200 bg-kua-gray50 flex items-center gap-2 border-b px-6 py-3">
                             <button
                                 onClick={toggleRole}
                                 className="text-kua-gray800 hover:text-kua-main text-sm font-medium transition-colors"
@@ -801,6 +813,14 @@ export const Header = () => {
                                     ? "👤 관리자 모드"
                                     : "👤 일반 사용자 모드"}
                             </button>
+                            {role === "admin" && (
+                                <Link
+                                    href="/admin"
+                                    className="text-kua-gray800 hover:text-kua-main text-xs font-medium transition-colors"
+                                >
+                                    관리자 페이지
+                                </Link>
+                            )}
                         </div>
                         <div className="flex flex-col gap-6 px-5 py-6">
                             <div className="flex flex-col gap-4 min-[380px]:flex-row">

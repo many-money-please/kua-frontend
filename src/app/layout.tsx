@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Header } from "@/widgets/header";
-import { Footer } from "@/widgets/footer";
-import { ScrollToTopButton } from "@/widgets/common";
 import Script from "next/script";
 import { UserRoleProvider } from "@/shared/lib/UserRoleContext";
 
@@ -72,12 +69,7 @@ export default function RootLayout({
                     src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false`}
                     strategy="beforeInteractive"
                 />
-                <UserRoleProvider>
-                    <Header />
-                    {children}
-                    <ScrollToTopButton />
-                    <Footer />
-                </UserRoleProvider>
+                <UserRoleProvider>{children}</UserRoleProvider>
             </body>
         </html>
     );
