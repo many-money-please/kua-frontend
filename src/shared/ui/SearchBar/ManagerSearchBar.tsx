@@ -26,8 +26,8 @@ export const ManagerSearchBar = ({
     placeholder = "검색어를 입력하세요",
 }: ManagerSearchBarProps) => {
     return (
-        <div className="flex h-[40px] items-center justify-between">
-            <div className="flex h-full items-center gap-4">
+        <div className="flex flex-col gap-2 sm:h-[40px] sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <div className="flex h-full flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
                 {searchOptions.length > 1 && (
                     <select
                         value={searchOption}
@@ -51,7 +51,7 @@ export const ManagerSearchBar = ({
                             onSearch();
                         }
                     }}
-                    className="bg-kua-gray100 text-kua-gray400 h-full w-64 rounded-lg px-4 py-2"
+                    className="bg-kua-gray100 text-kua-gray400 h-full w-full rounded-lg px-4 py-2 sm:w-64"
                 />
                 <button
                     type="button"
