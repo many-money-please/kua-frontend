@@ -50,9 +50,18 @@ const navItems: NavItem[] = [
                 href: "/about/organization",
                 showChevron: true,
                 children: [
-                    { label: "협회 조직도" },
-                    { label: "각종 위원회" },
-                    { label: "시/도 지부 소개" },
+                    {
+                        label: "협회 조직도",
+                        href: "/about/organization#organization",
+                    },
+                    {
+                        label: "각종 위원회",
+                        href: "/about/organization#committees",
+                    },
+                    {
+                        label: "시/도 지부 소개",
+                        href: "/about/organization#branches",
+                    },
                 ],
             },
             { label: "임원현황", href: "/about/executives", showChevron: true },
@@ -321,12 +330,20 @@ export const Header = () => {
             setCurrentHash(window.location.hash ?? "");
         };
 
+        // 초기 hash 설정
         updateHash();
+
+        // hash 변경 감지
         window.addEventListener("hashchange", updateHash);
+
+        // 같은 페이지 내에서 hash 변경을 감지하기 위한 polling
+        const interval = setInterval(updateHash, 100);
+
         return () => {
             window.removeEventListener("hashchange", updateHash);
+            clearInterval(interval);
         };
-    }, []);
+    }, [pathname]); // pathname이 변경될 때도 hash를 다시 확인
 
     const isPathActive = (href?: string, exactMatch = false) => {
         const baseHref = stripHash(href);
@@ -335,8 +352,16 @@ export const Header = () => {
             return pathname === "/";
         }
 
+        // 특정 경로들(/about, /competition-info, /community)은 항상 exactMatch가 필요
+        const requiresExactMatch =
+            baseHref === "/about" ||
+            baseHref === "/competition-info" ||
+            baseHref === "/community";
+
+        const shouldExactMatch = exactMatch || requiresExactMatch;
+
         // exactMatch가 true이면 정확히 일치할 때만 활성화
-        if (exactMatch) {
+        if (shouldExactMatch) {
             if (pathname !== baseHref) return false;
         } else {
             const baseMatched =
@@ -449,15 +474,36 @@ export const Header = () => {
                             item.subMenus && item.subMenus.length > 0;
 
                         // 메인 네비게이션 항목 활성화 확인
-                        // /about 경로의 경우 정확히 일치할 때만 활성화
-                        const shouldExactMatchForMainNav =
-                            item.href === "/about";
-                        const isMainNavActive = item.href
-                            ? isPathActive(
-                                  item.href,
-                                  shouldExactMatchForMainNav,
-                              )
-                            : false;
+                        // subMenus가 있는 경우: subMenus 중 하나라도 활성화되면 메인 항목도 활성화
+                        // subMenus가 없는 경우: 메인 href와 경로 매칭
+                        let isMainNavActive = false;
+                        if (hasSubMenus && item.subMenus) {
+                            // subMenus 또는 그 children 중 하나라도 활성화되면 메인 항목도 활성화
+                            isMainNavActive = item.subMenus.some((subMenu) => {
+                                // subMenu 자체가 활성화되거나
+                                const subMenuActive = subMenu.href
+                                    ? isPathActive(subMenu.href)
+                                    : false;
+
+                                // subMenu의 children 중 하나가 활성화되면
+                                const hasChildActive =
+                                    subMenu.children?.some(
+                                        (child) =>
+                                            child.href &&
+                                            isPathActive(child.href),
+                                    ) ?? false;
+
+                                return subMenuActive || hasChildActive;
+                            });
+                        } else if (item.href) {
+                            // subMenus가 없는 경우: /about은 정확히 일치할 때만, 나머지는 하위 경로 포함
+                            const shouldExactMatchForMainNav =
+                                item.href === "/about";
+                            isMainNavActive = isPathActive(
+                                item.href,
+                                shouldExactMatchForMainNav,
+                            );
+                        }
 
                         const handleNavClick = () => {
                             if (hasSubMenus) {
@@ -553,8 +599,12 @@ export const Header = () => {
                                             // 1. 자신의 children 중 하나가 활성화되어야 함
                                             // 2. 또는 정확히 경로가 일치 (특히 /about은 정확히 일치할 때만)
                                             // /about 경로의 경우 정확히 일치해야 하므로 exactMatch 사용
+                                            // 근데 이거 competition-info랑 about,community 추가로 추가해야함
                                             const shouldExactMatch =
-                                                subMenu.href === "/about";
+                                                subMenu.href ===
+                                                    "/competition-info" ||
+                                                subMenu.href === "/about" ||
+                                                subMenu.href === "/community";
                                             const isSubMenuActive =
                                                 Boolean(hasChildActive) ||
                                                 (subMenu.href &&
