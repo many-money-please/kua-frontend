@@ -26,9 +26,9 @@ export const AdminSearchBar = ({
     buttonText,
 }: AdminSearchBarProps) => {
     return (
-        <div className="flex h-[40px] items-center justify-between">
-            <div className="flex h-full w-full items-center justify-between">
-                <div className="flex h-full items-center gap-2">
+        <div className="flex h-full flex-col items-center justify-between sm:h-[40px] sm:flex-row">
+            <div className="flex h-full w-full items-end gap-5 sm:items-center sm:justify-between">
+                <div className="flex h-full flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
                     {searchOptions.length > 1 && (
                         <select
                             value={searchOption}
@@ -54,7 +54,7 @@ export const AdminSearchBar = ({
                                 onSearch();
                             }
                         }}
-                        className="bg-kua-gray100 text-kua-gray400 h-full w-64 rounded-lg px-4 py-2"
+                        className="bg-kua-gray100 text-kua-gray400 h-full w-full rounded-lg px-4 py-2 sm:w-64"
                     />
                     <button
                         type="button"

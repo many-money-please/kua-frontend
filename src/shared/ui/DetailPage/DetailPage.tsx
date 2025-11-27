@@ -5,6 +5,9 @@ import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import Image from "next/image";
 import { useState } from "react";
 import { useUserRole } from "@/shared/lib/UserRoleContext";
+import "suneditor/dist/css/suneditor.min.css";
+// suneditor 콘텐츠 표시용 CSS (에디터와 동일한 스타일 적용)
+import "suneditor/src/assets/css/suneditor-contents.css";
 
 export type DetailPageData = {
     id: number;
@@ -34,6 +37,7 @@ type DetailPageProps = {
     detailUrlPattern: (id: number) => string;
     isContactInquiry?: boolean;
     isSecret?: boolean;
+    editUrl?: string; // 수정 페이지 URL (관리자용)
 };
 
 export const DetailPage = ({
@@ -44,6 +48,7 @@ export const DetailPage = ({
     detailUrlPattern,
     isContactInquiry,
     isSecret,
+    editUrl,
 }: DetailPageProps) => {
     const router = useRouter();
     const { isAdmin } = useUserRole();
@@ -92,28 +97,43 @@ export const DetailPage = ({
     };
 
     return (
-        <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-12 py-16">
-            <div className="flex items-center gap-3">
-                {isContactInquiry && isSecret && (
-                    <Image
-                        src="/imgs/community/lock-small.svg"
-                        alt="비밀글"
-                        width={20}
-                        height={21.45}
-                    />
+        <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-5 py-8 sm:gap-12 sm:px-0 sm:py-16">
+            <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                    {isContactInquiry && isSecret && (
+                        <Image
+                            src="/imgs/community/lock-small.svg"
+                            alt="비밀글"
+                            width={20}
+                            height={21.45}
+                        />
+                    )}
+                    <h1 className="text-2xl font-bold sm:text-[32px]">
+                        {pageTitle}
+                    </h1>
+                </div>
+                {isAdmin && editUrl && (
+                    <button
+                        onClick={() => router.push(editUrl)}
+                        className="bg-kua-blue300 hover:bg-kua-blue500 cursor-pointer rounded px-4 py-2 text-white"
+                    >
+                        수정
+                    </button>
                 )}
-                <h1 className="text-[32px] font-bold">{pageTitle}</h1>
             </div>
             <div className="border-t-kua-main border-b-kua-gray300 flex flex-col gap-4 border-t-2 border-b py-4">
-                <h2 className="text-2xl font-semibold">{data.title}</h2>
-                <div className="flex items-center gap-4 text-lg">
+                <h2 className="text-xl font-semibold sm:text-2xl">
+                    {data.title}
+                </h2>
+                <div className="flex items-center gap-4 text-sm sm:text-lg">
                     <div>등록일: {data.registrationDate}</div>
                     <div>조회수 {data.views.toLocaleString()}</div>
                 </div>
             </div>
             <div className="flex flex-col gap-8">
+                {/* suneditor로 작성된 HTML 콘텐츠 표시 - 에디터와 동일한 스타일 */}
                 <div
-                    className="[&_a]:text-kua-blue300 min-h-[200px] text-xl [&_a]:underline [&_br]:mb-2 [&_div]:mb-4 [&_p]:mb-4 [&_p]:leading-relaxed [&_strong]:font-semibold"
+                    className="sun-editor-editable se-component-content"
                     dangerouslySetInnerHTML={{ __html: data.content }}
                 />
 
@@ -267,12 +287,14 @@ export const DetailPage = ({
                     >
                         <div className="flex items-center gap-8">
                             <FaChevronUp className="text-kua-gray800" />
-                            <div className="text-lg font-bold">이전글</div>
-                            <div className="text-kua-gray800 text-xl">
+                            <div className="text-base font-bold sm:text-lg">
+                                이전글
+                            </div>
+                            <div className="text-kua-gray800 text-base sm:text-xl">
                                 {navigation.prev.title}
                             </div>
                         </div>
-                        <div className="text-kua-gray800 text-lg">
+                        <div className="text-kua-gray800 text-base sm:text-lg">
                             {navigation.prev.date}
                         </div>
                     </div>
@@ -286,12 +308,14 @@ export const DetailPage = ({
                     >
                         <div className="flex items-center gap-8">
                             <FaChevronDown className="text-kua-gray800" />
-                            <div className="text-lg font-bold">다음글</div>
-                            <div className="text-kua-gray800 text-xl">
+                            <div className="text-base font-bold sm:text-lg">
+                                다음글
+                            </div>
+                            <div className="text-kua-gray800 sm:text- xl text-base">
                                 {navigation.next.title}
                             </div>
                         </div>
-                        <div className="text-kua-gray800 text-lg">
+                        <div className="text-kua-gray800 text-base sm:text-lg">
                             {navigation.next.date}
                         </div>
                     </div>
@@ -299,10 +323,10 @@ export const DetailPage = ({
             </div>
 
             {/* 목록 버튼 */}
-            <div className="flex w-full items-center justify-center py-8">
+            <div className="flex w-full items-center justify-center py-4 sm:py-8">
                 <button
                     onClick={handleListClick}
-                    className="border-kua-main hover:bg-kua-main mx-auto w-32 cursor-pointer rounded-sm border py-2 text-center transition-colors hover:text-white"
+                    className="border-kua-main hover:bg-kua-main mx-auto w-full cursor-pointer rounded-sm border py-2 text-center transition-colors hover:text-white sm:w-32"
                 >
                     목록
                 </button>

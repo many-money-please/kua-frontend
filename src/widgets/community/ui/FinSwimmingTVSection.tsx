@@ -131,7 +131,7 @@ export const FinSwimmingTVSection = ({
     };
 
     return (
-        <section className="mb-12 flex w-full max-w-[1200px] flex-col gap-6 pb-[150px]">
+        <section className="mb-12 flex w-full max-w-[1200px] flex-col gap-6 px-5 pb-16 sm:px-0 sm:pb-[150px]">
             {/* 헤더 영역 */}
             <div className="flex flex-col gap-2">
                 <span className="text-lg font-bold">{title}</span>

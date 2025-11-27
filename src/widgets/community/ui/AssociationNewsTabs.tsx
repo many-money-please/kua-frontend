@@ -29,7 +29,5 @@ export const AssociationNewsTabs = () => {
         return null;
     }
 
-    return (
-        <BaseTabs tabs={tabs} className="mx-auto w-full max-w-[1200px] py-20" />
-    );
+    return <BaseTabs tabs={tabs} className="mx-auto w-full max-w-[1200px]" />;
 };

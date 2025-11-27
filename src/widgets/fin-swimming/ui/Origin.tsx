@@ -2,10 +2,12 @@ import Image from "next/image";
 
 export const Origin = () => {
     return (
-        <>
+        <div className="flex flex-col gap-5 px-5 sm:gap-32">
             <div className="mx-auto w-full max-w-[1200px]">
-                <h2 className="mb-4 text-[32px] font-bold">핀수영의 유래</h2>
-                <p className="text-kua-gray600 text-2xl leading-relaxed">
+                <h2 className="text-kua-gray800 mb-4 text-xl font-bold sm:text-[32px]">
+                    핀수영의 유래
+                </h2>
+                <p className="text-kua-gray400 text-sm leading-relaxed sm:text-2xl">
                     핀수영은 수중에서 핀을 이용해 빠르게 이동하는 스포츠로,
                     <br />
                     자유형보다 약 1.3배 빠른 속도와 돌고래 같은 역동적 움직임을
@@ -22,6 +24,6 @@ export const Origin = () => {
                     className="object-cover"
                 />
             </div>
-        </>
+        </div>
     );
 };

@@ -1,9 +1,14 @@
 "use client";
 
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+
 type PaginationProps = {
     currentPage: number;
     totalPages: number;
-    onPageChange: (page: number) => void;
+    onPageChange?: (page: number) => void; // 클라이언트 사이드 페이지네이션용
+    // 서버 사이드 페이지네이션 옵션
+    serverSide?: boolean; // 서버 사이드 페이지네이션 사용 여부
+    basePath?: string; // 서버 사이드인 경우 URL 업데이트할 기본 경로 (없으면 현재 경로 사용)
 };
 
 const createPageArray = (totalPages: number) => {
@@ -14,7 +19,13 @@ export const Pagination = ({
     currentPage,
     totalPages,
     onPageChange,
+    serverSide = false,
+    basePath,
 }: PaginationProps) => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+
     if (totalPages <= 1) {
         return null;
     }
@@ -23,7 +34,22 @@ export const Pagination = ({
 
     const goToPage = (page: number) => {
         const nextPage = Math.min(Math.max(page, 1), totalPages);
-        if (nextPage !== currentPage) {
+        if (nextPage === currentPage) {
+            return;
+        }
+
+        // 서버 사이드 페이지네이션인 경우 URL 업데이트
+        if (serverSide) {
+            const params = new URLSearchParams(searchParams.toString());
+            if (nextPage === 1) {
+                params.delete("page"); // 첫 페이지는 파라미터 제거
+            } else {
+                params.set("page", nextPage.toString());
+            }
+            const targetPath = basePath || pathname;
+            router.push(`${targetPath}?${params.toString()}`);
+        } else if (onPageChange) {
+            // 클라이언트 사이드 페이지네이션인 경우 콜백 호출
             onPageChange(nextPage);
         }
     };

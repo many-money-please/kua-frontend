@@ -171,14 +171,14 @@ export const History = () => {
 
     return (
         <div id="history" className="bg-kua-sky50 w-full">
-            <div className="mx-auto flex w-full max-w-[1200px] items-start justify-center gap-25 py-44">
+            <div className="mx-auto flex w-full max-w-[1200px] flex-col items-start justify-center gap-10 px-5 py-20 sm:flex-row sm:gap-25 sm:px-0 sm:py-44">
                 {/* 왼쪽 기간 선택 버튼 */}
-                <div className="flex w-[300px] flex-col gap-3">
+                <div className="grid w-full grid-cols-2 gap-3 sm:w-[300px] sm:grid-cols-1">
                     {periods.map((period) => (
                         <button
                             key={period}
                             onClick={() => setActivePeriod(period)}
-                            className={`flex h-[80px] cursor-pointer items-center justify-between rounded-[10px] px-8 text-2xl font-bold transition-all ${
+                            className={`flex h-[60px] cursor-pointer items-center justify-between rounded-[10px] px-8 text-lg font-bold transition-all sm:h-[80px] sm:text-2xl ${
                                 activePeriod === period
                                     ? "bg-kua-main text-white"
                                     : "border-kua-main text-kua-main hover:bg-kua-main border bg-white hover:text-white"
@@ -220,21 +220,21 @@ export const History = () => {
                             ].map((yearData, yearIndex) => (
                                 <div
                                     key={yearIndex}
-                                    className="border-b-kua-gray400 dashed relative flex items-start gap-5 pt-8"
+                                    className="border-b-kua-gray400 dashed relative flex flex-col items-start gap-2 pt-4 sm:flex-row sm:gap-5 sm:pt-8"
                                 >
                                     {/* 연도 */}
                                     <div className="flex items-center gap-4">
                                         <div className="border-kua-sky50 bg-kua-main relative z-10 flex h-[15px] w-[15px] items-center justify-center rounded-full">
                                             <div className="h-[12px] w-[12px] rounded-full bg-white"></div>
                                         </div>
-                                        <span className="text-kua-main w-[82px] text-[32px] font-bold">
+                                        <span className="text-kua-main w-[82px] text-xl font-bold sm:text-[32px]">
                                             {yearData.year}
                                         </span>
                                     </div>
 
                                     {/* 이벤트 목록 */}
                                     <div
-                                        className="mt-3 flex flex-1 flex-col gap-6 pb-8"
+                                        className="mt-3 ml-11 flex flex-1 flex-col gap-3 pb-4 sm:ml-0 sm:gap-6 sm:pb-8"
                                         style={{
                                             borderBottom:
                                                 "0.5px dashed rgba(166, 171, 183, 1)",
@@ -247,10 +247,10 @@ export const History = () => {
                                                     key={eventIndex}
                                                     className="flex gap-4"
                                                 >
-                                                    <span className="text-kua-main min-w-[28px] text-xl font-bold">
+                                                    <span className="text-kua-main min-w-[28px] text-sm font-bold sm:text-xl">
                                                         {event.month}
                                                     </span>
-                                                    <span className="text-kua-gray800 text-xl">
+                                                    <span className="text-kua-gray800 text-sm sm:text-xl">
                                                         {event.content}
                                                     </span>
                                                 </div>

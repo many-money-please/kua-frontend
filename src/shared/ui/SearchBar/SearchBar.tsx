@@ -22,8 +22,8 @@ export const SearchBar = ({
     placeholder = "검색어를 입력하세요",
 }: SearchBarProps) => {
     return (
-        <div className="flex h-[40px] items-center justify-between">
-            <div className="flex h-full items-center gap-4">
+        <div className="flex flex-col gap-2 sm:h-[40px] sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <div className="flex h-full flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
                 <span className="text-lg font-bold">목록</span>
                 <span className="text-kua-gray800">
                     총{" "}
@@ -33,7 +33,7 @@ export const SearchBar = ({
                     건
                 </span>
             </div>
-            <div className="items-cente flex h-full gap-4">
+            <div className="flex h-full flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
                 {searchOptions.length > 1 && (
                     <select
                         value={searchOption}
@@ -57,12 +57,12 @@ export const SearchBar = ({
                             onSearch();
                         }
                     }}
-                    className="bg-kua-gray100 text-kua-gray400 h-full w-64 rounded-lg px-4 py-2"
+                    className="bg-kua-gray100 text-kua-gray400 h-full w-full rounded-lg px-4 py-2 sm:w-64"
                 />
                 <button
                     type="button"
                     onClick={onSearch}
-                    className="bg-kua-blue500 text-kua-white hover:bg-kua-blue600 h-full rounded-lg px-6 py-2 font-semibold transition-colors"
+                    className="bg-kua-blue500 text-kua-white hover:bg-kua-blue600 h-full cursor-pointer rounded-lg px-6 py-2 font-semibold transition-colors"
                 >
                     검색
                 </button>

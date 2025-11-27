@@ -207,7 +207,7 @@ export const RegulationsTab = () => {
                 <div className="flex items-center justify-center">
                     <button
                         onClick={() => handleDownload(row)}
-                        className="bg-kua-sky50 hover:bg-kua-main hover:text-kua-white text-kua-main border-kua-main flex cursor-pointer items-center justify-center gap-2 rounded-md border px-4 py-2 text-sm font-medium transition-colors"
+                        className="bg-kua-sky50 hover:bg-kua-main hover:text-kua-white text-kua-main border-kua-main flex cursor-pointer items-center justify-center gap-2 rounded-md border px-2 py-1 text-xs font-medium transition-colors sm:px-4 sm:py-2 sm:text-sm"
                     >
                         다운로드
                         <svg
@@ -251,7 +251,7 @@ export const RegulationsTab = () => {
     ];
 
     return (
-        <div className="w-full bg-white pb-[150px]">
+        <div className="w-full bg-white px-5 pb-16 sm:px-0 sm:pb-[150px]">
             <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-10">
                 {/* 검색 UI */}
                 {isAdmin ? (
@@ -267,7 +267,9 @@ export const RegulationsTab = () => {
                         }}
                         onDelete={() => {
                             if (selectedRows.length > 0) {
-                                const selectedIds = selectedRows.map((row) => row.id);
+                                const selectedIds = selectedRows.map(
+                                    (row) => row.id,
+                                );
                                 console.log("선택된 행들의 ID:", selectedIds);
                                 // TODO: 실제 삭제 로직 구현
                             } else {

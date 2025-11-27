@@ -176,7 +176,10 @@ export const DisclosureTab = () => {
 
     const handleDelete = () => {
         if (selectedRows.length > 0) {
-            console.log("Selected for deletion:", selectedRows.map((row) => row.id));
+            console.log(
+                "Selected for deletion:",
+                selectedRows.map((row) => row.id),
+            );
             // TODO: Implement actual delete logic
             setSelectedRows([]); // Clear selection after action
         } else {
@@ -213,7 +216,7 @@ export const DisclosureTab = () => {
     ];
 
     return (
-        <div className="w-full bg-white pb-[150px]">
+        <div className="w-full bg-white px-5 pb-16 sm:px-0 sm:pb-[150px]">
             <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-10">
                 {/* 검색 UI */}
                 {isAdmin ? (
