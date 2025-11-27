@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { NewsAndActivitiesSection } from "@/widgets/community";
 import type { NewsAndActivityPost } from "@/widgets/community";
@@ -207,14 +208,16 @@ export default function PhotoGalleryPage() {
     };
 
     return (
-        <NewsAndActivitiesSection
-            title="포토갤러리"
-            data={PHOTO_GALLERY}
-            detailBasePath="/community/photo-gallery"
-            searchOptions={["제목", "내용", "제목+내용"]}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onRegister={handleRegister}
-        />
+        <Suspense fallback={<div>로딩 중...</div>}>
+            <NewsAndActivitiesSection
+                title="포토갤러리"
+                data={PHOTO_GALLERY}
+                detailBasePath="/community/photo-gallery"
+                searchOptions={["제목", "내용", "제목+내용"]}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onRegister={handleRegister}
+            />
+        </Suspense>
     );
 }

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { FinSwimmingTVSection } from "@/widgets/community";
 import type { FinSwimmingTVPost } from "@/widgets/community";
+import { Suspense } from "react";
 
 // 임시 목업 데이터
 const FIN_SWIMMING_TV: FinSwimmingTVPost[] = [
@@ -237,13 +238,15 @@ export default function FinSwimmingTVPage() {
     };
 
     return (
-        <FinSwimmingTVSection
-            title="핀수영 TV"
-            data={FIN_SWIMMING_TV}
-            searchOptions={["제목", "내용", "제목+내용"]}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onRegister={handleRegister}
-        />
+        <Suspense fallback={<div>로딩 중...</div>}>
+            <FinSwimmingTVSection
+                title="핀수영 TV"
+                data={FIN_SWIMMING_TV}
+                searchOptions={["제목", "내용", "제목+내용"]}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onRegister={handleRegister}
+            />
+        </Suspense>
     );
 }
