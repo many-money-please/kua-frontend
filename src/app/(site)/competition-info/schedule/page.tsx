@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ScheduleTableSection } from "@/widgets/competition-info";
 import { createMockScheduleData } from "@/widgets/competition-info/lib/mockData";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
     title: "대회 일정 | 대회정보 | 대한수중 핀수영협회",
@@ -11,5 +12,9 @@ export const metadata: Metadata = {
 const scheduleData = createMockScheduleData();
 
 export default function CompetitionSchedulePage() {
-    return <ScheduleTableSection data={scheduleData} />;
+    return (
+        <Suspense fallback={<div>로딩 중...</div>}>
+            <ScheduleTableSection data={scheduleData} />
+        </Suspense>
+    );
 }
