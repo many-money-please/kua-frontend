@@ -48,10 +48,15 @@ const athleteRegistrationData: AthleteRegistrationItem[] = [
 
 export default function AthleteRegistrationPage() {
     return (
-        <div className="flex w-full max-w-[1200px] flex-col gap-8 pb-24">
-            <h2 className="text-[32px] font-bold">
-                경기인 등록 (선수, 지도자, 심판 등 동호인 등록 신청)
-            </h2>
+        <div className="flex w-full max-w-[1200px] flex-col gap-8 px-5 pb-8 sm:px-0 sm:pb-24">
+            <div className="flex flex-col sm:flex-row sm:gap-2">
+                <h2 className="text-2xl font-bold sm:text-[32px]">
+                    경기인 등록
+                </h2>
+                <h2 className="text-2xl font-bold sm:text-[32px]">
+                    (선수, 지도자, 심판 등 동호인 등록 신청)
+                </h2>
+            </div>
             {athleteRegistrationData.map((item) => (
                 <div
                     key={item.title}
@@ -65,17 +70,17 @@ export default function AthleteRegistrationPage() {
                             {item.title}
                         </div>
                     </div>
-                    <div className="text-kua-gray800 text-lg">
+                    <div className="text-kua-gray800 text-sm sm:text-lg">
                         {item.description}
                     </div>
                 </div>
             ))}
-            <div className="mx-auto flex gap-8 py-4">
-                <button className="bg-kua-main hover:bg-kua-blue500 flex w-80 cursor-pointer items-center justify-center gap-4 rounded-[10px] py-4 text-xl font-semibold text-white transition-colors">
+            <div className="mx-auto flex w-full flex-col gap-4 sm:flex-row sm:justify-center sm:gap-8">
+                <button className="bg-kua-main hover:bg-kua-blue500 inline-flex cursor-pointer items-center justify-center gap-4 rounded-[10px] py-4 text-base font-semibold text-white transition-colors sm:w-80 sm:text-xl">
                     스포츠지원포털 바로가기
                     <FaChevronRight className="text-sm" />
                 </button>
-                <button className="bg-kua-black100 hover:bg-kua-black200 flex w-80 cursor-pointer items-center justify-center gap-4 rounded-[10px] py-4 text-xl font-semibold text-white transition-colors">
+                <button className="bg-kua-black100 hover:bg-kua-black200 inline-flex cursor-pointer items-center justify-center gap-4 rounded-[10px] py-4 text-base font-semibold text-white transition-colors sm:w-80 sm:text-xl">
                     단체별 연락처 조회
                     <FaChevronRight className="text-sm" />
                 </button>
