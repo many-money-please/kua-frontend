@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { NewsAndActivitiesSection } from "@/widgets/community";
 import type { NewsAndActivityPost } from "@/widgets/community";
@@ -147,14 +148,16 @@ export default function NewsAndActivitiesPage() {
     };
 
     return (
-        <NewsAndActivitiesSection
-            title="소식 및 활동"
-            data={NEWS_AND_ACTIVITIES}
-            detailBasePath="/community/news-and-activities"
-            searchOptions={["제목", "내용", "제목+내용"]}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onRegister={handleRegister}
-        />
+        <Suspense fallback={<div>로딩 중...</div>}>
+            <NewsAndActivitiesSection
+                title="소식 및 활동"
+                data={NEWS_AND_ACTIVITIES}
+                detailBasePath="/community/news-and-activities"
+                searchOptions={["제목", "내용", "제목+내용"]}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onRegister={handleRegister}
+            />
+        </Suspense>
     );
 }

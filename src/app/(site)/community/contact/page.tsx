@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { ContactSection } from "@/widgets/community";
 import type { ContactPost } from "@/widgets/community";
 
@@ -178,11 +179,13 @@ const CONTACT_POSTS: ContactPost[] = [
 
 export default function ContactPage() {
     return (
-        <ContactSection
-            title="문의"
-            data={CONTACT_POSTS}
-            detailBasePath="/community/contact"
-            searchOptions={["제목", "내용", "제목+내용"]}
-        />
+        <Suspense fallback={<div>로딩 중...</div>}>
+            <ContactSection
+                title="문의"
+                data={CONTACT_POSTS}
+                detailBasePath="/community/contact"
+                searchOptions={["제목", "내용", "제목+내용"]}
+            />
+        </Suspense>
     );
 }

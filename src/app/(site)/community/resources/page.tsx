@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { CommunityTableSection } from "@/widgets/community";
 import type { CommunityPostSummary } from "@/widgets/community";
 
@@ -24,11 +25,13 @@ const RESOURCE_POSTS: CommunityPostSummary[] = [
 
 export default function CommunityResourcesPage() {
     return (
-        <CommunityTableSection
-            title="자료실"
-            data={RESOURCE_POSTS}
-            detailBasePath="/community/resources"
-            searchOptions={["제목", "내용", "제목+내용"]}
-        />
+        <Suspense fallback={<div>로딩 중...</div>}>
+            <CommunityTableSection
+                title="자료실"
+                data={RESOURCE_POSTS}
+                detailBasePath="/community/resources"
+                searchOptions={["제목", "내용", "제목+내용"]}
+            />
+        </Suspense>
     );
 }

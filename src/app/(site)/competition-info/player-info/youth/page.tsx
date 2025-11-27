@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { PlayerInfoTableSection } from "@/widgets/competition-info";
 import type { PlayerInfoSummary } from "@/widgets/competition-info";
 
@@ -24,12 +25,14 @@ const YOUTH_PLAYERS: PlayerInfoSummary[] = [
 
 export default function YouthPlayerInfoPage() {
     return (
-        <PlayerInfoTableSection
-            title="청소년대표"
-            data={YOUTH_PLAYERS}
-            detailBasePath="/competition-info/player-info/youth"
-            searchOptions={["제목", "내용", "제목+내용"]}
-        />
+        <Suspense fallback={<div>로딩 중...</div>}>
+            <PlayerInfoTableSection
+                title="청소년대표"
+                data={YOUTH_PLAYERS}
+                detailBasePath="/competition-info/player-info/youth"
+                searchOptions={["제목", "내용", "제목+내용"]}
+            />
+        </Suspense>
     );
 }
 
