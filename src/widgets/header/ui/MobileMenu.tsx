@@ -155,46 +155,53 @@ export const MobileMenu = ({
                                         const subKey = `${currentMobileNav.label}-${subMenu.label}`;
                                         const children = subMenu.children ?? [];
                                         const hasChildren = children.length > 0;
-                                        const isExpanded =
-                                            expandedMobileSubMenus[subKey] ??
-                                            false;
+                                        const shouldAutoExpand =
+                                            subMenu.showChevron === false;
+                                        const canToggle =
+                                            hasChildren &&
+                                            subMenu.showChevron !== false;
+                                        const isExpanded = shouldAutoExpand
+                                            ? true
+                                            : (expandedMobileSubMenus[subKey] ??
+                                              false);
+                                        const toggleSubMenu = () => {
+                                            if (!canToggle) return;
+                                            setExpandedMobileSubMenus(
+                                                (prev) => ({
+                                                    ...prev,
+                                                    [subKey]: !prev[subKey],
+                                                }),
+                                            );
+                                        };
                                         return (
                                             <div
                                                 key={subMenu.label}
                                                 className="border-kua-gray200 bg-kua-gray50 flex flex-col rounded-[14px] border px-4 py-3"
                                             >
-                                                <div className="text-kua-gray900 flex items-center justify-between text-base font-semibold">
+                                                <button
+                                                    type="button"
+                                                    onClick={toggleSubMenu}
+                                                    className="text-kua-gray900 flex w-full items-center justify-between text-left text-base font-semibold disabled:cursor-default"
+                                                    disabled={!canToggle}
+                                                    aria-expanded={
+                                                        canToggle
+                                                            ? isExpanded
+                                                            : undefined
+                                                    }
+                                                >
                                                     <span>{subMenu.label}</span>
                                                     {hasChildren &&
                                                         subMenu.showChevron !==
                                                             false && (
-                                                            <button
-                                                                type="button"
-                                                                onClick={() =>
-                                                                    setExpandedMobileSubMenus(
-                                                                        (
-                                                                            prev,
-                                                                        ) => ({
-                                                                            ...prev,
-                                                                            [subKey]:
-                                                                                !prev[
-                                                                                    subKey
-                                                                                ],
-                                                                        }),
-                                                                    )
-                                                                }
-                                                                className="text-kua-gray500 text-xs transition-transform"
-                                                            >
-                                                                <FaChevronDown
-                                                                    className={`transition-transform ${
-                                                                        isExpanded
-                                                                            ? "rotate-180"
-                                                                            : ""
-                                                                    }`}
-                                                                />
-                                                            </button>
+                                                            <FaChevronDown
+                                                                className={`text-kua-gray500 text-xs transition-transform ${
+                                                                    isExpanded
+                                                                        ? "rotate-180"
+                                                                        : ""
+                                                                }`}
+                                                            />
                                                         )}
-                                                </div>
+                                                </button>
                                                 {hasChildren && isExpanded && (
                                                     <div className="mt-2 flex flex-col gap-2 pl-2">
                                                         {children.map(
