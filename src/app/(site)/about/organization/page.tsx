@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { OrganizationTab } from "@/widgets/about";
 
@@ -8,5 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function OrganizationPage() {
-    return <OrganizationTab />;
+    return (
+        <Suspense fallback={<div>로딩 중...</div>}>
+            <OrganizationTab />
+        </Suspense>
+    );
 }
