@@ -1,6 +1,12 @@
 "use client";
 
-import { ReactNode, useState, useMemo, useEffect } from "react";
+import {
+    type HTMLAttributes,
+    ReactNode,
+    useState,
+    useMemo,
+    useEffect,
+} from "react";
 
 export type Column<T = unknown> = {
     key: string;
@@ -22,6 +28,7 @@ type DataTableProps<T = unknown> = {
     canDelete?: boolean;
     getRowId?: (row: T) => string | number;
     onSelectionChange?: (selectedRows: T[]) => void;
+    getRowProps?: (row: T, rowIndex: number) => HTMLAttributes<HTMLElement>;
 };
 
 export const DataTable = <T,>({
@@ -36,6 +43,7 @@ export const DataTable = <T,>({
     canDelete = false,
     getRowId,
     onSelectionChange,
+    getRowProps,
 }: DataTableProps<T>) => {
     // 선택된 행의 ID를 저장 (페이지 변경 시에도 유지)
     const [selectedRowIds, setSelectedRowIds] = useState<Set<string | number>>(
@@ -140,10 +148,22 @@ export const DataTable = <T,>({
                     data.map((row, rowIndex) => {
                         const rowId = getRowUniqueId(row, rowIndex);
                         const isSelected = selectedRowIds.has(rowId);
+                        const mobileRowProps =
+                            getRowProps?.(row, rowIndex) ?? {};
+                        const {
+                            className: mobileRowClassName,
+                            onClick: mobileRowOnClick,
+                            ...restMobileRowProps
+                        } = mobileRowProps;
                         return (
                             <div
                                 key={rowId}
+                                {...restMobileRowProps}
                                 onClick={(e) => {
+                                    mobileRowOnClick?.(e);
+                                    if (e.defaultPrevented) {
+                                        return;
+                                    }
                                     if (
                                         (e.target as HTMLElement).tagName !==
                                         "INPUT"
@@ -157,7 +177,7 @@ export const DataTable = <T,>({
                                     onRowClick
                                         ? "hover:bg-kua-sky50 cursor-pointer"
                                         : ""
-                                } ${rowClassName}`}
+                                } ${rowClassName} ${mobileRowClassName ?? ""}`}
                             >
                                 {canDelete && (
                                     <div
@@ -266,10 +286,21 @@ export const DataTable = <T,>({
                         data.map((row, rowIndex) => {
                             const rowId = getRowUniqueId(row, rowIndex);
                             const isSelected = selectedRowIds.has(rowId);
+                            const rowProps = getRowProps?.(row, rowIndex) ?? {};
+                            const {
+                                className: additionalRowClassName,
+                                onClick: rowOnClick,
+                                ...restRowProps
+                            } = rowProps;
                             return (
                                 <tr
                                     key={rowId}
+                                    {...restRowProps}
                                     onClick={(e) => {
+                                        rowOnClick?.(e);
+                                        if (e.defaultPrevented) {
+                                            return;
+                                        }
                                         // 체크박스 클릭 시에는 행 클릭 이벤트 발생하지 않도록
                                         if (
                                             (e.target as HTMLElement)
@@ -284,7 +315,9 @@ export const DataTable = <T,>({
                                         onRowClick
                                             ? "hover:bg-kua-sky50 cursor-pointer"
                                             : ""
-                                    } ${rowClassName}`}
+                                    } ${rowClassName} ${
+                                        additionalRowClassName ?? ""
+                                    }`}
                                 >
                                     {canDelete && (
                                         <td
