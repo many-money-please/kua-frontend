@@ -27,11 +27,13 @@ type CertificateSectionCardProps = {
 function CertificateSectionCard({ section }: CertificateSectionCardProps) {
     return (
         <div className="flex w-full max-w-[1200px] flex-col gap-8">
-            <h2 className="text-[32px] font-bold">{section.title}</h2>
+            <h2 className="text-2xl font-bold sm:text-[32px]">
+                {section.title}
+            </h2>
 
             <div className="bg-kua-sky50 flex flex-col gap-4 rounded-[10px] p-6">
                 {/* 서브타이틀 바 */}
-                <div className="flex items-center gap-8 rounded-[10px]">
+                <div className="flex flex-col gap-2 rounded-[10px] sm:flex-row sm:items-center sm:gap-8">
                     <div
                         className="relative"
                         style={{
@@ -46,8 +48,8 @@ function CertificateSectionCard({ section }: CertificateSectionCardProps) {
                             className="object-contain"
                         />
                     </div>
-                    <div className="bg-kua-gray300 h-12 w-px" />
-                    <h3 className="text-kua-gray800 text-2xl font-bold">
+                    <div className="bg-kua-gray300 hidden h-12 w-px sm:block" />
+                    <h3 className="text-kua-gray800 text-base font-bold sm:text-2xl">
                         {section.subtitle}
                     </h3>
                 </div>
@@ -56,12 +58,12 @@ function CertificateSectionCard({ section }: CertificateSectionCardProps) {
                 <div
                     className={`grid gap-6 ${
                         section.cards.length === 1
-                            ? "grid-cols-1"
+                            ? "sm:grid-cols-1"
                             : section.cards.length === 2
-                              ? "grid-cols-2"
+                              ? "sm:grid-cols-2"
                               : section.cards.length === 3
-                                ? "grid-cols-3"
-                                : "grid-cols-4"
+                                ? "sm:grid-cols-3"
+                                : "sm:grid-cols-4"
                     }`}
                 >
                     {section.cards.map((card, index) => (
@@ -72,10 +74,10 @@ function CertificateSectionCard({ section }: CertificateSectionCardProps) {
                             <div className="flex h-20 w-20 items-center justify-center">
                                 {card.icon}
                             </div>
-                            <h4 className="text-center text-2xl font-bold">
+                            <h4 className="text-center text-base font-bold sm:text-2xl">
                                 {card.title}
                             </h4>
-                            <button className="bg-kua-white hover:bg-kua-sky100 border-kua-gray400 flex cursor-pointer items-center justify-center gap-2 rounded-[10px] border px-8 py-2 text-base font-medium transition-colors">
+                            <button className="bg-kua-white hover:bg-kua-sky100 border-kua-gray400 flex cursor-pointer items-center justify-center gap-2 rounded-[10px] border px-8 py-2 text-base font-medium transition-colors sm:text-xl">
                                 바로가기
                                 <FaChevronRight className="text-sm" />
                             </button>
@@ -85,7 +87,7 @@ function CertificateSectionCard({ section }: CertificateSectionCardProps) {
 
                 {/* 안내 문구 */}
                 {section.notice && (
-                    <div className="text-kua-gray400 text-sm">
+                    <div className="text-kua-gray400 text-base sm:text-lg">
                         {section.notice}
                     </div>
                 )}
@@ -100,7 +102,7 @@ type CertificateSectionsProps = {
 
 export function CertificateSections({ sections }: CertificateSectionsProps) {
     return (
-        <div className="flex w-full flex-col items-center gap-24">
+        <div className="flex w-full flex-col items-center gap-24 px-5 sm:px-0">
             {sections.map((section, index) => (
                 <CertificateSectionCard key={index} section={section} />
             ))}

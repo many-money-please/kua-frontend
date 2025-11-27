@@ -52,16 +52,18 @@ type StepCardProps = {
 function StepCard({ stepNumber, title, description, isLast }: StepCardProps) {
     return (
         <>
-            <div className="flex items-center gap-8">
-                <div className="text-kua-main flex h-28 w-28 shrink-0 flex-col items-center justify-center rounded-[10px] bg-[#B3D3F3] font-bold">
-                    <span className="text-xl">STEP</span>
-                    <span className="text-[32px]">{stepNumber}</span>
+            <div className="flex items-start gap-8 sm:items-center">
+                <div className="text-kua-main flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-[10px] bg-[#B3D3F3] font-bold sm:h-28 sm:w-28">
+                    <span className="text-base sm:text-xl">STEP</span>
+                    <span className="text-2xl sm:text-[32px]">
+                        {stepNumber}
+                    </span>
                 </div>
-                <div className="flex flex-col gap-2">
-                    <h3 className="text-kua-main text-3xl font-bold">
+                <div className="flex flex-col gap-1 sm:gap-2">
+                    <h3 className="text-kua-main text-2xl font-bold sm:text-3xl">
                         {title}
                     </h3>
-                    <div className="text-kua-darkblue800 text-lg">
+                    <div className="text-kua-darkblue800 text-base sm:text-lg">
                         {description}
                     </div>
                 </div>
@@ -72,8 +74,8 @@ function StepCard({ stepNumber, title, description, isLast }: StepCardProps) {
 
 export function CertificateIssuanceGuide() {
     return (
-        <div className="bg-kua-sky50 relative w-full">
-            <div className="pointer-events-none absolute top-1/4 right-16 z-0 h-[536px] -translate-y-1/4 sm:block">
+        <div className="bg-kua-sky50 relative w-full px-5 sm:px-0">
+            <div className="pointer-events-none absolute top-1/4 right-16 z-0 h-[300px] -translate-y-1/4 sm:block sm:h-[536px]">
                 <Image
                     src="/imgs/logos/Icon-Blue.svg"
                     alt="logo"
@@ -85,11 +87,11 @@ export function CertificateIssuanceGuide() {
                 />
             </div>
             <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-12 py-24">
-                <h2 className="text-kua-black100 text-[32px] font-bold">
+                <h2 className="text-kua-black100 text-2xl font-bold sm:text-[32px]">
                     대한수중·핀수영협회 증명서 발급 안내
                 </h2>
                 <div className="flex w-full items-stretch gap-8">
-                    <div className="flex w-full flex-3 flex-col gap-12">
+                    <div className="flex w-full flex-col gap-12 sm:flex-3">
                         {steps.map((step, index) => (
                             <StepCard
                                 key={index}
