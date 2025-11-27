@@ -107,7 +107,7 @@ export const navItems: NavItem[] = [
             {
                 label: "대회정보",
                 href: "/competition-info",
-                showChevron: false,
+                showChevron: true,
                 children: [
                     { label: "대회일정", href: "/competition-info/schedule" },
                     { label: "대회결과", href: "/competition-info/results" },
@@ -120,7 +120,7 @@ export const navItems: NavItem[] = [
             {
                 label: "선수정보",
                 href: "/competition-info/player-info",
-                showChevron: false,
+                showChevron: true,
                 children: [
                     {
                         label: "국가대표",
@@ -144,7 +144,7 @@ export const navItems: NavItem[] = [
             {
                 label: "신청/발급",
                 href: "/competition-info/registration",
-                showChevron: false,
+                showChevron: true,
                 children: [
                     {
                         label: "대회 참가 신청",
@@ -171,7 +171,7 @@ export const navItems: NavItem[] = [
             {
                 label: "커뮤니티",
                 href: "/community",
-                showChevron: false,
+                showChevron: true,
                 children: [
                     { label: "공지사항", href: "/community/notices" },
                     { label: "자료실", href: "/community/resources" },
@@ -181,7 +181,7 @@ export const navItems: NavItem[] = [
             {
                 label: "협회소식",
                 href: "/community/news-and-activities",
-                showChevron: false,
+                showChevron: true,
                 children: [
                     {
                         label: "소식 및 활동",

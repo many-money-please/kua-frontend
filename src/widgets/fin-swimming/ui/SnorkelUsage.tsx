@@ -48,17 +48,19 @@ const snorkelSteps: SnorkelStep[] = [
 
 export const SnorkelUsage = () => {
     return (
-        <div className="bg-kua-blue50 w-full py-16">
+        <div className="bg-kua-blue50 w-full px-5 py-16 sm:px-0">
             <div className="mx-auto w-full max-w-[1200px] gap-4 rounded-[10px]">
-                <h2 className="mb-8 text-[32px] font-bold">스노클 사용법</h2>
-                <div className="grid grid-cols-3 gap-8">
+                <h2 className="mb-8 text-2xl font-bold sm:text-[32px]">
+                    스노클 사용법
+                </h2>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-8">
                     {snorkelSteps.map((step) => (
                         <div
                             key={step.title}
                             className="border-kua-sky100 flex flex-col items-center gap-8 rounded-[10px] border bg-white p-6"
                         >
                             {/* 아이콘 */}
-                            <div className="relative h-24 w-24">
+                            <div className="relative h-16 w-16 sm:h-24 sm:w-24">
                                 <Image
                                     src={step.icon}
                                     alt={step.title}
@@ -67,11 +69,11 @@ export const SnorkelUsage = () => {
                                 />
                             </div>
                             {/* 제목 */}
-                            <h3 className="text-kua-main text-4xl font-bold">
+                            <h3 className="text-kua-main text-2xl font-bold sm:text-4xl">
                                 {step.title}
                             </h3>
                             {/* 설명 */}
-                            <p className="text-kua-gray800 text-center text-xl leading-relaxed font-medium">
+                            <p className="text-kua-gray800 text-center text-base leading-relaxed font-medium sm:text-xl">
                                 {step.description}
                             </p>
                         </div>
