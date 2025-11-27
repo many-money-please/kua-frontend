@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { NewRecordsTableSection } from "@/widgets/competition-info";
 import type { NewRecordSummary } from "@/widgets/competition-info";
 
@@ -24,11 +25,13 @@ const NEW_RECORDS: NewRecordSummary[] = [
 
 export default function CompetitionNewRecordsPage() {
     return (
-        <NewRecordsTableSection
-            title="신기록 현황"
-            data={NEW_RECORDS}
-            detailBasePath="/competition-info/new-records"
-            searchOptions={["제목", "내용", "제목+내용"]}
-        />
+        <Suspense fallback={<div>로딩 중...</div>}>
+            <NewRecordsTableSection
+                title="신기록 현황"
+                data={NEW_RECORDS}
+                detailBasePath="/competition-info/new-records"
+                searchOptions={["제목", "내용", "제목+내용"]}
+            />
+        </Suspense>
     );
 }

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { PlayerInfoTableSection } from "@/widgets/competition-info";
 import type { PlayerInfoSummary } from "@/widgets/competition-info";
 
@@ -24,12 +25,14 @@ const RESERVE_PLAYERS: PlayerInfoSummary[] = [
 
 export default function ReservePlayerInfoPage() {
     return (
-        <PlayerInfoTableSection
-            title="상비군선수"
-            data={RESERVE_PLAYERS}
-            detailBasePath="/competition-info/player-info/reserve"
-            searchOptions={["제목", "내용", "제목+내용"]}
-        />
+        <Suspense fallback={<div>로딩 중...</div>}>
+            <PlayerInfoTableSection
+                title="상비군선수"
+                data={RESERVE_PLAYERS}
+                detailBasePath="/competition-info/player-info/reserve"
+                searchOptions={["제목", "내용", "제목+내용"]}
+            />
+        </Suspense>
     );
 }
 

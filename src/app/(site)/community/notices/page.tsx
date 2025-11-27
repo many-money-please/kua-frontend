@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { CommunityTableSection } from "@/widgets/community";
 import type { CommunityPostSummary } from "@/widgets/community";
@@ -38,15 +39,17 @@ export default async function CommunityNoticesPage({
     }
 
     return (
-        <CommunityTableSection
-            title="공지사항"
-            data={posts}
-            detailBasePath="/community/notices"
-            searchOptions={["제목", "내용", "제목+내용"]}
-            pageSize={15}
-            initialPage={page}
-            totalPages={noticeData.totalPages}
-            totalCount={noticeData.totalCount}
-        />
+        <Suspense fallback={<div>로딩 중...</div>}>
+            <CommunityTableSection
+                title="공지사항"
+                data={posts}
+                detailBasePath="/community/notices"
+                searchOptions={["제목", "내용", "제목+내용"]}
+                pageSize={15}
+                initialPage={page}
+                totalPages={noticeData.totalPages}
+                totalCount={noticeData.totalCount}
+            />
+        </Suspense>
     );
 }
