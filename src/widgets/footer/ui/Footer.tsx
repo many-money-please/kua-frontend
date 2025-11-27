@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Fragment } from "react";
 
 export const Footer = () => {
     return (
-        <footer className="bg-kua-darkblue800 h-[230px] w-full">
+        <footer className="bg-kua-darkblue800 w-full px-5 sm:h-[230px] sm:px-0">
             <div className="mx-auto flex flex-col items-center justify-center text-white">
-                <div className="flex w-full max-w-[1200px] py-[57px]">
+                <div className="flex w-full max-w-[1200px] flex-col gap-6 py-12 sm:flex-row sm:py-[57px]">
                     <div className="flex flex-1 flex-col gap-7">
-                        <div className="flex flex-1 items-start justify-start gap-1.5">
+                        <div className="flex flex-1 items-start justify-start gap-1 sm:gap-1.5">
                             <Image
                                 src="/imgs/logos/Icon-Footer.svg"
                                 alt="logo"
@@ -33,7 +34,7 @@ export const Footer = () => {
                             </p>
                         </div>
                     </div>
-                    <div className="flex flex-1 flex-col items-start justify-between">
+                    <div className="flex flex-1 flex-col items-start justify-between gap-6 sm:gap-0">
                         <div className="flex flex-col gap-2">
                             <div className="flex gap-5">
                                 <p className="text-sm font-medium">
@@ -41,12 +42,26 @@ export const Footer = () => {
                                     올림픽핸드볼경기장 112호
                                 </p>
                             </div>
-                            <div className="flex gap-5 text-sm">
-                                <p>TEL 02-420-4293~4</p>
-                                <p className="text-kua-gray500">|</p>
-                                <p>FAX 02-421-8898</p>
-                                <p className="text-kua-gray500">|</p>
-                                <p>E-MAIL kua@kua.or.kr</p>
+                            <div className="flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:gap-5">
+                                {[
+                                    { label: "TEL", value: "02-420-4293~4" },
+                                    { label: "FAX", value: "02-421-8898" },
+                                    { label: "E-MAIL", value: "kua@kua.or.kr" },
+                                ].map(({ label, value }, index, arr) => (
+                                    <Fragment key={label}>
+                                        <div className="flex flex-col gap-0.5 sm:items-center sm:gap-2 lg:flex-row">
+                                            <span className="font-medium">
+                                                {label}
+                                            </span>
+                                            <span>{value}</span>
+                                        </div>
+                                        {index !== arr.length - 1 && (
+                                            <span className="text-kua-gray500 hidden sm:block">
+                                                |
+                                            </span>
+                                        )}
+                                    </Fragment>
+                                ))}
                             </div>
                         </div>
                         <div className="flex gap-3">
