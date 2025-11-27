@@ -11,6 +11,7 @@ type ManagerSearchBarProps = {
     onAdd: () => void;
     onDelete: () => void;
     placeholder?: string;
+    addButtonText?: string;
 };
 
 export const ManagerSearchBar = ({
@@ -24,6 +25,7 @@ export const ManagerSearchBar = ({
     onAdd,
     onDelete,
     placeholder = "검색어를 입력하세요",
+    addButtonText = "추가하기",
 }: ManagerSearchBarProps) => {
     return (
         <div className="flex flex-col gap-2 sm:h-[40px] sm:flex-row sm:items-center sm:justify-between sm:gap-4">
@@ -61,23 +63,28 @@ export const ManagerSearchBar = ({
                     검색
                 </button>
             </div>
-            <div className="flex h-full items-center gap-4">
-                <button
-                    type="button"
-                    onClick={onAdd}
-                    className="bg-kua-main text-kua-white hover:bg-kua-blue600 h-full cursor-pointer rounded-lg px-4 py-2 transition-colors"
-                >
-                    추가하기
-                </button>
-                <button
-                    type="button"
-                    onClick={onDelete}
-                    className={`${selectedCount > 0 ? "bg-kua-orange500 text-kua-white cursor-pointer hover:bg-orange-600" : "bg-kua-gray250 text-kua-gray400"} h-full rounded-lg px-4 py-2 transition-colors duration-200`}
-                    disabled={selectedCount === 0}
-                >
-                    삭제 {selectedCount > 0 ? `(${selectedCount})` : ""}
-                </button>
-            </div>
+            {(addButtonText || selectedCount > 0) && (
+                <div className="flex h-full items-center gap-4">
+                    {addButtonText && (
+                        <button
+                            type="button"
+                            onClick={onAdd}
+                            className="bg-kua-main text-kua-white hover:bg-kua-blue600 h-full cursor-pointer rounded-lg px-4 py-2 transition-colors"
+                        >
+                            {addButtonText}
+                        </button>
+                    )}
+                    {selectedCount > 0 && (
+                        <button
+                            type="button"
+                            onClick={onDelete}
+                            className="bg-kua-orange500 text-kua-white cursor-pointer hover:bg-orange-600 h-full rounded-lg px-4 py-2 transition-colors duration-200"
+                        >
+                            삭제 ({selectedCount})
+                        </button>
+                    )}
+                </div>
+            )}
         </div>
     );
 };

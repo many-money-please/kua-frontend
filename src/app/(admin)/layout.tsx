@@ -1,11 +1,15 @@
 import type { ReactNode } from "react";
+import { AdminHeader } from "@/widgets/admin/ui/AdminHeader";
+import { AdminSidebar } from "@/widgets/admin/ui/AdminSidebar";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
     return (
-        <div className="bg-kua-gray50 min-h-screen">
-            <main className="mx-auto w-full max-w-[1200px] px-5 py-10">
-                {children}
-            </main>
+        <div className="flex min-h-screen flex-col bg-kua-gray50">
+            <AdminHeader />
+            <div className="flex flex-1">
+                <AdminSidebar />
+                <main className="flex-1 p-6">{children}</main>
+            </div>
         </div>
     );
 }
