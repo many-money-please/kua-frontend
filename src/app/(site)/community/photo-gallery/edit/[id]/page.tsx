@@ -2,7 +2,12 @@
 
 import { use } from "react";
 import { useRouter } from "next/navigation";
-import { NewsAndActivitiesEdit } from "@/widgets/community";
+import { PostForm, type PostFormValues } from "@/shared/ui/PostForm";
+import {
+    useGalleryPostDetailForEdit,
+    useUpdateGalleryPost,
+} from "@/shared/hooks/queries/galleryPosts";
+import { uploadImageFiles } from "@/shared/api/imageUploadUtils";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -11,38 +16,140 @@ type PageProps = {
 export default function PhotoGalleryEditPage({ params }: PageProps) {
     const resolvedParams = use(params);
     const router = useRouter();
+    const id = resolvedParams.id;
 
-    // 임시 기존 데이터
-    const existingData = {
-        title: "제28회 청양기 전국핀수영대회",
-        content: "<p>대회 개요 내용...</p>",
-        attachments: [{ id: 1, name: "대회결과.pdf", size: "2.3 MB" }],
-        thumbnail: undefined,
+    const {
+        data: initialData,
+        isLoading,
+        error,
+    } = useGalleryPostDetailForEdit(id);
+    const updateGalleryPost = useUpdateGalleryPost(id);
+
+    const handleSubmit = async (data: PostFormValues) => {
+        try {
+            // 기존 이미지 ID와 새로 추가할 이미지 파일 분리
+            const existingImageIds: number[] = [];
+            const newImageFiles: File[] = [];
+
+            if (data.images) {
+                for (const image of data.images) {
+                    // galleryId가 있으면 기존 이미지, 없으면 새 이미지
+                    const galleryId = (
+                        image as unknown as { galleryId: number }
+                    ).galleryId;
+                    if (galleryId && typeof galleryId === "number") {
+                        existingImageIds.push(galleryId);
+                    } else {
+                        newImageFiles.push(image.file);
+                    }
+                }
+            }
+
+            // 새 이미지 업로드
+            const newGalleryIds: number[] = [];
+            if (newImageFiles.length > 0) {
+                const uploadedImages = await uploadImageFiles(
+                    newImageFiles,
+                    "/api/gallery-posts/images",
+                );
+                newGalleryIds.push(...uploadedImages.map((img) => img.id));
+            }
+
+            // 기존 이미지 ID와 새로 업로드한 이미지 ID를 모두 addGalleryIds에 포함
+            const addGalleryIds = [...existingImageIds, ...newGalleryIds];
+
+            // 삭제할 이미지 ID 계산 (기존 이미지 중 현재 선택되지 않은 것)
+            const currentImageIds =
+                initialData?.images?.map(
+                    (img: { galleryId: number }) => img.galleryId,
+                ) || [];
+            const deleteGalleryIds = currentImageIds.filter(
+                (id: number) => !existingImageIds.includes(id),
+            );
+
+            const attachmentFiles =
+                data.attachments?.map((attachment) => attachment.file) ?? [];
+
+            // 게시글 수정
+            updateGalleryPost.mutate(
+                {
+                    title: data.title,
+                    content: data.content,
+                    isTopFixed: data.isPinned ? 1 : 0,
+                    isShow: 1,
+                    addGalleryIds:
+                        addGalleryIds.length > 0 ? addGalleryIds : undefined,
+                    deleteGalleryIds:
+                        deleteGalleryIds.length > 0
+                            ? deleteGalleryIds
+                            : undefined,
+                    attachments:
+                        attachmentFiles.length > 0
+                            ? attachmentFiles
+                            : undefined,
+                },
+                {
+                    onSuccess: () => {
+                        alert("포토갤러리가 수정되었습니다.");
+                    },
+                    onError: (error) => {
+                        alert(
+                            error.message || "포토갤러리 수정에 실패했습니다.",
+                        );
+                    },
+                },
+            );
+        } catch (error) {
+            alert(
+                error instanceof Error
+                    ? error.message
+                    : "포토갤러리 수정에 실패했습니다.",
+            );
+        }
     };
 
-    const handleSubmit = (data: {
-        title: string;
-        content: string;
-        attachments: File[];
-        thumbnail?: File;
-    }) => {
-        console.log("Update photo gallery post:", resolvedParams.id, data);
-        // API 호출하여 게시글 수정
-        // 성공 시 상세 페이지로 이동
-        router.push(`/community/photo-gallery/${resolvedParams.id}`);
-    };
+    if (isLoading) {
+        return (
+            <div className="mx-auto flex w-full max-w-[1200px] items-center justify-center px-5 py-16">
+                <div className="text-center">로딩 중...</div>
+            </div>
+        );
+    }
 
-    const handleCancel = () => {
-        router.push(`/community/photo-gallery/${resolvedParams.id}`);
-    };
+    if (error) {
+        console.error("[포토갤러리 수정] 에러:", error);
+        alert(error.message || "게시글을 불러오는데 실패했습니다.");
+        router.push(`/community/photo-gallery/${id}`);
+        return null;
+    }
+
+    if (!initialData) {
+        return (
+            <div className="mx-auto flex w-full max-w-[1200px] items-center justify-center px-5 py-16">
+                <div className="text-center">게시글을 불러올 수 없습니다.</div>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-kua-gray100 h-full w-full px-8 py-16">
             <div className="mx-auto flex max-w-[1200px] flex-col gap-10 pb-8">
-                <h1 className="text-3xl font-bold">포토갤러리</h1>
+                <h1 className="text-3xl font-bold">포토갤러리 수정</h1>
             </div>
             <div className="bg-kua-white mx-auto flex max-w-[1200px] flex-col gap-10 px-8 py-8">
-                <NewsAndActivitiesEdit id={resolvedParams.id} />
+                <PostForm.Root
+                    onSubmit={handleSubmit}
+                    isSubmitting={updateGalleryPost.isPending}
+                    initialValues={initialData}
+                    submitLabel="수정하기"
+                >
+                    <PostForm.PinField />
+                    <PostForm.TitleField placeholder="제목을 입력하세요 (200자 이내)" />
+                    <PostForm.ContentField />
+                    <PostForm.AttachmentField />
+                    <PostForm.ImageField />
+                    <PostForm.Actions />
+                </PostForm.Root>
             </div>
         </div>
     );

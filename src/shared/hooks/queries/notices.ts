@@ -6,6 +6,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import type { PostFormValues } from "@/shared/ui/PostForm";
 import type { DetailPageData } from "@/shared/ui/DetailPage";
+import {
+    convertRelativeImgSrcToAbsolute,
+    formatAttachments,
+} from "@/shared/lib/htmlUtils";
 
 // API 함수들
 async function fetchNoticeDetail(id: string): Promise<DetailPageData> {
@@ -25,40 +29,6 @@ async function fetchNoticeDetail(id: string): Promise<DetailPageData> {
 
     const result = await response.json();
 
-    // 백엔드 응답을 DetailPageData 형식으로 변환
-    const API_BASE_URL =
-        (process.env.NEXT_PUBLIC_API_URL ?? "").replace(/\/$/, "") ?? "";
-
-    const buildFileUrl = (filePath?: string) => {
-        if (!filePath) return null;
-        if (/^https?:\/\//i.test(filePath)) return filePath;
-        const normalizedPath = filePath.startsWith("/")
-            ? filePath
-            : `/${filePath}`;
-        return API_BASE_URL
-            ? `${API_BASE_URL}${normalizedPath}`
-            : normalizedPath;
-    };
-
-    const formatNoticeAttachments = (
-        files?: Array<{
-            fileName?: string;
-            filePath?: string;
-        }>,
-    ) => {
-        if (!files || files.length === 0) return [];
-        return files
-            .map((file) => {
-                const url = buildFileUrl(file.filePath);
-                if (!url) return null;
-                return { name: file.fileName || "첨부파일", url };
-            })
-            .filter(
-                (attachment): attachment is { name: string; url: string } =>
-                    attachment !== null,
-            );
-    };
-
     return {
         id: result.id || Number(id),
         title: result.title || "",
@@ -66,7 +36,7 @@ async function fetchNoticeDetail(id: string): Promise<DetailPageData> {
         views: result.hit || result.views || 0,
         isSecret: result.isSecret || false,
         content: result.content || "",
-        attachments: formatNoticeAttachments(result.files),
+        attachments: formatAttachments(result.files),
         images: result.images || [],
     };
 }
@@ -149,6 +119,8 @@ export const noticeKeys = {
         [...noticeKeys.lists(), filters] as const,
     details: () => [...noticeKeys.all, "detail"] as const,
     detail: (id: string) => [...noticeKeys.details(), id] as const,
+    detailForEdit: (id: string) =>
+        [...noticeKeys.details(), "edit", id] as const,
 };
 
 // Hooks
@@ -162,7 +134,7 @@ export function useNoticeDetail(id: string) {
 
 export function useNoticeDetailForEdit(id: string) {
     return useQuery({
-        queryKey: noticeKeys.detail(id),
+        queryKey: noticeKeys.detailForEdit(id),
         queryFn: async () => {
             const { clientFetch } = await import("@/shared/api/clientFetch");
             const response = await clientFetch(`/api/community/notices/${id}`);
@@ -180,10 +152,14 @@ export function useNoticeDetailForEdit(id: string) {
 
             const result = await response.json();
 
+            const processedContent = convertRelativeImgSrcToAbsolute(
+                result.content || "",
+            );
+
             // PostFormValues 형식으로 변환
             return {
                 title: result.title || "",
-                content: result.content || "",
+                content: processedContent,
                 isPinned: result.isTopFixed === 1,
                 attachments: [],
                 images: [],
@@ -214,10 +190,17 @@ export function useUpdateNotice(id: string) {
 
     return useMutation({
         mutationFn: (data: PostFormValues) => updateNotice(id, data),
-        onSuccess: () => {
-            // 상세 페이지와 목록 캐시 무효화
-            queryClient.invalidateQueries({ queryKey: noticeKeys.detail(id) });
-            queryClient.invalidateQueries({ queryKey: noticeKeys.lists() });
+        onSuccess: async () => {
+            // 상세 페이지, 수정 페이지, 목록 캐시 모두 무효화
+            await Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey: noticeKeys.detail(id),
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: noticeKeys.detailForEdit(id),
+                }),
+                queryClient.invalidateQueries({ queryKey: noticeKeys.lists() }),
+            ]);
             router.push(`/community/notices/${id}`);
             router.refresh();
         },
