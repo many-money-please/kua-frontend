@@ -14,7 +14,11 @@ export const metadata: Metadata = {
 export default async function CommunityNoticesPage({
     searchParams,
 }: {
-    searchParams: Promise<{ page?: string }>;
+    searchParams: Promise<{
+        page?: string;
+        title?: string;
+        searchOption?: string;
+    }>;
 }) {
     // searchParams는 Promise이므로 await 필요
     const params = await searchParams;
@@ -22,8 +26,11 @@ export default async function CommunityNoticesPage({
     // 쿼리 파라미터에서 페이지 번호 추출
     const page = parseInt(params.page || "1", 10);
 
+    // 검색 옵션이 "제목"일 때만 title 파라미터 전달
+    const title = params.searchOption === "제목" ? params.title : undefined;
+
     // 공지사항 데이터 가져오기
-    const noticeData = await getNotices(page, 15);
+    const noticeData = await getNotices(page, 15, title);
 
     // Notice 타입을 CommunityPostSummary 타입으로 변환
     const posts: CommunityPostSummary[] = noticeData.notices.map(
