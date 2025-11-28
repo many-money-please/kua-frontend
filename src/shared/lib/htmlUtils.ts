@@ -24,18 +24,26 @@ export function convertRelativeImgSrcToAbsolute(
         "",
     ) || "",
 ): string {
-    if (!baseUrl || !html) {
+    if (!html) {
         return html;
     }
 
+    // 이미 절대 URL인 경우는 그대로 유지
+    // 상대 경로(/uploads/...)인 경우만 절대 URL로 변환
     return html.replace(
-        /<img([^>]+)src=["'](\/uploads\/[^"']+)["']/gi,
+        /<img([^>]+)src=["']([^"']+)["']/gi,
         (match: string, attrs: string, src: string) => {
+            // 이미 절대 URL인 경우 그대로 유지
             if (/^https?:\/\//i.test(src)) {
                 return match;
             }
-            const absoluteUrl = `${baseUrl}${src}`;
-            return `<img${attrs}src="${absoluteUrl}"`;
+            // 상대 경로인 경우에만 절대 URL로 변환
+            if (src.startsWith("/uploads/") && baseUrl) {
+                const absoluteUrl = `${baseUrl}${src}`;
+                return `<img${attrs}src="${absoluteUrl}"`;
+            }
+            // 그 외의 경우는 그대로 유지
+            return match;
         },
     );
 }

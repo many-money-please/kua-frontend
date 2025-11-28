@@ -46,6 +46,7 @@ export type PostAttachment = {
     name: string;
     size: number;
     file: File;
+    fileId?: number;
 };
 
 export type PostImage = PostAttachment & {
