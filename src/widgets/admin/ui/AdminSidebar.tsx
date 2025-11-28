@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FiFolder, FiFileText, FiUser } from "react-icons/fi";
+import { FiFolder, FiFileText, FiUser, FiTag } from "react-icons/fi";
 
 type MenuItem = {
     label: string;
@@ -25,6 +25,11 @@ const menuItems: MenuItem[] = [
         label: "회원 관리",
         href: "/admin/members",
         icon: <FiUser size={20} />,
+    },
+    {
+        label: "카테고리 관리",
+        href: "/admin/categories",
+        icon: <FiTag size={20} />,
     },
 ];
 
