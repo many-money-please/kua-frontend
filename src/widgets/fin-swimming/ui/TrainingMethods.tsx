@@ -33,8 +33,8 @@ const trainingSteps: TrainingStep[] = [
 export const TrainingMethods = () => {
     return (
         <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-8 pb-16">
-            <h2 className="text-[32px] font-bold">훈련 방법</h2>
-            <div className="grid grid-cols-4 gap-4">
+            <h2 className="text-2xl font-bold sm:text-[32px]">훈련 방법</h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 sm:gap-4">
                 {trainingSteps.map((step, index) => (
                     <div
                         key={step.step}
@@ -46,16 +46,16 @@ export const TrainingMethods = () => {
                                 index === 3 ? "bg-kua-main" : "bg-kua-blue300"
                             }`}
                         >
-                            <h3 className="text-xl font-bold text-white">
+                            <h3 className="text-base font-bold text-white sm:text-xl">
                                 {step.step}
                             </h3>
                         </div>
                         {/* 본문 */}
                         <div className="flex flex-col gap-2 bg-white p-6">
-                            <p className="text-kua-main text-center text-2xl font-bold">
+                            <p className="text-kua-main text-center text-xl font-bold sm:text-2xl">
                                 {step.title}
                             </p>
-                            <p className="text-kua-gray600 text-center text-xl font-medium">
+                            <p className="text-kua-gray600 text-center text-base font-medium sm:text-xl">
                                 {step.subtitle}
                             </p>
                         </div>
@@ -67,7 +67,7 @@ export const TrainingMethods = () => {
                 <div className="relative h-[25px] w-[25px]">
                     <Image src="/imgs/icons/warning.svg" alt="핀수영" fill />
                 </div>
-                <div>
+                <div className="text-sm sm:text-base">
                     초보자는 부드러운 핀으로 시작해 점차 단단한 핀으로
                     변경하세요.
                     <br />

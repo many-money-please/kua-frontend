@@ -34,12 +34,14 @@ const basicPostureData = [
 export const BasicPosture = () => {
     return (
         <div className="mx-auto w-full max-w-[1200px]">
-            <h2 className="mb-4 text-[32px] font-bold">모노핀 착용</h2>
-            <div className="grid grid-cols-2 grid-rows-2 gap-4">
+            <h2 className="mb-4 text-2xl font-bold sm:text-[32px]">
+                기본 자세
+            </h2>
+            <div className="grid grid-cols-2 grid-rows-2 gap-4 sm:gap-8">
                 {basicPostureData.map((item, index) => (
                     <div
                         key={index}
-                        className="bg-kua-sky50 rounded-[10px] px-16 py-8 text-2xl"
+                        className="bg-kua-sky50 rounded-[10px] px-5 py-8 text-base sm:px-16 sm:text-2xl"
                     >
                         {item.description}
                     </div>

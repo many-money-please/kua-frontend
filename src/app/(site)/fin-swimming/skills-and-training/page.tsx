@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function SkillsAndTrainingPage() {
     return (
-        <div className="flex w-full flex-col gap-32">
+        <div className="flex w-full flex-col gap-16 px-5 sm:gap-32 sm:px-0">
             <MonofinWearing />
             <WearingOrder />
             <KickingPracticeSteps />

@@ -14,6 +14,7 @@ import {
  * 쿼리 파라미터:
  * - page: 페이지 번호 (기본값: 1)
  * - size: 페이지 크기 (기본값: 15)
+ * - title: 검색어 (제목으로 검색, 선택사항)
  */
 export async function GET(request: NextRequest) {
     try {
@@ -21,8 +22,13 @@ export async function GET(request: NextRequest) {
         const { searchParams } = new URL(request.url);
         const page = searchParams.get("page") || "1";
         const size = searchParams.get("size") || "15";
+        const title = searchParams.get("title");
 
-        const endpoint = `${API_ENDPOINTS.notice.list}?page=${page}&size=${size}`;
+        let endpoint = `${API_ENDPOINTS.notice.list}?page=${page}&size=${size}`;
+        // title 파라미터가 있으면 추가 (제목 검색)
+        if (title && title.trim()) {
+            endpoint += `&title=${encodeURIComponent(title.trim())}`;
+        }
         console.log("[공지사항 API] 요청 URL:", endpoint);
 
         // 2. 백엔드 API 호출 (인증 필요 - fetchWithAuth 사용)

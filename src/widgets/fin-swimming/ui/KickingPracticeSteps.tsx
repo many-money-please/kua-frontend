@@ -49,9 +49,11 @@ export const KickingPracticeSteps = () => {
 
     return (
         <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-8">
-            <h2 className="text-[32px] font-bold">발차기 연습 단계</h2>
-            <div className="flex w-full items-stretch gap-4">
-                <div className="flex w-[60%] flex-col gap-4">
+            <h2 className="text-2xl font-bold sm:text-[32px]">
+                발차기 연습 단계
+            </h2>
+            <div className="flex w-full flex-col items-stretch gap-4 sm:flex-row">
+                <div className="flex w-full flex-col gap-4 sm:w-[60%]">
                     {kickingSteps.map((step, index) => (
                         <div
                             key={step.step}
@@ -68,10 +70,10 @@ export const KickingPracticeSteps = () => {
                                     {step.step}
                                 </span>
                                 <div className="flex flex-col gap-2">
-                                    <h3 className="text-kua-main text-2xl font-bold">
+                                    <h3 className="text-kua-main text-xl font-bold sm:text-2xl">
                                         {step.title}
                                     </h3>
-                                    <p className="text-lg leading-relaxed">
+                                    <p className="text-base leading-relaxed sm:text-lg">
                                         {step.description}
                                     </p>
                                 </div>
@@ -79,7 +81,7 @@ export const KickingPracticeSteps = () => {
                         </div>
                     ))}
                 </div>
-                <div className="relative w-[40%]">
+                <div className="relative h-[400px] w-full sm:h-auto sm:w-[40%]">
                     <Image
                         src={kickingSteps[activeIndex].image}
                         alt={kickingSteps[activeIndex].title}
@@ -92,7 +94,7 @@ export const KickingPracticeSteps = () => {
                 <div className="relative h-[25px] w-[25px]">
                     <Image src="/imgs/icons/warning.svg" alt="핀수영" fill />
                 </div>
-                <div>
+                <div className="text-sm sm:text-base">
                     초보자는 부드러운 핀으로 시작해 점차 단단한 핀으로
                     변경하세요.
                     <br />

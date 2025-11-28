@@ -9,11 +9,13 @@ import type { NoticeListResponse } from "@/shared/api/types";
  *
  * @param page 페이지 번호 (기본값: 1)
  * @param size 페이지 크기 (기본값: 15)
+ * @param title 검색어 (제목으로 검색, 선택사항)
  * @returns 공지사항 목록 및 페이지네이션 정보
  */
 export async function getNotices(
     page: number = 1,
     size: number = 15,
+    title?: string,
 ): Promise<NoticeListResponse> {
     try {
         const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -26,7 +28,11 @@ export async function getNotices(
         const cookieString = cookieStore.toString();
         const accessToken = extractCookieValue(cookieString, "access_token");
 
-        const endpoint = `${API_ENDPOINTS.notice.list}?page=${page}&size=${size}`;
+        let endpoint = `${API_ENDPOINTS.notice.list}?page=${page}&size=${size}`;
+        // title 파라미터가 있으면 추가 (제목 검색)
+        if (title && title.trim()) {
+            endpoint += `&title=${encodeURIComponent(title.trim())}`;
+        }
         const url = `${API_URL}${endpoint}`;
 
         // 헤더 설정 (인증 토큰 포함)
