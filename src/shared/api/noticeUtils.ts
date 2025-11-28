@@ -75,11 +75,14 @@ export async function processBase64ImagesInContent(
             const formData = new FormData();
             formData.append("file", file);
 
-            const response = await fetch("/api/community/notices/images", {
-                method: "POST",
-                credentials: "include",
-                body: formData,
-            });
+            const { clientFetch } = await import("@/shared/api/clientFetch");
+            const response = await clientFetch(
+                "/api/community/notices/images",
+                {
+                    method: "POST",
+                    body: formData,
+                },
+            );
 
             if (!response.ok) {
                 console.error(`[이미지 업로드 실패] 상태: ${response.status}`);
