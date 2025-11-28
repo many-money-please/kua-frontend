@@ -31,4 +31,12 @@ export const API_ENDPOINTS = {
         update: (id: number) => `/api/boards/${id}`,
         delete: (id: number) => `/api/boards/${id}`,
     },
+    gallery: {
+        list: "/api/gallery-posts",
+        detail: (id: number) => `/api/gallery-posts/${id}`,
+        create: "/api/gallery-posts",
+        update: (id: number) => `/api/gallery-posts/${id}`,
+        delete: (id: number) => `/api/gallery-posts/${id}`,
+        uploadImage: "/api/gallery-posts/images",
+    },
 } as const;

@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
                 hostname: "img.youtube.com",
                 pathname: "/vi/**",
             },
+            {
+                protocol: "http",
+                hostname: "54.180.116.34",
+                port: "8080",
+                pathname: "/**",
+            },
         ],
     },
 };

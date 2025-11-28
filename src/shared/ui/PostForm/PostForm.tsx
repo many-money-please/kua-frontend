@@ -370,13 +370,20 @@ const ImageField = () => {
                                 key={image.id}
                                 className="bg-kua-gray100 relative flex h-28 items-center justify-center rounded-lg"
                             >
-                                <Image
-                                    src={image.preview}
-                                    alt={image.name}
-                                    fill
-                                    sizes="80px"
-                                    className="rounded-lg object-cover"
-                                />
+                                {image.preview ? (
+                                    <Image
+                                        src={image.preview}
+                                        alt={image.name}
+                                        fill
+                                        sizes="80px"
+                                        className="rounded-lg object-cover"
+                                        unoptimized
+                                    />
+                                ) : (
+                                    <div className="text-kua-gray400 text-xs">
+                                        이미지 없음
+                                    </div>
+                                )}
                                 <button
                                     type="button"
                                     className="bg-kua-gray800/80 absolute top-2 right-2 cursor-pointer rounded-full px-2 py-1 text-xs text-white"

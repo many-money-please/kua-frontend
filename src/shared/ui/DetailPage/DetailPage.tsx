@@ -5,6 +5,7 @@ import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import Image from "next/image";
 import { useState, useMemo } from "react";
 import { useUserRole } from "@/shared/lib/UserRoleContext";
+import { convertRelativeImgSrcToAbsolute } from "@/shared/lib/htmlUtils";
 import "suneditor/dist/css/suneditor.min.css";
 // suneditor 콘텐츠 표시용 CSS (에디터와 동일한 스타일 적용)
 import "suneditor/src/assets/css/suneditor-contents.css";
@@ -58,25 +59,10 @@ export const DetailPage = ({
     const [editContent, setEditContent] = useState("");
 
     // 이미지 src를 절대 URL로 변환
-    const processedContent = useMemo(() => {
-        const API_BASE_URL =
-            (process.env.NEXT_PUBLIC_API_URL ?? "").replace(/\/$/, "") || "";
-        if (!API_BASE_URL) return data.content;
-
-        // 상대 경로(/uploads/...)를 절대 URL로 변환
-        return data.content.replace(
-            /<img([^>]+)src=["'](\/uploads\/[^"']+)["']/gi,
-            (match, attrs, src) => {
-                // 이미 절대 URL인 경우는 그대로 유지
-                if (/^https?:\/\//i.test(src)) {
-                    return match;
-                }
-                // 상대 경로를 절대 URL로 변환
-                const absoluteUrl = `${API_BASE_URL}${src}`;
-                return `<img${attrs}src="${absoluteUrl}"`;
-            },
-        );
-    }, [data.content]);
+    const processedContent = useMemo(
+        () => convertRelativeImgSrcToAbsolute(data.content),
+        [data.content],
+    );
 
     const handleListClick = () => {
         router.push(listUrl);
@@ -164,7 +150,7 @@ export const DetailPage = ({
                         {data.images.map((image, index) => (
                             <div
                                 key={index}
-                                className="relative aspect-[390/312] w-full overflow-hidden rounded-lg"
+                                className="relative aspect-390/312 w-full overflow-hidden rounded-lg"
                             >
                                 <Image
                                     src={image}

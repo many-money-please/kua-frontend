@@ -49,9 +49,13 @@ function extractBase64Images(html: string): Array<{
 
 /**
  * base64 이미지를 업로드하고 content의 src를 filePath로 교체
+ * @param content HTML 콘텐츠
+ * @param imageUploadEndpoint 이미지 업로드 API 엔드포인트 (기본값: 공지사항 이미지 업로드)
+ * @returns 처리된 HTML 콘텐츠
  */
 export async function processBase64ImagesInContent(
     content: string,
+    imageUploadEndpoint: string = "/api/community/notices/images",
 ): Promise<string> {
     const images = extractBase64Images(content);
     if (images.length === 0) {
@@ -76,13 +80,10 @@ export async function processBase64ImagesInContent(
             formData.append("file", file);
 
             const { clientFetch } = await import("@/shared/api/clientFetch");
-            const response = await clientFetch(
-                "/api/community/notices/images",
-                {
-                    method: "POST",
-                    body: formData,
-                },
-            );
+            const response = await clientFetch(imageUploadEndpoint, {
+                method: "POST",
+                body: formData,
+            });
 
             if (!response.ok) {
                 console.error(`[이미지 업로드 실패] 상태: ${response.status}`);

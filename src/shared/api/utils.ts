@@ -204,3 +204,56 @@ export async function fetchWithAuth(
 
     return response;
 }
+
+/**
+ * FormData에서 request 필드를 파싱하여 JSON 객체로 변환
+ */
+export async function parseFormDataRequest<T = Record<string, unknown>>(
+    formData: FormData,
+): Promise<{ body: T; files: File[] }> {
+    const requestField = formData.get("request");
+
+    if (!requestField) {
+        throw new Error("요청 데이터가 필요합니다.");
+    }
+
+    const requestJson =
+        typeof requestField === "string"
+            ? requestField
+            : await requestField.text();
+
+    let body;
+    try {
+        body = JSON.parse(requestJson);
+    } catch {
+        throw new Error("요청 본문을 파싱할 수 없습니다.");
+    }
+
+    const files = formData.getAll("files") as File[];
+
+    return { body, files };
+}
+
+/**
+ * 게시글 필수 필드 검증
+ */
+export function validatePostFields(body: {
+    title?: string;
+    content?: string;
+}): { isValid: boolean; error?: string } {
+    if (!body.title || !body.content) {
+        return {
+            isValid: false,
+            error: "제목과 내용은 필수입니다.",
+        };
+    }
+
+    if (body.title.length > 200) {
+        return {
+            isValid: false,
+            error: "제목은 200자를 초과할 수 없습니다.",
+        };
+    }
+
+    return { isValid: true };
+}
