@@ -15,4 +15,20 @@ export const API_ENDPOINTS = {
         create: "/api/notices",
         delete: (id: number) => `/api/notices/${id}`,
     },
+    category: {
+        list: "/api/v1/categories",
+        detail: (id: number) => `/api/v1/categories/${id}`,
+        byBoardName: (boardName: string) =>
+            `/api/v1/categories/board/${encodeURIComponent(boardName)}`,
+        create: "/api/v1/categories",
+        update: (id: number) => `/api/v1/categories/${id}`,
+        delete: (id: number) => `/api/v1/categories/${id}`,
+    },
+    board: {
+        list: "/api/boards",
+        detail: (id: number) => `/api/boards/${id}`,
+        create: "/api/boards",
+        update: (id: number) => `/api/boards/${id}`,
+        delete: (id: number) => `/api/boards/${id}`,
+    },
 } as const;
