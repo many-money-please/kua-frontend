@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useMemo, useState, useEffect, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { DataTable, type Column } from "@/shared/ui/DataTable";
 import { Pagination } from "@/shared/ui/Pagination";
 import { SearchBar, ManagerSearchBar } from "@/shared/ui/SearchBar";
 import { useUserRole } from "@/shared/lib/UserRoleContext";
+import { useDeleteNotice } from "@/shared/hooks/queries/notices";
 
 export type CommunityPostSummary = {
     id: number;
@@ -46,6 +47,7 @@ export const CommunityTableSection = ({
 }: CommunityTableSectionProps) => {
     const router = useRouter();
     const { isAdmin } = useUserRole();
+    const deleteNotice = useDeleteNotice();
 
     // 클라이언트 사이드 페이지네이션용 state
     const [clientPage, setClientPage] = useState(initialPage);
@@ -54,19 +56,59 @@ export const CommunityTableSection = ({
 
     // 서버 사이드 페이지네이션인 경우 initialPage 사용, 아니면 state 사용
     const page = serverTotalPages !== undefined ? initialPage : clientPage;
-    const [searchInput, setSearchInput] = useState("");
-    const [searchQuery, setSearchQuery] = useState("");
-    const [searchOption, setSearchOption] = useState(
-        searchOptions?.[0] ?? "제목",
+    const searchParams = useSearchParams();
+
+    // URL 파라미터에서 검색어와 검색 옵션을 직접 계산 (useMemo 사용)
+    const urlTitle = useMemo(
+        () => searchParams.get("title") || "",
+        [searchParams],
     );
+    const urlSearchOption = useMemo(
+        () => searchParams.get("searchOption") || searchOptions?.[0] || "제목",
+        [searchParams, searchOptions],
+    );
+
+    // 입력 필드용 state (사용자가 입력하는 동안 유지)
+    const [searchInput, setSearchInput] = useState(urlTitle);
+    // 실제 검색에 사용되는 값은 URL 파라미터에서 직접 가져옴
+    const searchQuery = urlTitle;
+    // 검색 옵션은 state로 유지 (ManagerSearchBar에서 변경 가능)
+    const [searchOption, setSearchOption] = useState(urlSearchOption);
     const [selectedRows, setSelectedRows] = useState<CommunityPostSummary[]>(
         [],
     );
+
+    // URL 파라미터가 변경되면 입력 필드와 검색 옵션 값도 동기화
+    // useRef로 이전 값 추적하여 불필요한 업데이트 방지
+    const prevUrlTitleRef = useRef(urlTitle);
+    const prevUrlSearchOptionRef = useRef(urlSearchOption);
+
+    useEffect(() => {
+        // URL 파라미터가 실제로 변경되었을 때만 state 업데이트
+        // Note: URL 파라미터 동기화를 위한 필수 로직이므로 setState 사용
+        if (prevUrlTitleRef.current !== urlTitle) {
+            prevUrlTitleRef.current = urlTitle;
+            setSearchInput(urlTitle);
+        }
+        if (prevUrlSearchOptionRef.current !== urlSearchOption) {
+            prevUrlSearchOptionRef.current = urlSearchOption;
+            setSearchOption(urlSearchOption);
+        }
+        // URL 파라미터 변경 시에만 동기화하므로 searchInput, searchOption은 dependency에서 제외
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [urlTitle, urlSearchOption]);
 
     const filteredData = useMemo(() => {
         // 삭제된 항목 제외
         const filtered = data.filter((item) => !deletedIds.has(item.id));
 
+        // 서버 사이드 페이지네이션인 경우 클라이언트 사이드 필터링 하지 않음
+        // (서버에서 이미 필터링된 데이터를 받음)
+        if (serverTotalPages !== undefined) {
+            return filtered;
+        }
+
+        // 클라이언트 사이드 필터링 (기존 로직)
         if (!searchQuery.trim()) {
             return filtered;
         }
@@ -74,7 +116,7 @@ export const CommunityTableSection = ({
         return filtered.filter((item) =>
             item.title.toLowerCase().includes(lowerQuery),
         );
-    }, [data, searchQuery, deletedIds]);
+    }, [data, searchQuery, deletedIds, serverTotalPages]);
 
     const paginationInfo = useMemo(() => {
         // 서버 사이드 페이지네이션인 경우
@@ -116,11 +158,31 @@ export const CommunityTableSection = ({
     ]);
 
     const handleSearch = () => {
-        setSearchQuery(searchInput.trim());
+        const trimmedQuery = searchInput.trim();
+
         // 검색 시 첫 페이지로 이동
         if (serverTotalPages !== undefined) {
-            // 서버 사이드인 경우 URL 업데이트는 Pagination 컴포넌트에서 처리
-            // 여기서는 직접 처리하지 않음
+            // 서버 사이드인 경우 URL 업데이트
+            const params = new URLSearchParams(window.location.search);
+
+            // 검색 옵션이 "제목"이고 검색어가 있을 때만 title 파라미터 추가
+            if (searchOption === "제목" && trimmedQuery) {
+                params.set("title", trimmedQuery);
+                params.set("searchOption", "제목");
+            } else {
+                // 다른 옵션이거나 검색어가 없으면 title 파라미터 제거
+                params.delete("title");
+                if (trimmedQuery) {
+                    params.set("searchOption", searchOption);
+                } else {
+                    params.delete("searchOption");
+                }
+            }
+
+            // 첫 페이지로 이동
+            params.delete("page");
+
+            router.push(`${detailBasePath}?${params.toString()}`);
         } else {
             setClientPage(1);
         }
@@ -169,40 +231,12 @@ export const CommunityTableSection = ({
                                 const selectedIds = selectedRows.map(
                                     (row) => row.id,
                                 );
-                                console.log(
-                                    "[공지사항 삭제] 선택된 ID들:",
-                                    selectedIds,
-                                );
 
-                                // 각 공지사항 삭제 API 호출
-                                const deletePromises = selectedIds.map(
-                                    async (id) => {
-                                        const response = await fetch(
-                                            `/api/community/notices/${id}`,
-                                            {
-                                                method: "DELETE",
-                                                credentials: "include",
-                                            },
-                                        );
-
-                                        if (!response.ok) {
-                                            const result =
-                                                await response.json();
-                                            throw new Error(
-                                                result.error ||
-                                                    `공지사항 ${id} 삭제 실패`,
-                                            );
-                                        }
-
-                                        return id;
-                                    },
-                                );
-
-                                await Promise.all(deletePromises);
-                                console.log(
-                                    "[공지사항 삭제] 성공:",
-                                    selectedIds.length,
-                                    "개 삭제됨",
+                                // 각 공지사항 삭제
+                                await Promise.all(
+                                    selectedIds.map((id) =>
+                                        deleteNotice.mutateAsync(id),
+                                    ),
                                 );
 
                                 // 삭제된 항목 ID를 추가하여 테이블에서 즉시 제거
@@ -218,11 +252,7 @@ export const CommunityTableSection = ({
                                 alert(
                                     `${selectedIds.length}개의 공지사항이 삭제되었습니다.`,
                                 );
-
-                                // 페이지 새로고침하여 서버 컴포넌트 데이터 갱신
-                                router.refresh();
                             } catch (error) {
-                                console.error("[공지사항 삭제] 에러:", error);
                                 alert(
                                     error instanceof Error
                                         ? error.message

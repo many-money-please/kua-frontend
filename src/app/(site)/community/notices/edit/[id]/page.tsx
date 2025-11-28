@@ -1,132 +1,52 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { BasicPostCreate } from "@/shared/ui/BasicPostCreate";
 import type { PostFormValues } from "@/shared/ui/PostForm";
+import {
+    useNoticeDetailForEdit,
+    useUpdateNotice,
+} from "@/shared/hooks/queries/notices";
+import { useEffect } from "react";
 
 export default function NoticesEditPage() {
     const params = useParams<{ id: string }>();
     const router = useRouter();
     const id = params.id as string;
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [initialData, setInitialData] = useState<PostFormValues | null>(null);
-    const hasFetchedRef = useRef<string | null>(null);
 
-    // 기존 데이터 로드
+    const { data: initialData, isLoading, error } = useNoticeDetailForEdit(id);
+    const updateNotice = useUpdateNotice(id);
+
+    // 에러 처리
     useEffect(() => {
-        if (hasFetchedRef.current === id) {
-            return;
-        }
-
-        const fetchNoticeDetail = async () => {
-            try {
-                hasFetchedRef.current = id;
-                setLoading(true);
-                console.log("[공지사항 수정] 기존 데이터 로드 시작, ID:", id);
-
-                const response = await fetch(`/api/community/notices/${id}`, {
-                    credentials: "include",
-                });
-
-                if (!response.ok) {
-                    if (response.status === 404) {
-                        alert("해당 게시글을 찾을 수 없습니다.");
-                        router.push("/community/notices");
-                        return;
-                    }
-                    throw new Error(
-                        `공지사항을 가져오는데 실패했습니다: ${response.status}`,
-                    );
-                }
-
-                const result = await response.json();
-                console.log("[공지사항 수정] 응답 데이터:", result);
-
-                const formData: PostFormValues = {
-                    title: result.title || "",
-                    content: result.content || "",
-                    isPinned: result.isTopFixed === 1,
-                    attachments: [],
-                    images: [],
-                };
-
-                setInitialData(formData);
-            } catch (error) {
-                console.error("[공지사항 수정] 에러:", error);
+        if (error) {
+            if (
+                error.message.includes("404") ||
+                error.message.includes("찾을 수 없")
+            ) {
+                alert("해당 게시글을 찾을 수 없습니다.");
+                router.push("/community/notices");
+            } else {
                 alert("게시글을 불러오는데 실패했습니다.");
                 router.push(`/community/notices/${id}`);
-            } finally {
-                setLoading(false);
             }
-        };
-
-        if (id) {
-            fetchNoticeDetail();
         }
-
-        return () => {
-            if (hasFetchedRef.current === id) {
-                hasFetchedRef.current = null;
-            }
-        };
-    }, [id, router]);
+    }, [error, router, id]);
 
     const handleSubmit = async (data: PostFormValues) => {
         try {
-            setIsSubmitting(true);
-            console.log("[공지사항 수정] 제출 데이터:", data);
-
-            const { createNoticeFormData } = await import(
-                "@/shared/api/noticeUtils"
-            );
-            const formData = createNoticeFormData(data);
-
-            console.log(
-                "[공지사항 수정] FormData 생성 완료, 파일 개수:",
-                data.attachments.filter((a) => a.file instanceof File).length +
-                    data.images.filter((i) => i.file instanceof File).length,
-            );
-
-            // API 호출
-            const response = await fetch(`/api/community/notices/${id}`, {
-                method: "PUT",
-                credentials: "include",
-                body: formData,
-            });
-
-            console.log("[공지사항 수정] 응답 상태:", response.status);
-
-            if (!response.ok) {
-                const result = await response.json();
-                const errorMessage =
-                    result.error || "공지사항 수정에 실패했습니다.";
-                alert(errorMessage);
-                return;
-            }
-
-            const result = await response.json();
-            console.log("[공지사항 수정] 성공:", result);
-
+            await updateNotice.mutateAsync(data);
             alert("공지사항이 수정되었습니다.");
-            router.replace(`/community/notices/${id}`);
-            setTimeout(() => {
-                router.refresh();
-            }, 100);
         } catch (error) {
-            console.error("[공지사항 수정] 에러:", error);
             alert(
                 error instanceof Error
                     ? error.message
                     : "공지사항 수정에 실패했습니다.",
             );
-        } finally {
-            setIsSubmitting(false);
         }
     };
 
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="mx-auto flex w-full max-w-[1200px] items-center justify-center px-5 py-16">
                 <div className="text-center">로딩 중...</div>
@@ -134,7 +54,7 @@ export default function NoticesEditPage() {
         );
     }
 
-    if (!initialData) {
+    if (error || !initialData) {
         return (
             <div className="mx-auto flex w-full max-w-[1200px] items-center justify-center px-5 py-16">
                 <div className="text-center">게시글을 불러올 수 없습니다.</div>
@@ -151,7 +71,7 @@ export default function NoticesEditPage() {
                 <BasicPostCreate
                     onSubmit={handleSubmit}
                     titlePlaceholder="제목을 입력하세요 (200자 이내)"
-                    isSubmitting={isSubmitting}
+                    isSubmitting={updateNotice.isPending}
                     initialValues={initialData}
                     submitLabel="수정하기"
                 />
