@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Script from "next/script";
 import { UserRoleProvider } from "@/shared/lib/UserRoleContext";
+import { QueryProvider } from "@/shared/lib/QueryProvider";
 
 const pretendard = localFont({
     src: "../../public/fonts/pretendard/PretendardVariable.woff2",
@@ -69,7 +70,9 @@ export default function RootLayout({
                     src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false`}
                     strategy="beforeInteractive"
                 />
-                <UserRoleProvider>{children}</UserRoleProvider>
+                <QueryProvider>
+                    <UserRoleProvider>{children}</UserRoleProvider>
+                </QueryProvider>
             </body>
         </html>
     );

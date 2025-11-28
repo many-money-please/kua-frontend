@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useUserRole } from "@/shared/lib/UserRoleContext";
 import "suneditor/dist/css/suneditor.min.css";
 // suneditor 콘텐츠 표시용 CSS (에디터와 동일한 스타일 적용)
@@ -56,6 +56,27 @@ export const DetailPage = ({
     const [submittedReply, setSubmittedReply] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editContent, setEditContent] = useState("");
+
+    // 이미지 src를 절대 URL로 변환
+    const processedContent = useMemo(() => {
+        const API_BASE_URL =
+            (process.env.NEXT_PUBLIC_API_URL ?? "").replace(/\/$/, "") || "";
+        if (!API_BASE_URL) return data.content;
+
+        // 상대 경로(/uploads/...)를 절대 URL로 변환
+        return data.content.replace(
+            /<img([^>]+)src=["'](\/uploads\/[^"']+)["']/gi,
+            (match, attrs, src) => {
+                // 이미 절대 URL인 경우는 그대로 유지
+                if (/^https?:\/\//i.test(src)) {
+                    return match;
+                }
+                // 상대 경로를 절대 URL로 변환
+                const absoluteUrl = `${API_BASE_URL}${src}`;
+                return `<img${attrs}src="${absoluteUrl}"`;
+            },
+        );
+    }, [data.content]);
 
     const handleListClick = () => {
         router.push(listUrl);
@@ -127,14 +148,14 @@ export const DetailPage = ({
                 </h2>
                 <div className="flex items-center gap-4 text-sm sm:text-lg">
                     <div>등록일: {data.registrationDate}</div>
-                    <div>조회수 {data.views.toLocaleString()}</div>
+                    <div>조회수 {(data.views ?? 0).toLocaleString()}</div>
                 </div>
             </div>
             <div className="flex flex-col gap-8">
                 {/* suneditor로 작성된 HTML 콘텐츠 표시 - 에디터와 동일한 스타일 */}
                 <div
-                    className="sun-editor-editable se-component-content"
-                    dangerouslySetInnerHTML={{ __html: data.content }}
+                    className="sun-editor-editable se-component-content sun-content"
+                    dangerouslySetInnerHTML={{ __html: processedContent }}
                 />
 
                 {/* 이미지 그리드 (포토갤러리용) */}
