@@ -1,58 +1,38 @@
 "use client";
 
-import { useMemo, useState, type DragEvent } from "react";
+import { useMemo, useState, useEffect, type DragEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FiMenu, FiTrash2 } from "react-icons/fi";
 import { DataTable, type Column } from "@/shared/ui/DataTable";
 import { Pagination } from "@/shared/ui/Pagination";
 import { ManagerSearchBar } from "@/shared/ui/SearchBar/ManagerSearchBar";
+import type { Popup, PopupListResponse } from "@/shared/api/types";
 
 type PopupItem = {
-    id: string;
+    id: string; // number를 string으로 변환하여 사용
     title: string;
-    startDate: string;
-    endDate: string;
-    isExposed: boolean;
+    startDate: string; // "YYYY. MM. DD" 형식 (표시용)
+    endDate: string; // "YYYY. MM. DD" 형식 (표시용)
+    isExposed: boolean; // isActive를 isExposed로 매핑
 };
 
-const mockData: PopupItem[] = [
-    {
-        id: "1",
-        title: "수영 대회일정 공지사항",
-        startDate: "2025. 11. 10",
-        endDate: "2026. 05. 15",
-        isExposed: true,
-    },
-    {
-        id: "2",
-        title: "협회 공지 - 홈페이지 리뉴얼 안내",
-        startDate: "2025. 12. 01",
-        endDate: "2026. 03. 31",
-        isExposed: true,
-    },
-    {
-        id: "3",
-        title: "신규 회원 모집 캠페인",
-        startDate: "2025. 11. 20",
-        endDate: "2026. 01. 20",
-        isExposed: false,
-    },
-    {
-        id: "4",
-        title: "국제대회 일정 변경 안내",
-        startDate: "2025. 12. 15",
-        endDate: "2026. 04. 30",
-        isExposed: true,
-    },
-    {
-        id: "5",
-        title: "연말 기부 캠페인 참여 안내",
-        startDate: "2025. 12. 20",
-        endDate: "2026. 02. 15",
-        isExposed: false,
-    },
-];
+// 날짜 포맷팅: "YYYY-MM-DD" -> "YYYY. MM. DD"
+const formatDate = (dateString: string): string => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}. ${month}. ${day}`;
+};
+
+// 날짜 포맷팅: "YYYY. MM. DD" -> "YYYY-MM-DD"
+const parseDate = (dateString: string): string => {
+    if (!dateString) return "";
+    return dateString.replace(/\.\s/g, "-").replace(/\s/g, "");
+};
 
 const reorderList = <T,>(
     list: T[],
@@ -71,15 +51,79 @@ const reorderList = <T,>(
     return updated;
 };
 
-export const MainPopupManager = () => {
+type MainPopupManagerProps = {
+    initialPopups?: PopupItem[];
+};
+
+export const MainPopupManager = ({
+    initialPopups = [],
+}: MainPopupManagerProps) => {
     const router = useRouter();
     const [page, setPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchOption, setSearchOption] = useState("제목");
     const [selectedRows, setSelectedRows] = useState<PopupItem[]>([]);
-    const [popupData, setPopupData] = useState<PopupItem[]>(mockData);
+    const [popupData, setPopupData] = useState<PopupItem[]>(initialPopups);
     const [draggingId, setDraggingId] = useState<string | null>(null);
     const [dragOverId, setDragOverId] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    // 검색 시에만 클라이언트에서 데이터 가져오기
+    useEffect(() => {
+        // 초기 로딩은 서버에서 이미 완료되었으므로 검색어가 있을 때만 fetch
+        if (!searchQuery.trim()) {
+            // 검색어가 없으면 초기 데이터로 복원
+            setPopupData(initialPopups);
+            return;
+        }
+
+        const fetchPopups = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+
+                const url = `/api/admin/main/popup?title=${encodeURIComponent(searchQuery.trim())}`;
+
+                const response = await fetch(url, {
+                    credentials: "include",
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(
+                        errorData.error ||
+                            "팝업 목록을 가져오는데 실패했습니다.",
+                    );
+                }
+
+                const data: PopupListResponse = await response.json();
+                // 백엔드는 배열을 직접 반환하므로 data가 배열임
+                const popups: PopupItem[] = (data || []).map(
+                    (popup: Popup) => ({
+                        id: String(popup.id), // number를 string으로 변환
+                        title: popup.title,
+                        startDate: formatDate(popup.startDate),
+                        endDate: formatDate(popup.endDate),
+                        isExposed: popup.isActive, // isActive를 isExposed로 매핑
+                    }),
+                );
+
+                setPopupData(popups);
+            } catch (err) {
+                setError(
+                    err instanceof Error
+                        ? err.message
+                        : "팝업 목록을 가져오는데 실패했습니다.",
+                );
+                console.error("팝업 목록 가져오기 실패:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPopups();
+    }, [searchQuery, initialPopups]);
 
     const filteredData = useMemo(() => {
         if (!searchQuery.trim()) return popupData;
@@ -101,12 +145,66 @@ export const MainPopupManager = () => {
         return { totalPages, currentPage, visibleData, totalItems };
     }, [filteredData, page]);
 
-    const handleToggleExposure = (id: string) => {
+    const handleToggleExposure = async (id: string) => {
+        const popup = popupData.find((item) => item.id === id);
+        if (!popup) return;
+
+        const newExposed = !popup.isExposed;
+
+        // 낙관적 업데이트
         setPopupData((prev) =>
             prev.map((item) =>
-                item.id === id ? { ...item, isExposed: !item.isExposed } : item,
+                item.id === id ? { ...item, isExposed: newExposed } : item,
             ),
         );
+
+        try {
+            // PATCH /api/popups/{id}/toggle 사용
+            const response = await fetch(`/api/admin/main/popup/${id}/toggle`, {
+                method: "PATCH",
+                credentials: "include",
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(
+                    errorData.error || "노출 상태 변경에 실패했습니다.",
+                );
+            }
+
+            // 성공 시 서버에서 최신 데이터 다시 가져오기
+            const fetchPopups = async () => {
+                const res = await fetch("/api/admin/main/popup", {
+                    credentials: "include",
+                });
+                if (res.ok) {
+                    const data: PopupListResponse = await res.json();
+                    const popups: PopupItem[] = (data || []).map(
+                        (popup: Popup) => ({
+                            id: String(popup.id),
+                            title: popup.title,
+                            startDate: formatDate(popup.startDate),
+                            endDate: formatDate(popup.endDate),
+                            isExposed: popup.isActive,
+                        }),
+                    );
+                    setPopupData(popups);
+                }
+            };
+            await fetchPopups();
+        } catch (err) {
+            // 실패 시 원래 상태로 복구
+            setPopupData((prev) =>
+                prev.map((item) =>
+                    item.id === id ? { ...item, isExposed: !newExposed } : item,
+                ),
+            );
+            alert(
+                err instanceof Error
+                    ? err.message
+                    : "노출 상태 변경에 실패했습니다.",
+            );
+        }
     };
 
     const handleDragStart = (
@@ -129,16 +227,86 @@ export const MainPopupManager = () => {
         setDragOverId(null);
     };
 
-    const handleDrop = (targetId: string) => {
+    const handleDrop = async (targetId: string) => {
         if (!draggingId || draggingId === targetId) {
             handleDragEnd();
             return;
         }
-        setPopupData((prev) =>
-            reorderList(prev, draggingId, targetId, (item) => item.id),
+
+        // 낙관적 업데이트
+        const reordered = reorderList(
+            popupData,
+            draggingId,
+            targetId,
+            (item) => item.id,
         );
-        // TODO: 서버 API 연동 시, 순서 변경 결과를 저장하도록 요청 전송
+        setPopupData(reordered);
         handleDragEnd();
+
+        try {
+            // string id를 number로 변환
+            const popupIds = reordered.map((item) => Number(item.id));
+            const response = await fetch("/api/admin/main/popup/reorder", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({ popupIds }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || "순서 변경에 실패했습니다.");
+            }
+
+            // 성공 시 서버에서 최신 데이터 다시 가져오기
+            const fetchPopups = async () => {
+                const res = await fetch("/api/admin/main/popup", {
+                    credentials: "include",
+                });
+                if (res.ok) {
+                    const data: PopupListResponse = await res.json();
+                    const popups: PopupItem[] = (data || []).map(
+                        (popup: Popup) => ({
+                            id: String(popup.id),
+                            title: popup.title,
+                            startDate: formatDate(popup.startDate),
+                            endDate: formatDate(popup.endDate),
+                            isExposed: popup.isActive,
+                        }),
+                    );
+                    setPopupData(popups);
+                }
+            };
+            await fetchPopups();
+        } catch (err) {
+            // 실패 시 원래 데이터 다시 가져오기
+            const fetchPopups = async () => {
+                const res = await fetch("/api/admin/main/popup", {
+                    credentials: "include",
+                });
+                if (res.ok) {
+                    const data: PopupListResponse = await res.json();
+                    const popups: PopupItem[] = (data || []).map(
+                        (popup: Popup) => ({
+                            id: String(popup.id),
+                            title: popup.title,
+                            startDate: formatDate(popup.startDate),
+                            endDate: formatDate(popup.endDate),
+                            isExposed: popup.isActive,
+                        }),
+                    );
+                    setPopupData(popups);
+                }
+            };
+            await fetchPopups();
+            alert(
+                err instanceof Error
+                    ? err.message
+                    : "순서 변경에 실패했습니다.",
+            );
+        }
     };
 
     const columns: Column<PopupItem>[] = [
@@ -208,13 +376,50 @@ export const MainPopupManager = () => {
         {
             key: "delete",
             header: "삭제",
-            accessor: () => (
+            accessor: (row) => (
                 <div className="flex justify-center">
                     <button
                         type="button"
-                        onClick={(e) => {
+                        onClick={async (e) => {
                             e.stopPropagation();
-                            // TODO: 삭제 로직
+                            if (
+                                !confirm(
+                                    `"${row.title}" 팝업을 삭제하시겠습니까?`,
+                                )
+                            ) {
+                                return;
+                            }
+
+                            try {
+                                const response = await fetch(
+                                    `/api/admin/main/popup/${row.id}`,
+                                    {
+                                        method: "DELETE",
+                                        credentials: "include",
+                                    },
+                                );
+
+                                if (!response.ok) {
+                                    const errorData = await response
+                                        .json()
+                                        .catch(() => ({}));
+                                    throw new Error(
+                                        errorData.error ||
+                                            "팝업 삭제에 실패했습니다.",
+                                    );
+                                }
+
+                                // 삭제 성공 시 목록에서 제거
+                                setPopupData((prev) =>
+                                    prev.filter((item) => item.id !== row.id),
+                                );
+                            } catch (err) {
+                                alert(
+                                    err instanceof Error
+                                        ? err.message
+                                        : "팝업 삭제에 실패했습니다.",
+                                );
+                            }
                         }}
                         className="text-kua-gray400 hover:text-kua-orange500"
                     >
@@ -233,9 +438,52 @@ export const MainPopupManager = () => {
         router.push("/admin/main/popup/create");
     };
 
-    const handleDelete = () => {
-        // TODO: 선택된 항목 삭제 로직
-        console.log("삭제할 항목:", selectedRows);
+    const handleDelete = async () => {
+        if (selectedRows.length === 0) {
+            alert("삭제할 항목을 선택해주세요.");
+            return;
+        }
+
+        if (
+            !confirm(
+                `선택한 ${selectedRows.length}개의 팝업을 삭제하시겠습니까?`,
+            )
+        ) {
+            return;
+        }
+
+        try {
+            const deletePromises = selectedRows.map((row) =>
+                fetch(`/api/admin/main/popup/${row.id}`, {
+                    method: "DELETE",
+                    credentials: "include",
+                }),
+            );
+
+            const results = await Promise.allSettled(deletePromises);
+            const failed = results.filter(
+                (result) => result.status === "rejected",
+            );
+
+            if (failed.length > 0) {
+                throw new Error(
+                    `${failed.length}개의 팝업 삭제에 실패했습니다.`,
+                );
+            }
+
+            // 삭제 성공 시 목록에서 제거
+            const deletedIds = selectedRows.map((row) => row.id);
+            setPopupData((prev) =>
+                prev.filter((item) => !deletedIds.includes(item.id)),
+            );
+            setSelectedRows([]);
+        } catch (err) {
+            alert(
+                err instanceof Error
+                    ? err.message
+                    : "팝업 삭제에 실패했습니다.",
+            );
+        }
     };
 
     return (
@@ -279,32 +527,46 @@ export const MainPopupManager = () => {
                 addButtonText="신규 생성"
             />
 
-            <DataTable
-                columns={columns}
-                data={paginationInfo.visibleData}
-                getRowId={(row) => row.id}
-                onSelectionChange={setSelectedRows}
-                getRowProps={(row) => {
-                    const isDragging = draggingId === row.id;
-                    const isDragOver =
-                        dragOverId === row.id && draggingId !== row.id;
-                    return {
-                        onDragOver: (event) => {
-                            if (!draggingId || draggingId === row.id) {
-                                return;
-                            }
-                            event.preventDefault();
-                            handleDragEnter(row.id);
-                        },
-                        onDrop: () => handleDrop(row.id),
-                        className: `${isDragOver ? "ring-2 ring-kua-main" : ""} ${
-                            isDragging ? "opacity-60" : ""
-                        }`,
-                    };
-                }}
-            />
+            {loading && (
+                <div className="text-kua-gray500 py-10 text-center">
+                    로딩중...
+                </div>
+            )}
 
-            {paginationInfo.totalPages > 1 && (
+            {error && (
+                <div className="text-kua-orange500 py-4 text-center">
+                    {error}
+                </div>
+            )}
+
+            {!loading && !error && (
+                <DataTable
+                    columns={columns}
+                    data={paginationInfo.visibleData}
+                    getRowId={(row) => row.id}
+                    onSelectionChange={setSelectedRows}
+                    getRowProps={(row) => {
+                        const isDragging = draggingId === row.id;
+                        const isDragOver =
+                            dragOverId === row.id && draggingId !== row.id;
+                        return {
+                            onDragOver: (event) => {
+                                if (!draggingId || draggingId === row.id) {
+                                    return;
+                                }
+                                event.preventDefault();
+                                handleDragEnter(row.id);
+                            },
+                            onDrop: () => handleDrop(row.id),
+                            className: `${isDragOver ? "ring-2 ring-kua-main" : ""} ${
+                                isDragging ? "opacity-60" : ""
+                            }`,
+                        };
+                    }}
+                />
+            )}
+
+            {!loading && !error && paginationInfo.totalPages > 1 && (
                 <Pagination
                     currentPage={paginationInfo.currentPage}
                     totalPages={paginationInfo.totalPages}
@@ -314,4 +576,3 @@ export const MainPopupManager = () => {
         </div>
     );
 };
-

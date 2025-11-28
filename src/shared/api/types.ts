@@ -71,3 +71,45 @@ export type Pagination = {
 export type NoticeListResponse = {
     notices: Notice[];
 } & Pagination;
+
+// 팝업 관련 타입 (백엔드 응답 형식)
+export type Popup = {
+    id: number;
+    title: string;
+    content: string;
+    linkUrl: string;
+    imagePath: string;
+    imageFileName: string;
+    startDate: string; // ISO 8601 형식: "2025-11-28T01:27:10.239Z"
+    endDate: string; // ISO 8601 형식: "2025-11-28T01:27:10.239Z"
+    isActive: boolean; // 노출 여부 (기존 isExposed)
+    sortOrder: number; // 순서 (기존 order)
+    isDisplayable: boolean; // 표시 가능 여부
+    createdAt: string; // ISO 8601 형식
+    updatedAt: string; // ISO 8601 형식
+};
+
+// 팝업 목록 응답 (GET /api/popups/admin는 배열을 직접 반환)
+export type PopupListResponse = Popup[];
+
+// 팝업 생성/수정 요청
+export type PopupRequest = {
+    title: string;
+    content?: string;
+    linkUrl?: string;
+    imagePath?: string;
+    imageFileName?: string;
+    startDate: string; // ISO 8601 형식 또는 "YYYY-MM-DD"
+    endDate: string; // ISO 8601 형식 또는 "YYYY-MM-DD"
+    isActive: boolean;
+    sortOrder?: number;
+    isDisplayable?: boolean;
+};
+
+// 팝업 생성/수정 응답
+export type PopupResponse = Popup;
+
+// 팝업 순서 변경 요청
+export type PopupReorderRequest = {
+    popupIds: number[]; // 순서대로 정렬된 팝업 ID 배열
+};

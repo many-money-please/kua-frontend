@@ -42,21 +42,75 @@ export default function PopupCreatePage() {
         }
     };
 
-    const handleSubmit = () => {
-        // TODO: 폼 제출 로직
-        console.log({
-            exposureStatus,
-            selectedImage,
-            section,
-            title,
-            content,
-            linkUrl,
-            startDate,
-            startTime,
-            endDate,
-            endTime,
+    const handleSubmit = async () => {
+        // 유효성 검사
+        if (!title.trim()) {
+            alert("제목을 입력해주세요.");
+            return;
+        }
+        if (!content.trim()) {
+            alert("내용을 입력해주세요.");
+            return;
+        }
+        if (!selectedImage) {
+            alert("대표 이미지를 선택해주세요.");
+            return;
+        }
+        if (!startDate || !endDate) {
+            alert("노출 시작일과 종료일을 선택해주세요.");
+            return;
+        }
+
+        // 날짜와 시간을 합쳐서 ISO 8601 형식으로 변환
+        const startDateTime = startDate && startTime 
+            ? new Date(`${startDate}T${startTime}`).toISOString()
+            : new Date(`${startDate}T00:00:00`).toISOString();
+        const endDateTime = endDate && endTime
+            ? new Date(`${endDate}T${endTime}`).toISOString()
+            : new Date(`${endDate}T23:59:59`).toISOString();
+
+        // request 객체 생성
+        const requestData = {
+            title: title.trim(),
+            content: content.trim(),
+            linkUrl: linkUrl.trim() || "",
+            startDate: startDateTime,
+            endDate: endDateTime,
+            sortOrder: section === "A" ? 1 : section === "B" ? 2 : 3,
+        };
+
+        // FormData 생성
+        const formData = new FormData();
+        const requestBlob = new Blob([JSON.stringify(requestData)], {
+            type: "application/json",
         });
-        alert("등록되었습니다.");
+        formData.append("request", requestBlob);
+        formData.append("image", selectedImage);
+
+        try {
+            const response = await fetch("/api/admin/main/popup", {
+                method: "POST",
+                credentials: "include",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(
+                    errorData.error || "팝업 생성에 실패했습니다.",
+                );
+            }
+
+            alert("팝업이 등록되었습니다.");
+            router.push("/admin/main/popup");
+        } catch (error) {
+            alert(
+                error instanceof Error
+                    ? error.message
+                    : "팝업 생성에 실패했습니다.",
+            );
+            console.error("팝업 생성 실패:", error);
+        }
     };
 
     const handlePreview = () => {
