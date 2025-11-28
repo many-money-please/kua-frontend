@@ -75,6 +75,7 @@ export type GalleryPostUpdateRequest = {
     addGalleryIds?: number[];
     deleteGalleryIds?: number[];
     attachments?: File[];
+    deleteFileIds?: number[];
 };
 
 // API 함수들
@@ -171,6 +172,11 @@ async function createGalleryPost(
                 : undefined,
     };
 
+    console.log("[포토갤러리 POST] 요청 데이터:", {
+        payload: requestPayload,
+        attachmentsCount: data.attachments?.length || 0,
+    });
+
     const formData = new FormData();
     formData.append(
         "request",
@@ -225,6 +231,10 @@ async function updateGalleryPost(
         deleteGalleryIds:
             data.deleteGalleryIds && data.deleteGalleryIds.length > 0
                 ? data.deleteGalleryIds
+                : undefined,
+        deleteFileIds:
+            data.deleteFileIds && data.deleteFileIds.length > 0
+                ? data.deleteFileIds
                 : undefined,
     };
 
@@ -321,11 +331,23 @@ export function useGalleryPostDetailForEdit(id: string) {
 
             const result: GalleryPostDetail = await response.json();
 
+            // 첨부파일을 PostAttachment 형식으로 변환
+            const attachments =
+                result.files?.map((file) => {
+                    return {
+                        id: String(file.id),
+                        name: file.fileName || "첨부파일",
+                        size: 0,
+                        file: new File([], file.fileName || `file-${file.id}`), // 더미 파일
+                        fileId: file.id, // 삭제를 위한 파일 ID 저장
+                    };
+                }) || [];
+
             return {
                 title: result.title || "",
                 content: convertRelativeImgSrcToAbsolute(result.content || ""),
                 isPinned: result.isTopFixed === 1,
-                attachments: [],
+                attachments,
                 images:
                     result.galleries
                         ?.filter((g) => g.filePath) // filePath가 있는 것만 필터링

@@ -69,7 +69,11 @@ export async function processBase64ImagesInContent(
         try {
             // base64에서 파일 확장자 추출 (기본값: png)
             const mimeMatch = image.base64.match(/data:image\/([^;]+);/);
-            const extension = mimeMatch?.[1] || "png";
+            let extension = mimeMatch?.[1] || "png";
+            // SVG의 경우 "svg+xml"을 "svg"로 변환
+            if (extension.includes("svg")) {
+                extension = "svg";
+            }
             const filename = `image-${Date.now()}-${Math.random().toString(36).substring(7)}.${extension}`;
 
             // base64를 File로 변환

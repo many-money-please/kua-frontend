@@ -67,8 +67,30 @@ export default function PhotoGalleryEditPage({ params }: PageProps) {
                 (id: number) => !existingImageIds.includes(id),
             );
 
-            const attachmentFiles =
-                data.attachments?.map((attachment) => attachment.file) ?? [];
+            // 기존 첨부파일 ID와 새로 추가할 첨부파일 파일 분리
+            const existingFileIds: number[] = [];
+            const newAttachmentFiles: File[] = [];
+
+            if (data.attachments) {
+                for (const attachment of data.attachments) {
+                    // fileId가 있으면 기존 첨부파일, 없으면 새 첨부파일
+                    const fileId = (attachment as { fileId?: number }).fileId;
+                    if (fileId && typeof fileId === "number") {
+                        existingFileIds.push(fileId);
+                    } else {
+                        newAttachmentFiles.push(attachment.file);
+                    }
+                }
+            }
+
+            // 삭제할 첨부파일 ID 계산 (기존 첨부파일 중 현재 선택되지 않은 것)
+            const currentFileIds =
+                initialData?.attachments
+                    ?.map((att) => (att as { fileId?: number }).fileId)
+                    .filter((id): id is number => id !== undefined) || [];
+            const deleteFileIds = currentFileIds.filter(
+                (id: number) => !existingFileIds.includes(id),
+            );
 
             // 게시글 수정
             updateGalleryPost.mutate(
@@ -84,9 +106,11 @@ export default function PhotoGalleryEditPage({ params }: PageProps) {
                             ? deleteGalleryIds
                             : undefined,
                     attachments:
-                        attachmentFiles.length > 0
-                            ? attachmentFiles
+                        newAttachmentFiles.length > 0
+                            ? newAttachmentFiles
                             : undefined,
+                    deleteFileIds:
+                        deleteFileIds.length > 0 ? deleteFileIds : undefined,
                 },
                 {
                     onSuccess: () => {

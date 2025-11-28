@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
+import { FaChevronUp, FaChevronDown, FaXmark } from "react-icons/fa6";
 import Image from "next/image";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useUserRole } from "@/shared/lib/UserRoleContext";
 import { convertRelativeImgSrcToAbsolute } from "@/shared/lib/htmlUtils";
 import "suneditor/dist/css/suneditor.min.css";
@@ -53,10 +53,33 @@ export const DetailPage = ({
 }: DetailPageProps) => {
     const router = useRouter();
     const { isAdmin } = useUserRole();
+    const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
+        null,
+    );
     const [replyContent, setReplyContent] = useState("");
     const [submittedReply, setSubmittedReply] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editContent, setEditContent] = useState("");
+
+    // ESC 키로 모달 닫기
+    useEffect(() => {
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === "Escape" && selectedImageIndex !== null) {
+                setSelectedImageIndex(null);
+            }
+        };
+
+        if (selectedImageIndex !== null) {
+            document.addEventListener("keydown", handleEscape);
+            // 모달이 열릴 때 body 스크롤 방지
+            document.body.style.overflow = "hidden";
+        }
+
+        return () => {
+            document.removeEventListener("keydown", handleEscape);
+            document.body.style.overflow = "unset";
+        };
+    }, [selectedImageIndex]);
 
     // 이미지 src를 절대 URL로 변환
     const processedContent = useMemo(
@@ -150,7 +173,8 @@ export const DetailPage = ({
                         {data.images.map((image, index) => (
                             <div
                                 key={index}
-                                className="relative aspect-390/312 w-full overflow-hidden rounded-lg"
+                                className="relative aspect-390/312 w-full cursor-pointer overflow-hidden rounded-lg transition-transform hover:scale-105"
+                                onClick={() => setSelectedImageIndex(index)}
                             >
                                 <Image
                                     src={image}
@@ -160,6 +184,77 @@ export const DetailPage = ({
                                 />
                             </div>
                         ))}
+                    </div>
+                )}
+
+                {/* 이미지 모달 */}
+                {selectedImageIndex !== null && data.images && (
+                    <div
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+                        onClick={() => setSelectedImageIndex(null)}
+                    >
+                        <div
+                            className="relative max-h-[90vh] max-w-[90vw]"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button
+                                className="absolute top-0 -right-12 z-10 text-white transition-colors hover:text-gray-300"
+                                onClick={() => setSelectedImageIndex(null)}
+                                aria-label="닫기"
+                            >
+                                <FaXmark size={32} />
+                            </button>
+                            <Image
+                                src={data.images[selectedImageIndex]}
+                                alt={`갤러리 이미지 ${selectedImageIndex + 1}`}
+                                width={1200}
+                                height={800}
+                                className="max-h-[90vh] max-w-[90vw] object-contain"
+                                unoptimized
+                            />
+                            {data.images.length > 1 && (
+                                <>
+                                    <button
+                                        className="absolute top-1/2 left-4 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70 disabled:opacity-50"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSelectedImageIndex(
+                                                selectedImageIndex > 0
+                                                    ? selectedImageIndex - 1
+                                                    : data.images!.length - 1,
+                                            );
+                                        }}
+                                        aria-label="이전 이미지"
+                                    >
+                                        <FaChevronUp
+                                            size={24}
+                                            className="-rotate-90"
+                                        />
+                                    </button>
+                                    <button
+                                        className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70 disabled:opacity-50"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSelectedImageIndex(
+                                                selectedImageIndex <
+                                                    data.images!.length - 1
+                                                    ? selectedImageIndex + 1
+                                                    : 0,
+                                            );
+                                        }}
+                                        aria-label="다음 이미지"
+                                    >
+                                        <FaChevronDown
+                                            size={24}
+                                            className="-rotate-90"
+                                        />
+                                    </button>
+                                </>
+                            )}
+                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-4 py-2 text-sm text-white">
+                                {selectedImageIndex + 1} / {data.images.length}
+                            </div>
+                        </div>
                     </div>
                 )}
 

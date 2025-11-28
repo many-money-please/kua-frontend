@@ -125,6 +125,12 @@ export async function POST(request: NextRequest) {
                 { status: 400 },
             );
         }
+
+        console.log("[포토갤러리 POST API] 요청 데이터:", {
+            body,
+            filesCount: files.length,
+        });
+
         const backendFormData = new FormData();
         backendFormData.append(
             "request",

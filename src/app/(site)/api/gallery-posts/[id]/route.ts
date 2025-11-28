@@ -113,6 +113,7 @@ export async function PUT(
             isShow?: number;
             addGalleryIds?: number[];
             deleteGalleryIds?: number[];
+            deleteFileIds?: number[];
         };
         let files: File[];
         try {
