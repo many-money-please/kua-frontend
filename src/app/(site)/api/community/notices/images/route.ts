@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {
     decodeResponseText,
     extractCookieValue,
+    forwardSetCookies,
     parseErrorResponse,
 } from "@/shared/api/utils";
 
@@ -128,11 +129,16 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        return NextResponse.json(data, {
+        const nextResponse = NextResponse.json(data, {
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
             },
         });
+
+        // 백엔드 응답의 Set-Cookie 헤더를 브라우저에 전달 (토큰 갱신용)
+        forwardSetCookies(response, nextResponse);
+
+        return nextResponse;
     } catch (error) {
         console.error("[공지사항 이미지 업로드 API] 예외 발생:", {
             error,

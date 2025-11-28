@@ -9,9 +9,8 @@ import type { DetailPageData } from "@/shared/ui/DetailPage";
 
 // API 함수들
 async function fetchNoticeDetail(id: string): Promise<DetailPageData> {
-    const response = await fetch(`/api/community/notices/${id}`, {
-        credentials: "include",
-    });
+    const { clientFetch } = await import("@/shared/api/clientFetch");
+    const response = await clientFetch(`/api/community/notices/${id}`);
 
     if (!response.ok) {
         if (response.status === 404) {
@@ -86,9 +85,9 @@ async function createNotice(data: PostFormValues) {
         content: processedContent,
     });
 
-    const response = await fetch("/api/community/notices", {
+    const { clientFetch } = await import("@/shared/api/clientFetch");
+    const response = await clientFetch("/api/community/notices", {
         method: "POST",
-        credentials: "include",
         body: formData,
     });
 
@@ -114,9 +113,9 @@ async function updateNotice(id: string, data: PostFormValues) {
         content: processedContent,
     });
 
-    const response = await fetch(`/api/community/notices/${id}`, {
+    const { clientFetch } = await import("@/shared/api/clientFetch");
+    const response = await clientFetch(`/api/community/notices/${id}`, {
         method: "PUT",
-        credentials: "include",
         body: formData,
     });
 
@@ -129,9 +128,9 @@ async function updateNotice(id: string, data: PostFormValues) {
 }
 
 async function deleteNotice(id: number) {
-    const response = await fetch(`/api/community/notices/${id}`, {
+    const { clientFetch } = await import("@/shared/api/clientFetch");
+    const response = await clientFetch(`/api/community/notices/${id}`, {
         method: "DELETE",
-        credentials: "include",
     });
 
     if (!response.ok) {
@@ -165,9 +164,8 @@ export function useNoticeDetailForEdit(id: string) {
     return useQuery({
         queryKey: noticeKeys.detail(id),
         queryFn: async () => {
-            const response = await fetch(`/api/community/notices/${id}`, {
-                credentials: "include",
-            });
+            const { clientFetch } = await import("@/shared/api/clientFetch");
+            const response = await clientFetch(`/api/community/notices/${id}`);
 
             if (!response.ok) {
                 if (response.status === 404) {

@@ -4,6 +4,7 @@ import { API_ENDPOINTS } from "@/shared/api/endpoints";
 import {
     decodeResponseText,
     extractCookieValue,
+    forwardSetCookies,
     parseErrorResponse,
 } from "@/shared/api/utils";
 
@@ -168,11 +169,16 @@ export async function PUT(
         revalidatePath("/community/notices");
         revalidatePath(`/community/notices/${id}`);
 
-        return NextResponse.json(data, {
+        const nextResponse = NextResponse.json(data, {
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
             },
         });
+
+        // 백엔드 응답의 Set-Cookie 헤더를 브라우저에 전달 (토큰 갱신용)
+        forwardSetCookies(response, nextResponse);
+
+        return nextResponse;
     } catch (error) {
         console.error("[공지사항 수정 API] 예외 발생:", {
             error,
@@ -281,11 +287,16 @@ export async function GET(
             );
         }
 
-        return NextResponse.json(data, {
+        const nextResponse = NextResponse.json(data, {
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
             },
         });
+
+        // 백엔드 응답의 Set-Cookie 헤더를 브라우저에 전달 (토큰 갱신용)
+        forwardSetCookies(response, nextResponse);
+
+        return nextResponse;
     } catch (error) {
         console.error("[공지사항 상세 API] 예외 발생:", {
             error,
